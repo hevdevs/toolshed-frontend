@@ -1,26 +1,22 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { TextInput } from "react-native-gesture-handler";
 
-const [usernameInput, setUsernameInput] = useState("");
-
 const LoginPage = () => {
-  return (
-    <View>
-        <Text>Username: </Text>
-      <TextInput >
+  const [usernameInput, setUsernameInput] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
 
-      </TextInput>
-      
+  return (
+    <View style={styles.container}>
+        <Text>Username: </Text>
     </View>
-  );
+  )
 };
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+  },
 });
 
 export default LoginPage;
-
-
-
