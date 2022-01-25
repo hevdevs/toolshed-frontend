@@ -3,8 +3,8 @@ import React from 'react';
 
 const UserScreen = () => {
   return (
-    <View>
-      <Text>user page</Text>
+      <View style={styles.container}>
+      <Text>My Page</Text>
     </View>
   );
 };

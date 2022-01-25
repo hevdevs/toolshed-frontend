@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
-const InboxScreen = () => {
+const ToolshedScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>Inbox Screen</Text>
+      <Text>Toolshed</Text>
     </View>
   );
 };
 
-export default InboxScreen;
+export default ToolshedScreen;
 
 const styles = StyleSheet.create({
   container: {
