@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import LoginPage from "./LoginPage";
-import HomePage from "../screens/HomePage";
+import LoginScreen from "../screens/LoginScreen";
+import HomeScreen from "../screens/HomeScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,14 +15,14 @@ function NavBar() {
     >
       <Tab.Screen
         name="Home"
-        component={HomePage}
+        component={HomeScreen}
         options={{
           tabBarLabel: "Home",
         }}
       />
       <Tab.Screen
         name="Login"
-        component={LoginPage}
+        component={LoginScreen}
         options={{
           tabBarLabel: "Updates",
           tabBarBadge: 3,
@@ -33,3 +33,5 @@ function NavBar() {
 }
 
 export default NavBar;
+
+
