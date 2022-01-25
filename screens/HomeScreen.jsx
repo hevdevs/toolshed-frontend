@@ -5,7 +5,6 @@ import { TextInput } from "react-native-gesture-handler";
 
 const HomeScreen = () => {
 
-
   return (
     <View style={styles.container}>
       <Text>HomeScreen 💯💯💯</Text>
