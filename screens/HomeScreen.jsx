@@ -8,7 +8,7 @@ const HomeScreen = () => {
 
   return (
     <View>
-      <TextInput value={} />
+      <Text>HomeScreen</Text>
     </View>
   );
 };

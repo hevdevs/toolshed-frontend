@@ -9,8 +9,9 @@ import React, { useState } from "react";
 import auth from "../firebase";
 import { AuthErrorCodes, signInWithEmailAndPassword } from "firebase/auth";
 import { CurrentRenderContext } from "@react-navigation/native";
+import Register from "./Register";
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
@@ -48,7 +49,7 @@ const LoginScreen = () => {
         <Text>Log In</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => alert("Hello, world!")}
+        onPress={() => navigation.navigate("Register")}
         style={styles.button}
       >
         <Text>Register</Text>
