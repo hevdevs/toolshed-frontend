@@ -1,14 +1,14 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-import { TextInput } from "react-native-gesture-handler";
+import NavTabs from "../components/NavTabs";
 
 
 const HomeScreen = () => {
 
   return (
-    <View style={styles.container}>
-      <Text>HomeScreen 💯💯💯</Text>
-    </View>
+    <>
+      <NavTabs />
+    </>
   );
 };
 
