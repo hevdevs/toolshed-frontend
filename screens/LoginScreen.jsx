@@ -1,24 +1,33 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState } from "react";
 import auth from "../firebase";
 import { AuthErrorCodes, signInWithEmailAndPassword } from "firebase/auth";
 import { CurrentRenderContext } from "@react-navigation/native";
 
-const LoginPage = () => {
+const LoginScreen = () => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
   const handleLogin = async () => {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, emailInput, passwordInput)
-      console.log(userCredential)
-      const user = userCredential.user
-    }
-    catch (err) {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        emailInput,
+        passwordInput
+      );
+      console.log(userCredential);
+      const user = userCredential.user;
+    } catch (err) {
       console.log(err);
       alert("Login error: Please check your username and password");
-    } 
-  }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -35,15 +44,13 @@ const LoginPage = () => {
         onChangeText={setPasswordInput}
         secureTextEntry={true}
       />
-      <TouchableOpacity
-        onPress={handleLogin}
-        style={styles.button}
-      >
+      <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text>Log In</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => alert("Hello, world!")}
-        style={styles.button}>
+        style={styles.button}
+      >
         <Text>Register</Text>
       </TouchableOpacity>
     </View>
@@ -85,4 +92,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default LoginScreen;
