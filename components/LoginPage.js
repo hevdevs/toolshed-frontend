@@ -15,7 +15,8 @@ const LoginPage = () => {
       const user = userCredential.user
     }
     catch (err) {
-      console.log(err)
+      console.log(err);
+      alert("Login error: Please check your username and password");
     } 
   }
 
