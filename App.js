@@ -1,8 +1,8 @@
 import { StyleSheet, View, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginPage from "./components/LoginPage";
-import React, {useState, createContext, useContext, useEffect} from "react";
+import LoginScreen from "./screens/LoginScreen";
+import React, { useState, createContext, useContext, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 
@@ -12,31 +12,34 @@ const AuthenticatedUserContext = createContext({});
 const AuthenticatedUserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   return (
-    <AuthenticatedUserContext.Provider value={{user, setUser}}>
+    <AuthenticatedUserContext.Provider value={{ user, setUser }}>
       {children}
     </AuthenticatedUserContext.Provider>
-  )
-}
+  );
+};
 
 function AuthStack() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="LoginPage" component={LoginPage}/>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
     </Stack.Navigator>
-  )
+  );
 }
 
 function RootNavigator() {
-  const {user, setUser} = useContext(AuthenticatedUserContext);
+  const { user, setUser } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, async (authenticatedUser) => {
-      authenticatedUser ? setUser(authenticatedUser) : setUser(null)
-      setIsLoading(false);
-    });
+    const unsubscribeAuth = onAuthStateChanged(
+      auth,
+      async (authenticatedUser) => {
+        authenticatedUser ? setUser(authenticatedUser) : setUser(null);
+        setIsLoading(false);
+      }
+    );
     return unsubscribeAuth;
-  }, [user])
+  }, [user]);
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -46,15 +49,15 @@ function RootNavigator() {
   }
   return (
     <NavigationContainer>
-      {user ? <HomeScreen/> : <AuthStack/>}
+      {user ? <HomeScreen /> : <AuthStack />}
     </NavigationContainer>
-  )
+  );
 }
 
 export default function App() {
   return (
     <AuthenticatedUserProvider>
-      <RootNavigator/>
+      <RootNavigator />
     </AuthenticatedUserProvider>
   );
 }
