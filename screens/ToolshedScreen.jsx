@@ -29,8 +29,8 @@ const ToolshedScreen = () => {
       <Text style={styles.header}>Toolshed</Text>
       <ToolSearch style={styles.barContainer} items={items} setItems={setItems}/> 
       <View style={styles.cardContainer}>
-      {items.map((item) => {
-        return <ItemCard item={item} />;
+      {items.map((item, index) => {
+        return <ItemCard item={item} key={index}/>;
       })}
       </View>
     </View>
