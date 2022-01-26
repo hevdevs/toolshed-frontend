@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import auth from "../firebase";
+import { auth } from "../firebase";
 import { AuthErrorCodes, signInWithEmailAndPassword } from "firebase/auth";
 import { CurrentRenderContext } from "@react-navigation/native";
 import Register from "./Register";

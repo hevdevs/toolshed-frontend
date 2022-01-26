@@ -2,6 +2,9 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import { db, storage } from "../firebase";
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
+import ItemCard from "../components/ToolshedComponents/ItemCard";
+import ToolSearch from "../components/ToolshedComponents/ToolSearch";
+
 
 const ToolshedScreen = () => {
   const [items, setItems] = useState([]);
@@ -19,14 +22,17 @@ const ToolshedScreen = () => {
     })();
   }, []);
 
-  console.log(items);
 
   return (
+    
     <View style={styles.container}>
-      <Text>Toolshed</Text>
-      {items.map((item) => {
-        return <Text>{`\n${item.name}`}</Text>;
+      <Text style={styles.header}>Toolshed</Text>
+      <ToolSearch style={styles.barContainer} items={items} setItems={setItems}/> 
+      <View style={styles.cardContainer}>
+      {items.map((item, index) => {
+        return <ItemCard item={item} key={index}/>;
       })}
+      </View>
     </View>
   );
 };
@@ -38,5 +44,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
+  },
+  header: {
+    marginTop: "3%",
+    fontSize: 28,
+    fontWeight: "bold",
+  },
+  cardContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignContent: "space-between",
+    width: "100%",
+    backgroundColor: "grey",
   },
 });

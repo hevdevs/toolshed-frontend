@@ -13,7 +13,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 function NavTabs() {
   return (
-    <Tab.Navigator initialRouteName="Toolshed">
+    <Tab.Navigator initialRouteName="Toolshed" labeled={false}>
       <Tab.Screen
         name="Toolshed"
         component={ToolshedScreen}
