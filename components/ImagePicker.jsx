@@ -1,9 +1,6 @@
 import { View, Button, Image, Text } from "react-native";
 import React, { useState } from "react";
 import * as ImagePickerPackage from "expo-image-picker";
-import { ref, uploadBytes } from "firebase/storage";
-import uuid from "react-native-uuid";
-import { storage } from "../firebase";
 
 const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
   const pickImage = async () => {
@@ -29,7 +26,7 @@ const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
             source={{ uri: phoneImageUri }}
             style={{ width: 200, height: 200, alignSelf: "center" }}
           />
-          {/* <Button title="Upload Image" onPress={handleUpload} /> */}
+          <Button title="Remove image" onPress={() => setPhoneImageUri("")} />
         </>
       ) : null}
     </View>
