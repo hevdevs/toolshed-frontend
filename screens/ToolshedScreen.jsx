@@ -1,12 +1,11 @@
-import { StyleSheet, Text, View, Image } from "react-native";
-import { db, storage } from "../firebase";
 import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
-import ItemCard from "../components/ToolshedComponents/ItemCard";
+import { db } from "../firebase";
+
 import ToolSearch from "../components/ToolshedComponents/ToolSearch";
 
-
-const ToolshedScreen = () => {
+const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -22,17 +21,14 @@ const ToolshedScreen = () => {
     })();
   }, []);
 
-
   return (
-    
     <View style={styles.container}>
       <Text style={styles.header}>Toolshed</Text>
-      <ToolSearch style={styles.barContainer} items={items} setItems={setItems}/> 
-      <View style={styles.cardContainer}>
-      {items.map((item, index) => {
-        return <ItemCard item={item} key={index}/>;
-      })}
-      </View>
+      <View style={styles.contentContainer}>
+        <ScrollView>
+          <ToolSearch style={styles.bar}  items={items} setItems={setItems} navigation={navigation} />
+        </ScrollView>
+      </View> 
     </View>
   );
 };
@@ -45,17 +41,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
+    backgroundColor: "#F36433",
+    shadowColor: "#000",
+    shadowOffset: { width: 5, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 1,
   },
   header: {
-    marginTop: "3%",
+    margin: "5%",
     fontSize: 28,
     fontWeight: "bold",
+    color: "#FFF8F0",
   },
-  cardContainer: {
-    flex: 1,
-    flexDirection: "column",
-    alignContent: "space-between",
+  contentContainer: {
     width: "100%",
-    backgroundColor: "grey",
+    padding: 0,
+    margin: 0,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#9DD9D2",
+  },
+  bar: {
+    width: "100%",
   },
 });
