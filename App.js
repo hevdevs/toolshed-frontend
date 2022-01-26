@@ -14,6 +14,7 @@ import ItemScreen from "./screens/ItemScreen";
 import InboxScreen from "./screens/InboxScreen";
 import RequestsScreen from "./screens/RequestsScreen";
 import UserScreen from "./screens/UserScreen";
+import PostItem from "./screens/PostItem";
 
 const Stack = createNativeStackNavigator();
 
@@ -73,6 +74,7 @@ function HomeStack() {
       <Stack.Screen name="RequestsScreen" component={RequestsScreen} />
       <Stack.Screen name="UserScreen" component={UserScreen} />
       <Stack.Screen name="ItemScreen" component={ItemScreen} />
+      <Stack.Screen name="PostItem" component={PostItem} />
     </Stack.Navigator>
   );
 }
