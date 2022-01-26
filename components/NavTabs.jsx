@@ -8,6 +8,7 @@ import ToolshedScreen from "../screens/ToolshedScreen";
 
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import PostItem from "../screens/PostItem";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -44,9 +45,18 @@ function NavTabs() {
           ),
         }}
       />
+      <Tab.Screen
+        name="Post item"
+        component={PostItem}
+        options={{
+          tabBarLabel: "Requests",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="plus" color={color} size={size} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
-
 
 export default NavTabs;
