@@ -1,10 +1,13 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import React, { useState } from "react";
 import { Searchbar } from "react-native-paper";
+import ItemCard from "./ItemCard";
 
-const ToolSearch = ({ items, setItems }) => {
+const ToolSearch = ({ items, navigation }) => {
   
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [filteredTools, setFilteredTools] = useState([]);
+
   let lowerSearch = searchQuery.toLowerCase();
 
   const onChangeSearch = (query) => {
@@ -15,22 +18,33 @@ const ToolSearch = ({ items, setItems }) => {
     const itemsArr = [...items];
     let filteredItems = itemsArr.filter((item) => {
       let itemCased = item.name.toLowerCase();
-      let regex = new RegExp(`(${lowerSearch})`, 'g');
+      let regex = new RegExp(`(${lowerSearch})`, "g");
       return itemCased.match(regex);
-    })
-    setItems(filteredItems)
-    setSearchQuery("");
+    });
+    setFilteredTools(filteredItems);
+    setSearchQuery("");;
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Searchbar
         placeholder="Search the Toolshed"
         value={searchQuery}
-        style={styles.container}
+        style={styles.bar}
         onChangeText={onChangeSearch}
         onIconPress={handleIconPress}
-      />
+      /> 
+      <View style={styles.cardContainer}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("ItemScreen");
+          }}
+        >
+          {filteredTools.map((item) => {
+            return <ItemCard item={item} key={item.name} />;
+          })}
+          </Pressable>
+        </View>
     </View>
   );
 };
@@ -38,8 +52,15 @@ const ToolSearch = ({ items, setItems }) => {
 export default ToolSearch;
 
 const styles = StyleSheet.create({
-  container: {
+
+  cardContainer: {
+    alignContent: "space-between",
     width: "90%",
     margin: "5%",
   },
-})
+
+  bar: {
+    width: "100%",
+    marginTop: "5%",
+  },
+});
