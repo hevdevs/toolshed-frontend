@@ -1,14 +1,19 @@
-import { StyleSheet, View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState, createContext, useContext, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 
-//screens
+// Screens
 import Register from "./screens/Register";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
+import ToolshedScreen from "./screens/ToolshedScreen";
+import ItemScreen from "./screens/ItemScreen";
+import InboxScreen from "./screens/InboxScreen";
+import RequestsScreen from "./screens/RequestsScreen";
+import UserScreen from "./screens/UserScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,8 +59,21 @@ function RootNavigator() {
   }
   return (
     <NavigationContainer>
-      {user ? <HomeScreen /> : <AuthStack />}
+      {user ? <HomeStack /> : <AuthStack />}
     </NavigationContainer>
+  );
+}
+
+function HomeStack() {
+  return (
+    <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Toolshed" component={ToolshedScreen} />
+      <Stack.Screen name="InboxScreen" component={InboxScreen} />
+      <Stack.Screen name="RequestsScreen" component={RequestsScreen} />
+      <Stack.Screen name="UserScreen" component={UserScreen} />
+      <Stack.Screen name="ItemScreen" component={ItemScreen} />
+    </Stack.Navigator>
   );
 }
 
@@ -66,12 +84,3 @@ export default function App() {
     </AuthenticatedUserProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
