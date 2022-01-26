@@ -1,13 +1,10 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Image } from "react-native";
+import React, { useEffect, useState } from "react";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { Card } from 'react-native-paper';
 
 const ItemCard = ({ item }) => {
-    
-    const storage = getStorage();
-    const [itemImage, setItemImage] = useState("");
-
+  const storage = getStorage();
+  const [itemImage, setItemImage] = useState("");
     useEffect(() => {
         (async () => {
             try {
@@ -19,14 +16,14 @@ const ItemCard = ({ item }) => {
         })();
     }, []);
 
-  return (
+    return (
       <View style={styles.card}>
           {itemImage ? <Image style={styles.image} source={{ uri: itemImage }} /> : null}
-          <View style={styles.cardText}>
-          <Text style={styles.text}>{`${item.name} \n`}</Text>
-              <Text style={styles.text}>{`${item.username}`}</Text>
+          <View>
+                <Text style={styles.cardText}>{`${item.name} \n`}</Text>
+              <Text style={styles.cardText}>{`${item.username}`}</Text>
           </View>
-    </View>
+      </View>
   );
 };
 
@@ -35,14 +32,15 @@ export default ItemCard;
 const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
-    backgroundColor: "#FAF9F6",
-    width: "90%",
+    width: "100%",
     padding: "5%",
     borderRadius: 5,
-    margin: "5%",
+    marginBottom: "5%",
+    backgroundColor: "#FFF8F0",
   },
-    cardText: {
-      marginLeft: "5%",
+  cardText: {
+    marginRight: 0,
+    marginLeft: "5%",
   },
   image: {
     width: 100,
