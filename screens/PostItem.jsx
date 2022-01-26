@@ -7,11 +7,18 @@ import { addDoc, collection } from "firebase/firestore";
 import ImagePicker from "../components/ImagePicker";
 import { auth, db, storage } from "../firebase";
 
-const PostItem = () => {
+const PostItem = ({ navigation }) => {
   const [itemName, setItemName] = useState("");
   const [phoneImageUri, setPhoneImageUri] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [uploadedUri, setUploadedUri] = useState("");
+
+  const resetState = () => {
+    setItemName("");
+    setPhoneImageUri("");
+    setItemDescription("");
+    setUploadedUri("");
+  };
 
   const uploadImage = async () => {
     const blob = await new Promise((resolve, reject) => {
@@ -61,7 +68,8 @@ const PostItem = () => {
     }
     try {
       await addItem();
-      alert("Success");
+      resetState();
+      navigation.navigate("Toolshed");
     } catch (err) {
       try {
         console.log(err);
