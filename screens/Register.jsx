@@ -29,7 +29,6 @@ const Register = ({ navigation }) => {
         let newUserInfo = { firstName, surname, email };
         setDoc(doc(db, "users", docRef), newUserInfo);
         alert("Sign Up Was Successful");
-        navigation.navigate("LoginScreen");
       } catch (err) {
         console.log(err);
       }
