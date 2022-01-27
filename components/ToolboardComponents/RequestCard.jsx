@@ -11,7 +11,7 @@ const RequestCard = ({ requests, navigation }) => {
     <View style={styles.cardContainer}>
       {requests.map((req) => {
         return (
-          <Pressable onPress={() => navigation.navigate("RequestScreen", { req })}>
+          <Pressable onPress={() => navigation.navigate("RequestScreen", { req, navigation })}>
             <View style={styles.card}>
               <Text style={styles.cardTitle}>{`${req.title} \n \n`}</Text>
               <Text>{`${req.body}`}</Text>

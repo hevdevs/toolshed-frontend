@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 
-const RequestScreen = ({ route }) => {
+const RequestScreen = ({ route, navigation }) => {
   
   const { req } = route.params;
   
@@ -10,7 +10,7 @@ const RequestScreen = ({ route }) => {
       <Text>{`${req.title}`}</Text>
       <Text>{`${req.body}`}</Text>
       <Text>{`${req.user}`}</Text>
-      <Pressable onPress={goBack()}>
+      <Pressable onPress={() => { navigation.goBack() }}>
         <Text>Back to toolboard</Text>
       </Pressable>
     </View>
