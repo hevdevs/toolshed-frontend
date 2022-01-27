@@ -5,11 +5,12 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 const ItemCard = ({ item }) => {
   const storage = getStorage();
   const [itemImage, setItemImage] = useState("");
+  
   useEffect(() => {
     (async () => {
       try {
         const imageUrl = await getDownloadURL(
-          ref(storage, "images/MOCK-IMAGE.jpg")
+          ref(storage, `${item.imageUri}`)
         );
         setItemImage(imageUrl);
       } catch (err) {

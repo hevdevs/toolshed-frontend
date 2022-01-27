@@ -3,10 +3,6 @@ import React from 'react';
 
 const RequestCard = ({ requests, navigation }) => {
   
-  const handlePress = () => {
-    ;
-  }
-
   return (
     <View style={styles.cardContainer}>
       {requests.map((req) => {
