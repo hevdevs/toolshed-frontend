@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 
 // import HomeScreen from "../screens/HomeScreen";
 import UserScreen from "../screens/UserScreen";
-import RequestsScreen from "../screens/RequestsScreen";
+import ToolboardScreen from "../screens/ToolboardScreen";
 import InboxScreen from "../screens/InboxScreen";
 import ToolshedScreen from "../screens/ToolshedScreen";
 
@@ -41,8 +41,8 @@ function NavTabs() {
         }}
       />
       <Tab.Screen
-        name="Requests"
-        component={RequestsScreen}
+        name="Toolboard"
+        component={ToolboardScreen}
         options={{
           tabBarLabel: "Requests",
           tabBarIcon: ({ color, size }) => (
