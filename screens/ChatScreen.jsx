@@ -1,7 +1,6 @@
 import React, { useCallback, useLayoutEffect, useState } from "react";
 import { GiftedChat } from "react-native-gifted-chat";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, database } from "../config/firebase";
+import { auth, db } from "../firebase.js";
 // import { useUser } from "../hooks/useUser";
 import {
   addDoc,
@@ -16,7 +15,7 @@ const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
 
   useLayoutEffect(() => {
-    const collectionRef = collection(database, "chats");
+    const collectionRef = collection(db, "chats");
     const q = query(collectionRef, orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -38,7 +37,7 @@ const ChatScreen = () => {
       GiftedChat.append(previousMessages, messages)
     );
     const { _id, createdAt, text, user } = messages[0];
-    addDoc(collection(database, "chats"), {
+    addDoc(collection(db, "chats"), {
       _id,
       createdAt,
       text,

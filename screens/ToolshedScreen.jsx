@@ -7,7 +7,6 @@ import ToolSearch from "../components/ToolshedComponents/ToolSearch";
 
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
-
   const handlePress = () => {
     navigation.navigate("PostItem");
   };
@@ -17,7 +16,9 @@ const ToolshedScreen = ({ navigation }) => {
       try {
         const itemList = await getDocs(collection(db, "items"));
         const itemArray = [];
-        itemList.forEach((doc) => itemArray.push(doc.data()));
+        itemList.forEach((doc) => {
+          itemArray.push(Object.assign({ uid: doc.id }, doc.data()));
+        });
         setItems(itemArray);
       } catch (err) {
         console.log(err);

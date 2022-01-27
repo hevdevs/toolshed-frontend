@@ -1,17 +1,16 @@
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { Searchbar } from "react-native-paper";
 import ItemCard from "./ItemCard";
 
 const ToolSearch = ({ items, navigation }) => {
-  
   const [searchQuery, setSearchQuery] = React.useState("");
   const [filteredTools, setFilteredTools] = useState([]);
 
   let lowerSearch = searchQuery.toLowerCase();
 
   const onChangeSearch = (query) => {
-    setSearchQuery(query)
+    setSearchQuery(query);
   };
 
   const handleIconPress = () => {
@@ -22,7 +21,7 @@ const ToolSearch = ({ items, navigation }) => {
       return itemCased.match(regex);
     });
     setFilteredTools(filteredItems);
-    setSearchQuery("");;
+    setSearchQuery("");
   };
 
   return (
@@ -33,18 +32,22 @@ const ToolSearch = ({ items, navigation }) => {
         style={styles.bar}
         onChangeText={onChangeSearch}
         onIconPress={handleIconPress}
-      /> 
+      />
       <View style={styles.cardContainer}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("ItemScreen");
-          }}
-        >
-          {filteredTools.map((item) => {
-            return <ItemCard item={item} key={item.name} />;
-          })}
-          </Pressable>
-        </View>
+        {filteredTools.map((item, index) => {
+          return (
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("ItemScreen", { item });
+              }}
+              item={item}
+              key={index}
+            >
+              <ItemCard item={item} key={index} />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 };
@@ -52,7 +55,6 @@ const ToolSearch = ({ items, navigation }) => {
 export default ToolSearch;
 
 const styles = StyleSheet.create({
-
   cardContainer: {
     alignContent: "space-between",
     width: "90%",

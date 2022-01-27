@@ -16,6 +16,7 @@ import RequestsScreen from "./screens/RequestsScreen";
 import UserScreen from "./screens/UserScreen";
 import PostItem from "./screens/PostItem";
 import PostRequest from "./screens/PostRequest";
+import ChatScreen from "./screens/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -80,6 +81,7 @@ function HomeStack() {
       <Stack.Screen name="ItemScreen" component={ItemScreen} />
       <Stack.Screen name="PostItem" component={PostItem} />
       <Stack.Screen name="PostRequest" component={PostRequest} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
     </Stack.Navigator>
   );
 }
