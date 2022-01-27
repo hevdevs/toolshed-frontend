@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+  Image,
+} from "react-native";
 import React from "react";
 
 // components
@@ -8,9 +15,10 @@ const ItemScreen = ({ route, navigation }) => {
   const { item } = route.params;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View>
         <Text style={styles.header}>Toolshed</Text>
+        <Image style={styles.image} source={{ uri: item.uri }} />
         <Text>{item.name}</Text>
         <Text>{item.owner}</Text>
         <Text>{item.description}</Text>
@@ -27,7 +35,7 @@ const ItemScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
       <NavTabs />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -38,6 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#9DD9D2",
   },
   header: {
     margin: "5%",
@@ -50,5 +59,8 @@ const styles = StyleSheet.create({
     margin: "5%",
     padding: 10,
     borderRadius: 5,
+  },
+  image: {
+    justifyContent: "center",
   },
 });
