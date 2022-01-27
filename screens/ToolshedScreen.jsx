@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -7,6 +7,10 @@ import ToolSearch from "../components/ToolshedComponents/ToolSearch";
 
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
+
+  const handlePress = () => {
+    navigation.navigate("PostItem");
+  };
 
   useEffect(() => {
     (async () => {
@@ -25,10 +29,18 @@ const ToolshedScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.header}>Toolshed</Text>
       <View style={styles.contentContainer}>
+        <Pressable style={styles.button} onPress={handlePress}>
+          <Text style={styles.text}>Post a tool!</Text>
+        </Pressable>
         <ScrollView>
-          <ToolSearch style={styles.bar}  items={items} setItems={setItems} navigation={navigation} />
+          <ToolSearch
+            style={styles.bar}
+            items={items}
+            setItems={setItems}
+            navigation={navigation}
+          />
         </ScrollView>
-      </View> 
+      </View>
     </View>
   );
 };
@@ -65,5 +77,14 @@ const styles = StyleSheet.create({
   },
   bar: {
     width: "100%",
+  },
+  button: {
+    backgroundColor: "#F36433",
+    margin: "5%",
+    padding: 10,
+    borderRadius: 5,
+  },
+  text: {
+    color: "#FFF8F0",
   },
 });
