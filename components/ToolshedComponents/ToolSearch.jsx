@@ -7,7 +7,7 @@ const ToolSearch = ({ items, navigation }) => {
   
   const [searchQuery, setSearchQuery] = React.useState("");
   const [filteredTools, setFilteredTools] = useState([]);
-
+  
   let lowerSearch = searchQuery.toLowerCase();
 
   const onChangeSearch = (query) => {
@@ -40,8 +40,8 @@ const ToolSearch = ({ items, navigation }) => {
             navigation.navigate("ItemScreen");
           }}
         >
-          {filteredTools.map((item) => {
-            return <ItemCard item={item} key={item.name} />;
+          {filteredTools.map((item, idx) => {
+            return <ItemCard item={item} key={idx} />;
           })}
           </Pressable>
         </View>
