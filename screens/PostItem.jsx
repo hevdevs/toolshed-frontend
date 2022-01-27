@@ -11,13 +11,11 @@ const PostItem = ({ navigation }) => {
   const [itemName, setItemName] = useState("");
   const [phoneImageUri, setPhoneImageUri] = useState("");
   const [itemDescription, setItemDescription] = useState("");
-  const [uploadedUri, setUploadedUri] = useState("");
 
   const resetState = () => {
     setItemName("");
     setPhoneImageUri("");
     setItemDescription("");
-    setUploadedUri("");
   };
 
   const uploadImage = async () => {
@@ -38,16 +36,15 @@ const PostItem = ({ navigation }) => {
     const reference = ref(storage, `images/${uuid.v4()}.jpeg`);
     try {
       const snapshot = await uploadBytes(reference, blob);
-      const uri = `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`;
-      setUploadedUri(uri);
-    } catch (err) {
-      console.log(err);
-    } finally {
       blob.close();
+      const uri = `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`;
+      return uri;
+    } catch (err) {
+      throw err;
     }
   };
 
-  const addItem = async () => {
+  const addItem = async (uploadedUri) => {
     const item = {
       name: itemName,
       description: itemDescription,
@@ -55,55 +52,46 @@ const PostItem = ({ navigation }) => {
       owner: auth.currentUser.uid,
     };
     const postItem = await addDoc(collection(db, "items"), item);
-    console.log(postItem);
   };
 
   const handleSubmit = async () => {
-    let uploadedImageRef;
+    const uploadedUri = await uploadImage();
+    uploadedImageRef = ref(storage, uploadedUri);
     try {
-      await uploadImage();
-      uploadedImageRef = ref(storage, uploadedUri);
-    } catch (err) {
-      alert("failed to upload image");
-    }
-    try {
-      await addItem();
+      await addItem(uploadedUri);
       resetState();
       navigation.navigate("Toolshed");
     } catch (err) {
-      try {
-        console.log(err);
-        await deleteObject(uploadedImageRef);
-        console.log("Image deletion succesful");
-      } catch {
-        console.log("Image deletion failed");
-      }
+      if (uploadedUri) await deleteObject(uploadedImageRef);
+      alert(err);
     }
   };
 
   return (
-    <View>
-      <Text>{"\n\n"}</Text>
-      <TextInput
-        placeholder="Item name"
-        value={itemName}
-        onChangeText={setItemName}
-      />
-      <TextInput
-        placeholder="Item description"
-        value={itemDescription}
-        onChangeText={setItemDescription}
-      />
-      <ImagePicker
-        phoneImageUri={phoneImageUri}
-        setPhoneImageUri={setPhoneImageUri}
-      />
-      <Button
-        title="Add to toolshed"
-        onPress={handleSubmit}
-        disabled={!phoneImageUri || !itemName}
-      />
-    </View>
+    <>
+      <View>
+        <Text>{"\n\n"}</Text>
+        <TextInput
+          placeholder="Item name"
+          value={itemName}
+          onChangeText={setItemName}
+        />
+        <TextInput
+          placeholder="Item description"
+          value={itemDescription}
+          onChangeText={setItemDescription}
+        />
+        <ImagePicker
+          phoneImageUri={phoneImageUri}
+          setPhoneImageUri={setPhoneImageUri}
+        />
+        <Button
+          title="Add to toolshed"
+          onPress={handleSubmit}
+          disabled={!phoneImageUri || !itemName}
+        />
+      </View>
+    </>
   );
 };
 
