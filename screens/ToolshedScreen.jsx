@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
+// components
 import ToolSearch from "../components/ToolshedComponents/ToolSearch";
+import ItemCard from "../components/ToolshedComponents/ItemCard";
 
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
+  const [filteredTools, setFilteredTools] = useState([]);
   const handlePress = () => {
     navigation.navigate("PostItem");
   };
@@ -33,13 +43,30 @@ const ToolshedScreen = ({ navigation }) => {
         <Pressable style={styles.button} onPress={handlePress}>
           <Text style={styles.text}>Post a tool!</Text>
         </Pressable>
+        <ToolSearch
+          style={styles.bar}
+          items={items}
+          setItems={setItems}
+          navigation={navigation}
+          setFilteredTools={setFilteredTools}
+          filteredTools={filteredTools}
+        />
         <ScrollView>
-          <ToolSearch
-            style={styles.bar}
-            items={items}
-            setItems={setItems}
-            navigation={navigation}
-          />
+          <View style={styles.cardContainer}>
+            {filteredTools.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("ItemScreen", { item });
+                  }}
+                  item={item}
+                  key={index}
+                >
+                  <ItemCard item={item} key={index} />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </ScrollView>
       </View>
     </View>
