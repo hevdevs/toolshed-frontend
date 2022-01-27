@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const RequestsScreen = ({ navigation }) => {
 
   const handlePress = () => {
-    navigation.navigate("PostRequesta")
+    navigation.navigate("PostRequest")
   }
     return (
         <View style={styles.container}>
