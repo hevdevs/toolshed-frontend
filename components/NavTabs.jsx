@@ -1,7 +1,7 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 // import HomeScreen from "../screens/HomeScreen";
 import UserScreen from "../screens/UserScreen";
@@ -25,9 +25,9 @@ function NavTabs() {
         component={ToolshedScreen}
         options={{
           tabBarLabel: "Toolshed",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color }) => {
+            return <Ionicons name={"home"} size={24} color={color} />;
+          },
         }}
       />
       <Tab.Screen
@@ -35,9 +35,9 @@ function NavTabs() {
         component={UserScreen}
         options={{
           tabBarLabel: "My Page",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color }) => {
+            return <Ionicons name={"person"} size={24} color={color} />;
+          },
         }}
       />
       <Tab.Screen
@@ -45,9 +45,9 @@ function NavTabs() {
         component={ToolboardScreen}
         options={{
           tabBarLabel: "Requests",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="help" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color }) => {
+            return <Ionicons name={"hand-left"} size={24} color={color} />;
+          },
         }}
       />
       <Tab.Screen
@@ -55,9 +55,9 @@ function NavTabs() {
         component={InboxScreen}
         options={{
           tabBarLabel: "Inbox",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="chat" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color }) => {
+            return <Ionicons name={"mail"} size={24} color={color} />;
+          },
         }}
       />
     </Tab.Navigator>
