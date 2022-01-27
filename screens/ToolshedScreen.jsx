@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   },
   header: {
     margin: "5%",
+    marginTop: "10%",
     fontSize: 28,
     fontWeight: "bold",
     color: "#FFF8F0",

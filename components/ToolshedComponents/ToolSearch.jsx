@@ -4,7 +4,6 @@ import { Searchbar } from "react-native-paper";
 
 const ToolSearch = ({ items, setFilteredTools, filteredTools }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
-
   let lowerSearch = searchQuery.toLowerCase();
 
   const onChangeSearch = (query) => {
