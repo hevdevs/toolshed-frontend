@@ -12,10 +12,12 @@ import HomeScreen from "./screens/HomeScreen";
 import ToolshedScreen from "./screens/ToolshedScreen";
 import ItemScreen from "./screens/ItemScreen";
 import InboxScreen from "./screens/InboxScreen";
-import RequestsScreen from "./screens/RequestsScreen";
+import ToolboardScreen from "./screens/ToolboardScreen";
 import UserScreen from "./screens/UserScreen";
 import PostItem from "./screens/PostItem";
 import PostRequest from "./screens/PostRequest";
+import ChatScreen from "./screens/ChatScreen";
+import RequestScreen from "./screens/RequestScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -75,11 +77,13 @@ function HomeStack() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Toolshed" component={ToolshedScreen} />
       <Stack.Screen name="InboxScreen" component={InboxScreen} />
-      <Stack.Screen name="RequestsScreen" component={RequestsScreen} />
+      <Stack.Screen name="ToolboardScreen" component={ToolboardScreen} />
       <Stack.Screen name="UserScreen" component={UserScreen} />
       <Stack.Screen name="ItemScreen" component={ItemScreen} />
+      <Stack.Screen name="RequestScreen" component={RequestScreen} />
       <Stack.Screen name="PostItem" component={PostItem} />
       <Stack.Screen name="PostRequest" component={PostRequest} />
+      <Stack.Screen name="ChatScreen" component={ChatScreen} />
     </Stack.Navigator>
   );
 }

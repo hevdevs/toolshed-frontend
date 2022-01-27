@@ -5,25 +5,29 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 const ItemCard = ({ item }) => {
   const storage = getStorage();
   const [itemImage, setItemImage] = useState("");
-    useEffect(() => {
-        (async () => {
-            try {
-                const imageUrl = await getDownloadURL(ref(storage, "images/MOCK-IMAGE.jpg"));
-                setItemImage(imageUrl)
-            } catch (err) {
-                console.log(err)
-            }
-        })();
-    }, []);
+  useEffect(() => {
+    (async () => {
+      try {
+        const imageUrl = await getDownloadURL(
+          ref(storage, "images/MOCK-IMAGE.jpg")
+        );
+        setItemImage(imageUrl);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
 
-    return (
-      <View style={styles.card}>
-          {itemImage ? <Image style={styles.image} source={{ uri: itemImage }} /> : null}
-          <View>
-                <Text style={styles.cardText}>{`${item.name} \n`}</Text>
-              <Text style={styles.cardText}>{`${item.username}`}</Text>
-          </View>
+  return (
+    <View style={styles.card}>
+      {itemImage ? (
+        <Image style={styles.image} source={{ uri: itemImage }} />
+      ) : null}
+      <View>
+        <Text style={styles.cardText}>{`${item.name} \n`}</Text>
+        <Text style={styles.cardText}>{`${item.owner}`}</Text>
       </View>
+    </View>
   );
 };
 
