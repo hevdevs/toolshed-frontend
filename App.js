@@ -6,19 +6,19 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 
 // Screens
-import Register from "./screens/Register";
-import LoginScreen from "./screens/LoginScreen";
-import HomeScreen from "./screens/HomeScreen";
-import ToolshedScreen from "./screens/ToolshedScreen";
-import ItemScreen from "./screens/ItemScreen";
-import InboxScreen from "./screens/InboxScreen";
-import ToolboardScreen from "./screens/ToolboardScreen";
-import UserScreen from "./screens/UserScreen";
-import PostItem from "./screens/PostItem";
-import PostRequest from "./screens/PostRequest";
-import ChatScreen from "./screens/ChatScreen";
-import RequestScreen from "./screens/RequestScreen";
-import MapScreen from "./screens/MapScreen";
+import Register from "./screens/LoginScreens/Register";
+import LoginScreen from "./screens/LoginScreens/LoginScreen";
+import HomeScreen from "./screens/LoginScreens/HomeScreen";
+import ToolshedScreen from "./screens/Toolshed/ToolshedScreen";
+import ItemScreen from "./screens/Toolshed/ItemScreen";
+import InboxScreen from "./screens/ChatScreens/InboxScreen";
+import ToolboardScreen from "./screens/Toolboard/ToolboardScreen";
+import UserScreen from "./screens/UserScreens/UserScreen";
+import PostItem from "./screens/Toolshed/PostItem";
+import PostRequest from "./screens/Toolboard/PostRequest";
+import ChatScreen from "./screens/ChatScreens/ChatScreen";
+import RequestScreen from "./screens/Toolboard/RequestScreen";
+import MapScreen from "./screens/Maps/MapScreen";
 
 const Stack = createNativeStackNavigator();
 

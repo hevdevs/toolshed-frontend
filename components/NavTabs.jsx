@@ -4,10 +4,10 @@ import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 // import HomeScreen from "../screens/HomeScreen";
-import UserScreen from "../screens/UserScreen";
-import ToolboardScreen from "../screens/ToolboardScreen";
-import InboxScreen from "../screens/InboxScreen";
-import ToolshedScreen from "../screens/ToolshedScreen";
+import UserScreen from "../screens/UserScreens/UserScreen";
+import ToolboardScreen from "../screens/Toolboard/ToolboardScreen";
+import InboxScreen from "../screens/ChatScreens/InboxScreen";
+import ToolshedScreen from "../screens/Toolshed/ToolshedScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
