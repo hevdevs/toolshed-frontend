@@ -48,7 +48,7 @@ const ItemScreen = ({ route, navigation }) => {
         >
           <Text>Click here to send a direct message</Text>
         </TouchableOpacity>
-      <Button title="View Map" style={styles.button} onPress={() => {navigation.navigate("MapScreen", item)}}/>
+      <Button title="View Map" style={styles.button} onPress={() => {navigation.navigate("MapScreen", {item})}}/>
       </View>
     </SafeAreaView>
   );
