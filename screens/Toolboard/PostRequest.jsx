@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable, Picker } from "react-native";
+import { View, Text, StyleSheet, Pressable, Picker, ScrollView, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
 import { addDoc, collection, getDoc, doc } from "firebase/firestore";
@@ -58,34 +58,55 @@ const PostRequest = ({ navigation: { goBack } }) => {
 
 
   return (
-    <View>
-      <Text>{"\n\n"}</Text>
-      <TextInput
-        placeholder="What are you looking for?"
-        value={titleInput}
-        onChangeText={setTitleInput}
-      />
-      <TextInput
-        placeholder="Add a description"
-        value={bodyInput}
-        onChangeText={setBodyInput}
-      />
-      <Text>Select a category for your item request</Text>
-      <Picker
-        selectedCategory={selectedCategory}
-        style={{ height: 50, width: 150 }}
-        onValueChange={(categoryValue) => setSelectedCategory(categoryValue)}
-      >
-        {categories.map((category, index) => {
-          return <Picker.Item label={category} value={category} key={index} />;
-        })}
-      </Picker>
-      <Pressable style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.text}>Post your request to the Toolboard</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={() => goBack()}>
-        <Text style={styles.text}>Go Back</Text>
-      </Pressable>
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Request an Item</Text>
+      </View>
+      <ScrollView>
+        <View style={styles.formContainer}>
+          <Text style={styles.subheader}>Enter item name</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="What are you looking for?"
+            value={titleInput}
+            onChangeText={setTitleInput}
+          />
+          <Text style={styles.subheader}>Enter item description</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Add a description"
+            value={bodyInput}
+            onChangeText={setBodyInput}
+          />
+          <Text style={styles.subheader}>
+            Select a category for your item request
+          </Text>
+          <TouchableOpacity style={styles.pickerContainer}>
+            <Picker
+              style={styles.picker}
+              selectedCategory={selectedCategory}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(categoryValue) =>
+                setSelectedCategory(categoryValue)
+              }
+            >
+              {categories.map((category, index) => {
+                return (
+                  <Picker.Item label={category} value={category} key={index} />
+                );
+              })}
+            </Picker>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainer}>
+          <Pressable style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.text}>Submit!</Text>
+          </Pressable>
+          <Pressable style={styles.button} onPress={() => goBack()}>
+            <Text style={styles.text}>Go Back</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -96,17 +117,71 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    width: "100%",
+    backgroundColor: "#9DD9D2",
+  },
+  headerContainer: {
+    backgroundColor: "#F36433",
+    width: "100%",
+    height: "15%",
+  },
+  header: {
+    alignSelf: "center",
+    position: "absolute",
+    top: 0,
+    marginTop: "15%",
+    margin: 0,
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#FFF8F0",
+  },
+  formContainer: {
+    backgroundColor: "#9DD9D2",
+    width: "100%",
+    paddingTop: "10%",
+  },
+  input: {
+    backgroundColor: "#FFF8F0",
+    margin: "5%",
+    color: "#172121",
+  },
+  picker: {
+    height: 50,
+    width: 150,
+    color: "#172121",
+  },
+  pickerContainer: {
+    margin: "5%",
+    backgroundColor: "#2DC2DB",
+    width: 150,
+    alignSelf: "center",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    margin: "10%",
   },
   button: {
+    alignSelf: "center",
     backgroundColor: "#F36433",
-    margin: "5%",
+    marginRight: "5%",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
+    width: 75,
+    bottom: 0,
   },
   text: {
-
     color: "#FFF8F0",
+    fontWeight: "bold",
+  },
+  subheader: {
+    alignSelf: "center",
+    color: "#172121",
+    fontWeight: "bold",
+    fontSize: 20,
+    marginBottom: "2%",
+    borderBottomColor: "#172121",
+    borderBottomWidth: 1,
   },
 });
