@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { TextInput } from "react-native-paper";
 import uuid from "react-native-uuid";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDoc, doc } from "firebase/firestore";
 import ImagePicker from "../components/ImagePicker";
 import { auth, db, storage } from "../firebase";
 
@@ -11,11 +11,13 @@ const PostItem = ({ navigation }) => {
   const [itemName, setItemName] = useState("");
   const [phoneImageUri, setPhoneImageUri] = useState("");
   const [itemDescription, setItemDescription] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const resetState = () => {
     setItemName("");
     setPhoneImageUri("");
     setItemDescription("");
+    setSelectedCategory("");
   };
 
   const uploadImage = async () => {
@@ -45,11 +47,26 @@ const PostItem = ({ navigation }) => {
   };
 
   const addItem = async (uploadedUri) => {
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef);
+    const fields = docSnap._document.data.value.mapValue.fields;
+    
     const item = {
       name: itemName,
       description: itemDescription,
       imageUri: uploadedUri,
-      owner: auth.currentUser.uid,
+      userInfo: {
+        userUid: auth.currentUser.uid,
+        userFirstName: fields.firstName.stringValue,
+        userSurname: fields.surname.stringValue,
+        userLocation: null,
+        userUsername: null,       
+      },
+      timestamp: {
+        date: dayjs().format("DD/MM/YY"),
+        time: dayjs().format("HH:mm"),
+        fullStamp: dayjs().format(),
+      },
     };
     const postItem = await addDoc(collection(db, "items"), item);
   };
