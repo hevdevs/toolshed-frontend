@@ -9,7 +9,7 @@ const UserScreen = ({ navigation }) => {
 
   return (
       <View style={styles.container}>
-      <Text style={styles.header}>Toolshed</Text>
+      <Text style={styles.header}>User Page</Text>
       <View style={styles.contentContainer}>
         <Text style={styles.welcome}>Welcome, {auth.currentUser.email}</Text>
         <View style={styles.userInfo}>
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   },
   header: {
     margin: "5%",
+    marginTop: "10%",
     fontSize: 28,
     fontWeight: "bold",
     color: "#FFF8F0",

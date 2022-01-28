@@ -5,26 +5,41 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
+  Button
 } from "react-native";
-import React from "react";
-
-// components
-import NavTabs from "../components/NavTabs";
+import React, {useState, useEffect} from "react";
+import { getDownloadURL, ref} from "@firebase/storage";
+import { storage } from "../firebase";
 
 const ItemScreen = ({ route, navigation }) => {
   const { item } = route.params;
+  const [itemImage, setItemImage] = useState("");
+
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const imageUrl = await getDownloadURL(
+          ref(storage, `${item.imageUri}`)
+        );
+        setItemImage(imageUrl);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
         <Text style={styles.header}>Toolshed</Text>
-        <Image style={styles.image} source={{ uri: item.uri }} />
+      <View style={styles.contentContainer}>
+        <Image style={styles.image} source={{uri: itemImage}} />
         <Text>{item.name}</Text>
         <Text>{item.userInfo.userFirstName}</Text>
         <Text>{item.userInfo.userSurname}</Text>                  
         <Text>{item.description}</Text>
       </View>
-      <View>
+      <View style={styles.contentContainer}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
@@ -34,8 +49,8 @@ const ItemScreen = ({ route, navigation }) => {
         >
           <Text>Click here to send a direct message</Text>
         </TouchableOpacity>
+      <Button title="View Map" style={styles.button} onPress={() => {navigation.navigate("MapScreen", {item})}}/>
       </View>
-      <NavTabs />
     </SafeAreaView>
   );
 };
@@ -47,9 +62,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#9DD9D2",
+    backgroundColor: "#F36433",
   },
   header: {
+    marginTop: "10%",
     margin: "5%",
     fontSize: 28,
     fontWeight: "bold",
@@ -63,5 +79,16 @@ const styles = StyleSheet.create({
   },
   image: {
     justifyContent: "center",
+    height: "60%",
+    width: "60%",
+  },
+  contentContainer: {
+    width: "100%",
+    padding: 0,
+    margin: 0,
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#9DD9D2",
   },
 });
