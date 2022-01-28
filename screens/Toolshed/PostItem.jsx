@@ -1,4 +1,4 @@
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, Picker } from "react-native";
 import React, { useState } from "react";
 import { TextInput } from "react-native-paper";
 import uuid from "react-native-uuid";
@@ -6,18 +6,27 @@ import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection, getDoc, doc } from "firebase/firestore";
 import ImagePicker from "../../components/ImagePicker";
 import { auth, db, storage } from "../../firebase";
+import dayjs from "dayjs";
 
 const PostItem = ({ navigation }) => {
   const [itemName, setItemName] = useState("");
   const [phoneImageUri, setPhoneImageUri] = useState("");
   const [itemDescription, setItemDescription] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(undefined);
+  const categories = [
+    "DIY",
+    "Household",
+    "Kitchen",
+    "Electronics",
+    "Garden",
+    "Furniture"
+  ];
 
   const resetState = () => {
     setItemName("");
     setPhoneImageUri("");
     setItemDescription("");
-    setSelectedCategory("");
+    setSelectedCategory(undefined);
   };
 
   const uploadImage = async () => {
@@ -50,17 +59,18 @@ const PostItem = ({ navigation }) => {
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
     const fields = docSnap._document.data.value.mapValue.fields;
-    
+    console.log(fields)
     const item = {
       name: itemName,
       description: itemDescription,
       imageUri: uploadedUri,
+      category: selectedCategory,
       userInfo: {
         userUid: auth.currentUser.uid,
         userFirstName: fields.firstName.stringValue,
         userSurname: fields.surname.stringValue,
-        userLocation: null,
-        userUsername: null,       
+        userLocation: fields.userLocation,
+        userUsername: auth.currentUser.displayName,       
       },
       timestamp: {
         date: dayjs().format("DD/MM/YY"),
@@ -69,12 +79,13 @@ const PostItem = ({ navigation }) => {
       },
     };
     const postItem = await addDoc(collection(db, "items"), item);
-  };
+  }
 
   const handleSubmit = async () => {
     const uploadedUri = await uploadImage();
     uploadedImageRef = ref(storage, uploadedUri);
     try {
+      
       await addItem(uploadedUri);
       resetState();
       navigation.navigate("Toolshed");
@@ -98,6 +109,19 @@ const PostItem = ({ navigation }) => {
           value={itemDescription}
           onChangeText={setItemDescription}
         />
+        <Text>Select an item category</Text>
+        <Picker
+          placeholder="Select Item Category"
+          selectedCategory={selectedCategory}
+          style={{ height: 50, width: 150 }}
+          onValueChange={(categoryValue) => setSelectedCategory(categoryValue)}
+        >
+          {categories.map((category, index) => {
+            return (
+              <Picker.Item label={category} value={category} key={index} />
+            );
+          })}
+        </Picker>
         <ImagePicker
           phoneImageUri={phoneImageUri}
           setPhoneImageUri={setPhoneImageUri}

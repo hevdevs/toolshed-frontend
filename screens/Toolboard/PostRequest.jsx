@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, Pressable, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Pressable, Picker } from "react-native";
 import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
 import { addDoc, collection, getDoc, doc } from "firebase/firestore";
@@ -8,6 +8,16 @@ import dayjs from "dayjs";
 const PostRequest = ({ navigation: { goBack } }) => {
   const [titleInput, setTitleInput] = useState("");
   const [bodyInput, setBodyInput] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(undefined);
+
+  const categories = [
+    "DIY",
+    "Household",
+    "Kitchen",
+    "Electronics",
+    "Garden",
+    "Furniture",
+  ];
 
   const resetForms = () => {
     setTitleInput("");
@@ -22,12 +32,13 @@ const PostRequest = ({ navigation: { goBack } }) => {
     const request = {
       title: titleInput,
       body: bodyInput,
+      category: selectedCategory,
       userInfo: {
         userUid: auth.currentUser.uid,
         userFirstName: fields.firstName.stringValue,
         userSurname: fields.surname.stringValue,
-        userLocation: null,
-        userUsername: null,
+        userLocation: fields.userLocation,
+        userUsername: auth.currentUser.displayName,
       },
       timestamp: {
         date: dayjs().format("DD/MM/YY"),
@@ -50,19 +61,31 @@ const PostRequest = ({ navigation: { goBack } }) => {
     <View>
       <Text>{"\n\n"}</Text>
       <TextInput
-        placeholder="Title"
+        placeholder="What are you looking for?"
         value={titleInput}
         onChangeText={setTitleInput}
       />
       <TextInput
-        placeholder="Body"
+        placeholder="Add a description"
         value={bodyInput}
         onChangeText={setBodyInput}
       />
-      <Pressable style={styles.button} onPress={() => goBack()}>
-        <Text style={styles.text}>Back to Toolboard</Text>
+      <Text>Select a category for your item request</Text>
+      <Picker
+        selectedCategory={selectedCategory}
+        style={{ height: 50, width: 150 }}
+        onValueChange={(categoryValue) => setSelectedCategory(categoryValue)}
+      >
+        {categories.map((category, index) => {
+          return <Picker.Item label={category} value={category} key={index} />;
+        })}
+      </Picker>
+      <Pressable style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.text}>Post your request to the Toolboard</Text>
       </Pressable>
-        <Button title="Post to Toolboard" onPress={handleSubmit} />
+      <Pressable style={styles.button} onPress={() => goBack()}>
+        <Text style={styles.text}>Go Back</Text>
+      </Pressable>
     </View>
   );
 };
@@ -80,8 +103,10 @@ const styles = StyleSheet.create({
     margin: "5%",
     padding: 10,
     borderRadius: 5,
+    alignItems: "center",
   },
   text: {
+
     color: "#FFF8F0",
   },
 });
