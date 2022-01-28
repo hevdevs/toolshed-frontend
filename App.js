@@ -18,6 +18,7 @@ import PostItem from "./screens/PostItem";
 import PostRequest from "./screens/PostRequest";
 import ChatScreen from "./screens/ChatScreen";
 import RequestScreen from "./screens/RequestScreen";
+import MapScreen from "./screens/MapScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -84,6 +85,7 @@ function HomeStack() {
       <Stack.Screen name="PostItem" component={PostItem} />
       <Stack.Screen name="PostRequest" component={PostRequest} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
+      <Stack.Screen name="MapScreen" component={MapScreen} />
     </Stack.Navigator>
   );
 }
