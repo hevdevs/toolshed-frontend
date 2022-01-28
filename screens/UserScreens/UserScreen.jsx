@@ -1,11 +1,28 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
-import {auth} from "../../firebase.js";
+import React, {useState, useEffect} from 'react';
+import { auth, db } from "../../firebase.js";
+import { collection, getDocs } from "firebase/firestore";
 import SignOut from '../../components/SignOut.jsx';
 
 const UserScreen = ({ navigation }) => {
+  const [items, setItems] = useState([]);
 
-  // console.log(auth);
+  useEffect(() => {
+    (async () => {
+      try {
+        const itemList = await getDocs(collection(db, "items"));
+        const itemArray = [];
+        itemList.forEach((doc) => {
+          console.log(doc)
+          itemArray.push(Object.assign({ uid: doc.id }, doc.data()));
+        });
+        setItems(itemArray);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
 
   return (
       <View style={styles.container}>
