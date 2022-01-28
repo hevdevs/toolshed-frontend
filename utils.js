@@ -2,6 +2,7 @@ import { storage } from "./firebase";
 import { ref, getDownloadURL } from "firebase/storage";
 import { Image } from "react-native";
 import React, { useState, useEffect } from "react";
+import * as Location from "expo-location";
 
 export const distance = (loc1, loc2) => {
   //Distance in km
@@ -28,3 +29,12 @@ export const distance = (loc1, loc2) => {
     return dist.toFixed(2);
   }
 };
+
+export const setLocation = async (postcode, setUserLocation) => {
+  const coords = await Location.geocodeAsync(`${postcode}`);
+  setUserLocation({
+    longitude: coords[0].longitude,
+    latitude: coords[0].latitude,
+  });
+};
+

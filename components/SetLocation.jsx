@@ -5,7 +5,7 @@ import { TextInput } from "react-native-paper";
 import * as Location from "expo-location";
 import MapComponent from "./MapComponent";
 
-const SetLocation = ({ setLocation, location }) => {
+const SetLocation = ({ setUserLocation, userLocation }) => {
   const [showMap, setShowMap] = useState(false);
   const [postCode, setPostCode] = useState("");
 

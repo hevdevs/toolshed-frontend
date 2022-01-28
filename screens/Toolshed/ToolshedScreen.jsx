@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db, auth } from "../../firebase";
 
 // components
 import ToolSearch from "../../components/ToolshedComponents/ToolSearch";
