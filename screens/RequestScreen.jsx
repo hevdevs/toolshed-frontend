@@ -4,13 +4,20 @@ import React from 'react';
 const RequestScreen = ({ route, navigation }) => {
   
   const { req } = route.params;
+  console.log(req)
   
   return (
     <View style={styles.container}>
       <Text>{`${req.title}`}</Text>
       <Text>{`${req.body}`}</Text>
-      <Text>{`${req.user}`}</Text>
-      <Pressable onPress={() => { navigation.goBack() }}>
+      <Text>{`${req.userInfo.userFirstName}`}</Text>
+      <Text>{`${req.userInfo.userSurname}`}</Text>
+      <Text>{`${req.timestamp.date} ${req.timestamp.time}`}</Text>
+      <Pressable
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
         <Text>Back to toolboard</Text>
       </Pressable>
     </View>

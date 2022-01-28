@@ -20,7 +20,8 @@ const ItemScreen = ({ route, navigation }) => {
         <Text style={styles.header}>Toolshed</Text>
         <Image style={styles.image} source={{ uri: item.uri }} />
         <Text>{item.name}</Text>
-        <Text>{item.owner}</Text>
+        <Text>{item.userInfo.userFirstName}</Text>
+        <Text>{item.userInfo.userSurname}</Text>                  
         <Text>{item.description}</Text>
       </View>
       <View>

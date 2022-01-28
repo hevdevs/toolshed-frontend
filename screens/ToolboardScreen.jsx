@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -23,20 +23,20 @@ const ToolboardScreen = ({ navigation }) => {
     })()
   }, []);
 
-  console.log(requests)
-
   const handlePress = () => {
     navigation.navigate("PostRequest")
   }
     return (
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <ScrollView>
         <Text style={styles.header}>Toolboard</Text>
         <View style={styles.contentContainer}>
           <Pressable style={styles.button} onPress={handlePress}>
             <Text style={styles.text}>Post a request!</Text>
           </Pressable>
           <RequestCard requests={requests} navigation={navigation} />
-        </View>
+          </View>
+        </ScrollView>
     </View>
   );
 };
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#F36433",
     margin: "5%",
+    marginTop: "20%",
     padding: 10,
     borderRadius: 5,
   },
