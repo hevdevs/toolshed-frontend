@@ -11,8 +11,8 @@ const RequestScreen = ({ route, navigation }) => {
       <Text>{`${req.title}`}</Text>
       <Text>{`${req.body}`}</Text>
       <Text>{`${req.category}`}</Text>
-      <Text>{`${req.userInfo.userFirstName}`}</Text>
-      <Text>{`${req.userInfo.userSurname}`}</Text>
+      {/* <Text>{`${req.userInfo.userFirstName}`}</Text> */}
+      {/* <Text>{`${req.userInfo.userSurname}`}</Text> */}
       <Text>{`${req.timestamp.date} ${req.timestamp.time}`}</Text>
       <Pressable
         onPress={() => {
