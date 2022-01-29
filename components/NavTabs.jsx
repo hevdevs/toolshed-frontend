@@ -56,7 +56,7 @@ function NavTabs() {
         options={{
           tabBarLabel: "Inbox",
           tabBarIcon: ({ color }) => {
-            return <Ionicons name={"mail"} size={24} color={color} />;
+            return <Ionicons name={"chatbox-ellipses"} size={24} color={color} />;
           },
         }}
       />

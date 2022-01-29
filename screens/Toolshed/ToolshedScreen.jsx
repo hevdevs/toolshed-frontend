@@ -7,16 +7,20 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+
 import { collection, getDocs } from "firebase/firestore";
 import { db, auth } from "../../firebase";
 
-// components
 import ToolSearch from "../../components/ToolshedComponents/ToolSearch";
 import ItemCard from "../../components/ToolshedComponents/ItemCard";
+import ActionButton from "react-native-action-button";
 
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const [filteredTools, setFilteredTools] = useState([]);
+  
   const handlePress = () => {
     navigation.navigate("PostItem");
   };
@@ -40,9 +44,6 @@ const ToolshedScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.header}>Toolshed</Text>
       <View style={styles.contentContainer}>
-        <Pressable style={styles.button} onPress={handlePress}>
-          <Text style={styles.text}>Post a tool!</Text>
-        </Pressable>
         <ToolSearch
           style={styles.bar}
           items={items}
@@ -69,6 +70,11 @@ const ToolshedScreen = ({ navigation }) => {
           </View>
         </ScrollView>
       </View>
+      <ActionButton buttonColor="#F36433">
+        <ActionButton.Item onPress={handlePress} title={"Post a Tool"}>
+          <Ionicons name={"build"} size={24} color={"white"} />
+        </ActionButton.Item>
+      </ActionButton>
     </View>
   );
 };
@@ -111,9 +117,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F36433",
     margin: "5%",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 35,
+    position: "relative",
+    bottom: 0,
+    alignSelf: "flex-end",
   },
   text: {
     color: "#FFF8F0",
+    fontWeight: "bold",
+    fontSize: 30,
   },
 });

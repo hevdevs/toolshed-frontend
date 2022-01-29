@@ -1,3 +1,6 @@
+
+import React, { useState, useEffect } from "react";
+
 import {
   StyleSheet,
   Text,
@@ -5,13 +8,16 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
-  Button,
+  Pressable,
 } from "react-native";
+
 import React, { useState, useEffect } from "react";
 import { getDownloadURL, ref } from "@firebase/storage";
 import { storage, auth, db } from "../../firebase";
 import CalendarComponent from "../../components/CalendarComponent";
 import { updateDoc, doc, arrayUnion, addDoc } from "firebase/firestore";
+
+import { Ionicons } from "@expo/vector-icons";
 
 const ItemScreen = ({ route, navigation }) => {
   const { item } = route.params;
@@ -52,8 +58,9 @@ const ItemScreen = ({ route, navigation }) => {
       <View style={styles.contentContainer}>
         <Image style={styles.image} source={{ uri: itemImage }} />
         <Text>{item.name}</Text>
-        <Text>{item.userInfo.userFirstName}</Text>
-        <Text>{item.userInfo.userSurname}</Text>
+        <Text>
+          {item.userInfo.userFirstName} {item.userInfo.userSurname}
+        </Text>
         <Text>{item.description}</Text>
       </View>
       <View style={styles.contentContainer}>
@@ -64,15 +71,30 @@ const ItemScreen = ({ route, navigation }) => {
           onPress={handlePress}
           itemOwner={item.owner}
         >
-          <Text>Click here to send a direct message</Text>
+          <Text style={styles.text}>MESSAGE <Ionicons name={"paper-plane"} size={16} /></Text>
         </TouchableOpacity>
-        <Button
+        <Pressable
           title="View Map"
           style={styles.button}
           onPress={() => {
             navigation.navigate("MapScreen", { item });
           }}
-        />
+        >
+          <Text style={styles.text}>
+            VIEW MAP <Ionicons name={"map"} size={16} />
+          </Text>
+        </Pressable>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Text style={styles.text}>
+            <Ionicons name={"arrow-back-circle"} size={16} />
+            {" BACK"}
+          </Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -99,6 +121,7 @@ const styles = StyleSheet.create({
     margin: "5%",
     padding: 10,
     borderRadius: 5,
+    alignItems: "center",
   },
   image: {
     justifyContent: "center",
@@ -113,5 +136,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#9DD9D2",
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#FFF8F0",
   },
 });
