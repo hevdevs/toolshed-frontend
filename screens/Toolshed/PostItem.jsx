@@ -148,7 +148,7 @@ const PostItem = ({ navigation }) => {
           >
             <Text style={styles.text}>Submit!</Text>
           </Pressable>
-          <Pressable style={styles.button} onPress={() => goBack()}>
+          <Pressable style={styles.button} onPress={() => navigation.goBack()}>
             <Text style={styles.text}>Go Back</Text>
           </Pressable>
         </View>
