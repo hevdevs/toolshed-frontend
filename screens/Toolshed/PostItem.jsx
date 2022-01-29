@@ -1,18 +1,21 @@
-import { View, Text, Button, Picker, StyleSheet, Pressable, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState } from "react";
+import { View, Text, Button, Picker, StyleSheet, Pressable, TouchableOpacity, ScrollView } from "react-native";
 import { TextInput } from "react-native-paper";
 import uuid from "react-native-uuid";
+
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection, getDoc, doc } from "firebase/firestore";
-import ImagePicker from "../../components/ImagePicker";
 import { auth, db, storage } from "../../firebase";
 import dayjs from "dayjs";
+
+import ImagePicker from "../../components/ImagePicker";
 
 const PostItem = ({ navigation }) => {
   const [itemName, setItemName] = useState("");
   const [phoneImageUri, setPhoneImageUri] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(undefined);
+  
   const categories = [
     "DIY",
     "Household",
@@ -78,6 +81,7 @@ const PostItem = ({ navigation }) => {
         time: dayjs().format("HH:mm"),
         fullStamp: dayjs().format(),
       },
+      available: true,
     };
     const postItem = await addDoc(collection(db, "items"), item);
   }
