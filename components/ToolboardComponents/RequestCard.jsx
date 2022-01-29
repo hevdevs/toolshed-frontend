@@ -9,7 +9,7 @@ const RequestCard = ({ requests, navigation }) => {
         return (
           <Pressable onPress={() => navigation.navigate("RequestScreen", { req, navigation })}>
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>{`${req.title} \n \n`}</Text>
+              <Text style={styles.cardTitle}>{`Looking for: ${req.title} \n \n`}</Text>
               <Text>{`${req.body}`}</Text>
             </View>
           </Pressable>
@@ -23,22 +23,24 @@ export default RequestCard;
 
 const styles = StyleSheet.create({
   cardContainer: {
-    alignContent: "space-between",
-    width: "90%",
-    margin: "5%",
+    width: "100%",
+    backgroundColor: "#9DD9D2",
   },
   card: {
-    flexDirection: "row",
-    width: "100%",
+    width: "90%",
     padding: "5%",
     borderRadius: 5,
-    marginBottom: "5%",
+    margin: "5%",
     backgroundColor: "#FFF8F0",
   },
-  cardTitle: {
+  cardText: {
     marginRight: 0,
     marginLeft: "5%",
-    color: "#F36443",
-    fontWeight: "bold",
+  },
+  image: {
+    width: 100,
+    height: 100,
+    padding: 0,
+    margin: 0,
   },
 });

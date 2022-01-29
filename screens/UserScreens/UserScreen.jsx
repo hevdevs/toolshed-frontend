@@ -1,7 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { auth, db } from "../../firebase.js";
 import { collection, getDocs } from "firebase/firestore";
+
 import SignOut from '../../components/SignOut.jsx';
 
 const UserScreen = ({ navigation }) => {

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import React from 'react';
 
 const RequestScreen = ({ route, navigation }) => {
@@ -10,6 +10,7 @@ const RequestScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <Text>{`${req.title}`}</Text>
       <Text>{`${req.body}`}</Text>
+      <Text>{`${req.category}`}</Text>
       <Text>{`${req.userInfo.userFirstName}`}</Text>
       <Text>{`${req.userInfo.userSurname}`}</Text>
       <Text>{`${req.timestamp.date} ${req.timestamp.time}`}</Text>
