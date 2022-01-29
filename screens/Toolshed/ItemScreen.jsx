@@ -11,7 +11,6 @@ import {
   Pressable,
 } from "react-native";
 
-import React, { useState, useEffect } from "react";
 import { getDownloadURL, ref } from "@firebase/storage";
 import { storage, auth, db } from "../../firebase";
 import CalendarComponent from "../../components/CalendarComponent";
