@@ -53,8 +53,7 @@ const ItemScreen = ({ route, navigation }) => {
           }}
           itemOwner={item.owner}
         >
-          <Text style={styles.text}>MESSAGE <Ionicons name={"paper-plane
-          "} size={16} /></Text>
+          <Text style={styles.text}>MESSAGE <Ionicons name={"paper-plane"} size={16} /></Text>
         </TouchableOpacity>
         <Pressable
           title="View Map"
