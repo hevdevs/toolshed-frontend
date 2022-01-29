@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 
 import RequestCard from "../../components/ToolboardComponents/RequestCard";
+import ActionButton from "react-native-action-button";
+
 
 const ToolboardScreen = ({ navigation }) => {
 
@@ -28,17 +32,19 @@ const ToolboardScreen = ({ navigation }) => {
   }
     return (
       <View style={styles.container}>
-        <ScrollView>
         <Text style={styles.header}>Toolboard</Text>
-        <View style={styles.contentContainer}>
-          <Pressable style={styles.button} onPress={handlePress}>
-            <Text style={styles.text}>Post a request!</Text>
-          </Pressable>
-          <RequestCard requests={requests} navigation={navigation} />
+        <ScrollView style={styles.scroll}>
+          <View style={styles.contentContainer}>
+            <RequestCard requests={requests} navigation={navigation} />
           </View>
         </ScrollView>
-    </View>
-  );
+        <ActionButton buttonColor="#F36433">
+          <ActionButton.Item onPress={handlePress} title={"Post a Request"}>
+            <Ionicons name={"help-circle"} size={24} color={"white"} />
+          </ActionButton.Item>
+        </ActionButton>
+      </View>
+    );
 };
 
 export default ToolboardScreen;
@@ -50,11 +56,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     backgroundColor: "#F36433",
-    shadowColor: "#000",
-    shadowOffset: { width: 5, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1,
   },
   header: {
     margin: "5%",
@@ -62,24 +63,29 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "#FFF8F0",
+    alignSelf: "center",
   },
   contentContainer: {
-    width: "100%",
-    padding: 0,
-    margin: 0,
-    flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    width: "100%",
     backgroundColor: "#9DD9D2",
   },
   button: {
     backgroundColor: "#F36433",
     margin: "5%",
-    marginTop: "20%",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 35,
+    position: "relative",
+    bottom: 0,
+    alignSelf: "flex-end",
+  },
+  scroll: {
+    padding: 0,
+    margin: 0,
   },
   text: {
     color: "#FFF8F0",
+    fontWeight: "bold",
+    fontSize: 30,
   },
 });
