@@ -1,8 +1,9 @@
-import { storage } from "./firebase";
+import { storage, db } from "./firebase";
 import { ref, getDownloadURL } from "firebase/storage";
 import { Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as Location from "expo-location";
+import { doc, getDoc } from "firebase/firestore";
 
 export const distance = (loc1, loc2) => {
   //Distance in km
@@ -38,3 +39,13 @@ export const setLocation = async (postcode, setUserLocation) => {
   });
 };
 
+export const getUserDataFromUid = async (uid) => {
+  try {
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    const fields = docSnap.data();
+    return fields;
+  } catch {
+    throw "err";
+  }
+};

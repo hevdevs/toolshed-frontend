@@ -1,21 +1,30 @@
 import React, { useCallback, useLayoutEffect, useState } from "react";
-import { GiftedChat } from "react-native-gifted-chat";
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import { auth, db } from "../../firebase.js";
-// import { useUser } from "../hooks/useUser";
+import { Text } from "react-native";
 import {
   addDoc,
   collection,
   orderBy,
   query,
   onSnapshot,
+  doc,
+  updateDoc,
+  arrayUnion,
 } from "firebase/firestore";
 
-const ChatScreen = () => {
-  //   const currentUser = useUser();
+const ChatScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
 
+  const { messageId, userUsername } = route.params;
+
+  // const messageId =
+  //   userUid < auth.currentUser.uid
+  //     ? `${auth.currentUser.uid}-${userUid}`
+  //     : `${userUid}-${auth.currentUser.uid}`;
+
   useLayoutEffect(() => {
-    const collectionRef = collection(db, "chats");
+    const collectionRef = collection(db, `groups/${messageId}/messages`);
     const q = query(collectionRef, orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -28,32 +37,68 @@ const ChatScreen = () => {
         }))
       );
     });
-
     return unsubscribe;
-  });
+  }, []);
 
   const onSend = useCallback((messages = []) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages)
     );
     const { _id, createdAt, text, user } = messages[0];
-    addDoc(collection(db, "chats"), {
+    addDoc(collection(db, `groups/${messageId}/messages`), {
       _id,
       createdAt,
       text,
       user,
     });
+    // updateDoc(doc(db, `users/${auth.currentUser.uid}`), {
+    //   chats: arrayUnion(messageId),
+    // });
+    // updateDoc(doc(db, `users/${userUid}`), {
+    //   chats: arrayUnion(messageId),
+    // });
   }, []);
 
+  function renderBubble(props) {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          left: {
+            backgroundColor: "orange",
+          },
+        }}
+        textStyle={{
+          right: {
+            color: "#fff",
+          },
+        }}
+      />
+    );
+  }
+
   return (
-    <GiftedChat
-      messages={messages}
-      onSend={(messages) => onSend(messages)}
-      user={{
-        _id: auth?.currentUser?.email,
-        name: auth?.currentUser?.displayName,
-      }}
-    />
+    <>
+      <Text
+        style={{
+          textAlign: "center",
+          backgroundColor: "orange",
+          color: "white",
+          fontSize: 20,
+        }}
+      >{`\n\n@${userUsername}`}</Text>
+      <GiftedChat
+        messages={messages}
+        onSend={onSend}
+        renderBubble={renderBubble}
+        user={{
+          _id: auth?.currentUser?.email,
+          name: auth?.currentUser?.displayName,
+        }}
+        renderAvatar={() => null}
+        showAvatarForEveryMessage={true}
+      />
+    </>
   );
 };
 
