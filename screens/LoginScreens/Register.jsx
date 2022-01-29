@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   ScrollView,
+  ImageBackground,
 } from "react-native";
 import { createUserWithEmailAndPassword, updateProfile } from "@firebase/auth";
 import { auth, db } from "../../firebase";
@@ -72,109 +73,123 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
-      <ScrollView>
-        <Text style={styles.create}>Create a new account</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter First Name"
-            autoCapitalize="none"
-            textContentType="name"
-            value={firstName}
-            onChangeText={setFirstName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Surname"
-            autoCapitalize="none"
-            textContentType="name"
-            value={surname}
-            onChangeText={setSurname}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Username"
-            autoCapitalize="none"
-            textContentType="name"
-            value={username}
-            onChangeText={setUsername}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Email"
-            autoCapitalize="none"
-            keyboardType="email-address"
-            textContentType="emailAddress"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Password"
-            autoCapitalize="none"
-            autoCorrect={false}
-            secureTextEntry={true}
-            textContentType="password"
-            value={password}
-            onChangeText={setPassword}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Postcode"
-            autoCapitalize="none"
-            autoCorrect={false}
-            textContentType="postalCode"
-            value={postcode}
-            onChangeText={setPostcode}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate("LoginScreen")}
-          >
-            <Text style={styles.buttonText}>Go To Login</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <ImageBackground
+      source={require("../../assets/toolbackground.png")}
+      resizeMode="cover"
+      style={styles.image}
+    >
+      <KeyboardAvoidingView behavior="padding" style={styles.wrapper}>
+        <ScrollView>
+          <View style={styles.headerContent}>
+            <Text style={styles.header}>Create a new account</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Full Name"
+              autoCapitalize="none"
+              textContentType="name"
+              value={firstName}
+              onChangeText={setFirstName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Username"
+              autoCapitalize="none"
+              textContentType="name"
+              value={username}
+              onChangeText={setUsername}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Email"
+              autoCapitalize="none"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Password"
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry={true}
+              textContentType="password"
+              value={password}
+              onChangeText={setPassword}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Postcode"
+              autoCapitalize="none"
+              autoCorrect={false}
+              textContentType="postalCode"
+              value={postcode}
+              onChangeText={setPostcode}
+            />
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+                <Text style={styles.buttonText}>Sign Up</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigation.navigate("LoginScreen")}
+              >
+                <Text style={styles.buttonText}>Go To Login</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+  wrapper: {
     justifyContent: "center",
     alignItems: "center",
   },
-  create: {
-    marginBottom: 40,
-    fontWeight: "800",
-    fontSize: 20,
+  headerContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: "12%",
+  },
+  header: {
+    color: "orange",
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor: "#000000c0",
+    marginTop: "25%",
   },
   inputContainer: {
-    width: "80%",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
   },
   input: {
     backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    width: 300,
+    alignItems: "center",
+    position: "relative",
+    height: 50,
     borderRadius: 10,
-    marginTop: 5,
+    paddingHorizontal: 20,
+    marginTop: 15,
   },
   buttonContainer: {
-    width: "60%",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
+    marginBottom: 15,
   },
   button: {
-    backgroundColor: "#0782f9",
-    width: "100%",
+    backgroundColor: "#0782F9",
+    width: 125,
+    marginTop: "5%",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
@@ -184,17 +199,56 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
-  buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "#0782f9",
-    borderWidth: 2,
-  },
-  buttonOutlineText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-  },
 });
 
 export default Register;
+
+// header: {
+//   color: "orange",
+//   fontSize: 30,
+//   fontWeight: "bold",
+//   textAlign: "center",
+//   backgroundColor: "#000000c0",
+//   marginTop: "25%",
+//   width: "100%",
+// },
+// inputContainer: {
+//   alignContent: "center",
+//   justifyContent: "center",
+// },
+// input: {
+//   backgroundColor: "white",
+//   paddingHorizontal: 15,
+//   paddingVertical: 10,
+//   borderRadius: 10,
+//   marginTop: 5,
+// },
+// buttonContainer: {
+//   width: "60%",
+//   justifyContent: "center",
+//   alignItems: "center",
+//   marginTop: 40,
+// },
+// button: {
+//   backgroundColor: "#0782f9",
+//   width: "100%",
+//   padding: 15,
+//   borderRadius: 10,
+//   alignItems: "center",
+// },
+// buttonText: {
+//   color: "white",
+//   fontWeight: "700",
+//   fontSize: 16,
+// },
+// buttonOutline: {
+//   backgroundColor: "white",
+//   marginTop: 5,
+//   borderColor: "#0782f9",
+//   borderWidth: 2,
+// },
+// buttonOutlineText: {
+//   color: "white",
+//   fontWeight: "700",
+//   fontSize: 16,
+// },
