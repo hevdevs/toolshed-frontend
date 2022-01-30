@@ -15,6 +15,7 @@ const PostRequest = ({ navigation: { goBack } }) => {
     "Household",
     "Kitchen",
     "Electronics",
+    "Arts and Crafts",
     "Garden",
     "Furniture",
   ];
