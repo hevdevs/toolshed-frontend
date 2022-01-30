@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
 
 import { auth, db } from "../../firebase.js";
 import { collection, getDocs } from "firebase/firestore";
 
-import SignOut from '../../components/SignOut.jsx';
+import SignOut from "../../components/SignOut.jsx";
 
 const UserScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
@@ -15,7 +15,7 @@ const UserScreen = ({ navigation }) => {
         const itemList = await getDocs(collection(db, "items"));
         const itemArray = [];
         itemList.forEach((doc) => {
-          console.log(doc)
+          console.log(doc);
           itemArray.push(Object.assign({ uid: doc.id }, doc.data()));
         });
         setItems(itemArray);
@@ -25,12 +25,13 @@ const UserScreen = ({ navigation }) => {
     })();
   }, []);
 
-
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.header}>User Page</Text>
       <View style={styles.contentContainer}>
-        <Text style={styles.welcome}>Welcome, {auth.currentUser.email}</Text>
+        <Text style={styles.welcome}>
+          Welcome, {auth.currentUser.displayName}
+        </Text>
         <View style={styles.userInfo}>
           <Text>Profile pic: {auth.currentUser.photoURL}</Text>
           <Text>Name: {auth.currentUser.displayName}</Text>
@@ -74,5 +75,5 @@ const styles = StyleSheet.create({
   userInfo: {
     display: "flex",
     flexDirection: "row",
-  }
+  },
 });

@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableHighlight,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { auth } from "../../firebase";
@@ -40,7 +41,9 @@ const LoginScreen = ({ navigation }) => {
       resizeMode="cover"
       style={styles.image}
     >
-      <View style={styles.wrapper}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
         <View style={styles.welcContents}>
           <Text style={styles.header}>Welcome to your ToolShed</Text>
           <Image
@@ -48,7 +51,8 @@ const LoginScreen = ({ navigation }) => {
             style={styles.icon}
           />
         </View>
-        <KeyboardAvoidingView style={styles.formContainer} behavior="padding">
+
+        <View style={styles.formContainer} behavior="padding">
           <TextInput
             style={styles.inputEmail}
             placeholder={"Email"}
@@ -75,8 +79,8 @@ const LoginScreen = ({ navigation }) => {
           >
             <Text style={styles.buttonText}>Register</Text>
           </TouchableOpacity>
-        </KeyboardAvoidingView>
-      </View>
+        </View>
+      </KeyboardAvoidingView>
     </ImageBackground>
   );
 };
@@ -102,7 +106,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     backgroundColor: "#000000c0",
     marginTop: "25%",
-    width: "60%",
   },
   icon: {
     height: 100,
