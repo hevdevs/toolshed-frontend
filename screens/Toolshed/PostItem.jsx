@@ -88,15 +88,15 @@ const PostItem = ({ navigation }) => {
 
   const handleSubmit = async () => {
     const uploadedUri = await uploadImage();
-    uploadedImageRef = ref(storage, uploadedUri);
+    const uploadedImageRef = ref(storage, uploadedUri);
     try {
-      
       await addItem(uploadedUri);
+      alert("Request successfully posted!");
       resetState();
-      navigation.navigate("Toolshed");
     } catch (err) {
       if (uploadedUri) await deleteObject(uploadedImageRef);
-      alert(err);
+      alert("Request failed to post!");
+      console.log(err);
     }
   };
 

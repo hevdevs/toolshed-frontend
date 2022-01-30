@@ -15,7 +15,7 @@ function NavTabs() {
   return (
     <Tab.Navigator
       style={styles.bar}
-      initialRouteName="Toolshed"
+      initialRouteName="Home"
       labeled={false}
       barStyle={{ backgroundColor: "#2DC2BD" }}
       activeColor="#FFF8F0"
@@ -69,5 +69,6 @@ export default NavTabs;
 const styles = StyleSheet.create({
   bar: {
     backgroundColor: "#F36433",
+    bottom: 0,
   },
 });
