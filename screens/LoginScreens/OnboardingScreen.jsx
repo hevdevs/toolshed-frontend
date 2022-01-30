@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 60,
     alignSelf: "center",
     position: "absolute",
-    bottom: 250,
+    bottom: "25%",
     color: "#575761",
   },
 });
