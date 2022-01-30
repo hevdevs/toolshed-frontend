@@ -42,7 +42,9 @@ const ToolshedScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Toolshed</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Toolshed</Text>
+      </View>
       <View style={styles.contentContainer}>
         <ToolSearch
           style={styles.bar}
@@ -87,12 +89,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    backgroundColor: "#F36433",
+    backgroundColor: "#9DD9D2",
     shadowColor: "#000",
     shadowOffset: { width: 5, height: 2 },
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 1,
+  },
+  headerContainer: {
+    paddingTop: "10%",
+    backgroundColor: "#F36433",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    position: "absolute",
+    top: 0,
   },
   header: {
     margin: "5%",
@@ -100,14 +112,13 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "#FFF8F0",
+    alignSelf: "center",
   },
   contentContainer: {
+    marginTop: "40%",
     width: "100%",
-    padding: 0,
-    margin: 0,
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#9DD9D2",
   },
   bar: {

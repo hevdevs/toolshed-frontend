@@ -37,12 +37,6 @@ const ToolSearch = ({ items, setFilteredTools, filteredTools }) => {
 export default ToolSearch;
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    alignContent: "space-between",
-    width: "90%",
-    margin: "5%",
-  },
-
   bar: {
     width: "100%",
     marginTop: "5%",
