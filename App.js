@@ -6,6 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 
 // Screens
+import OnboardingScreen from "./screens/LoginScreens/OnboardingScreen";
 import Register from "./screens/LoginScreens/Register";
 import LoginScreen from "./screens/LoginScreens/LoginScreen";
 import HomeScreen from "./screens/LoginScreens/HomeScreen";
@@ -35,6 +36,7 @@ const AuthenticatedUserProvider = ({ children }) => {
 function AuthStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen}/>
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>

@@ -32,7 +32,9 @@ const ToolboardScreen = ({ navigation }) => {
   }
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>Toolboard</Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Toolboard</Text>
+        </View>
         <ScrollView style={styles.scroll}>
           <View style={styles.contentContainer}>
             <RequestCard requests={requests} navigation={navigation} />
@@ -55,17 +57,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
+    backgroundColor: "#9DD9D2",
+  },
+  headerContainer: {
+    paddingTop: "10%",
     backgroundColor: "#F36433",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    position: "absolute",
+    top: 0,
   },
   header: {
     margin: "5%",
-    marginTop: "10%",
     fontSize: 28,
     fontWeight: "bold",
     color: "#FFF8F0",
     alignSelf: "center",
   },
   contentContainer: {
+    marginTop: "40%",
     justifyContent: "center",
     width: "100%",
     backgroundColor: "#9DD9D2",
