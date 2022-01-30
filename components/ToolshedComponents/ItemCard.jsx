@@ -56,6 +56,7 @@ const ItemCard = ({ item }) => {
               thumbColor={isEnabled ? "#2DC2BD" : "#2DC2BD"}
               onValueChange={toggleAvailibility}
               value={isEnabled}
+              label={"Toggle"}
             />
           </View>
         ) : null}
