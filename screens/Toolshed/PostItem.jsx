@@ -10,11 +10,13 @@ import dayjs from "dayjs";
 
 import ImagePicker from "../../components/ImagePicker";
 
-const PostItem = ({ navigation }) => {
+const PostItem = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
   const [phoneImageUri, setPhoneImageUri] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(undefined);
+
+  const { setNewItem } = route.params;
   
   const categories = [
     "DIY",
@@ -74,7 +76,7 @@ const PostItem = ({ navigation }) => {
         userFirstName: fields.firstName.stringValue,
         userSurname: fields.surname.stringValue,
         userLocation: fields.userLocation,
-        userUsername: auth.currentUser.displayName,       
+        userUsername: auth.currentUser.displayName,
       },
       timestamp: {
         date: dayjs().format("DD/MM/YY"),
@@ -84,7 +86,8 @@ const PostItem = ({ navigation }) => {
       available: true,
     };
     const postItem = await addDoc(collection(db, "items"), item);
-  }
+    setNewItem((currNewItem) => { !currNewItem });
+  };
 
   const handleSubmit = async () => {
     const uploadedUri = await uploadImage();
