@@ -21,6 +21,8 @@ import PostRequest from "./screens/Toolboard/PostRequest";
 import ChatScreen from "./screens/ChatScreens/ChatScreen";
 import RequestScreen from "./screens/Toolboard/RequestScreen";
 import MapScreen from "./screens/Maps/MapScreen";
+import UserForumPostsScreen from "./screens/UserScreens/UserForumPostsScreen"
+import UserItemsScreen from "./screens/UserScreens/UserItemsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -93,6 +95,8 @@ const HomeStack = () => {
       <Stack.Screen name="PostRequest" component={PostRequest} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="MapScreen" component={MapScreen} />
+      <Stack.Screen name="UserForumPostsScreen" component={UserForumPostsScreen} />
+      <Stack.Screen name="UserItemsScreen" component={UserItemsScreen} />
     </Stack.Navigator>
   );
 }
