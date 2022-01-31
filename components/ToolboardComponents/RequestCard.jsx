@@ -1,19 +1,26 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import React from "react";
+import uuid from "react-native-uuid";
 
 const RequestCard = ({ requests, navigation }) => {
-  
   return (
     <View style={styles.cardContainer}>
       {requests.map((req) => {
         return (
-          <Pressable onPress={() => navigation.navigate("RequestScreen", { req, navigation })}>
+          <Pressable
+            key={req.requestUid}
+            onPress={() =>
+              navigation.navigate("RequestScreen", { req, navigation })
+            }
+          >
             <View style={styles.card}>
-              <Text style={styles.cardTitle}>{`Looking for: ${req.title} \n \n`}</Text>
+              <Text
+                style={styles.cardTitle}
+              >{`Looking for: ${req.title} \n \n`}</Text>
               <Text>{`${req.body}`}</Text>
             </View>
           </Pressable>
-        )
+        );
       })}
     </View>
   );
