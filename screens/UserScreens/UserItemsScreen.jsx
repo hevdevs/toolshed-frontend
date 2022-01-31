@@ -6,6 +6,7 @@ import { getDocs, doc, collection, where, query} from '@firebase/firestore';
 const UserItemsScreen = ( {navigation} ) => {
     const [items, setItems] = useState([]);
     const user = auth.currentUser; 
+    
 
     useEffect( async () => {
         try {
