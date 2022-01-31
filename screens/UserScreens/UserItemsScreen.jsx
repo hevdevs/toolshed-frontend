@@ -1,12 +1,30 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ItemCard, Image } from 'react-native';
-import { auth, db } from '../../firebase.js';
+import { storage, auth, db } from '../../firebase.js';
 import React, { useState, useEffect} from 'react';
 import { getDocs, doc, collection, where, query} from '@firebase/firestore';
+import { getDownloadURL, ref } from "@firebase/storage";
 
 const UserItemsScreen = ( {navigation} ) => {
     const [items, setItems] = useState([]);
+    const [itemImage, setItemImage] = useState([]);
     const user = auth.currentUser; 
+
+    const handleOnPress = () => {
+        
+    }
     
+    // useEffect( async () => {
+    //     try {
+    //         const urlArray = [];
+    //         items.map((item) => {
+    //             const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
+    //             urlArray.push(imageUrl)
+    //           })
+    //           setItemImage(urlArray);
+    //     } catch (err) {
+    //       console.log(err);
+    //     }
+    //   }, []);
 
     useEffect( async () => {
         try {
@@ -36,11 +54,14 @@ setItems(itemsArr)
                     return (
                         <View style={styles.itemContainer}>
                             <View>
-                            <Image source={{uri: item.imageUri}}/>
+                            <Image style={styles.image} source={{uri: item.imageUri}}/>
                             </View>
                             <Text style={styles.itemName}>{item.name}</Text>
                             <Text style={styles.itemDescription}>{item.description}</Text>
                             <Text>{item.category}</Text>
+                            <TouchableOpacity style={styles.button} onPress={handleOnPress}>
+                                <Text style={styles.buttonText}>Remove</Text>
+                            </TouchableOpacity>
                         </View>
                     )
                 })
@@ -81,6 +102,21 @@ const styles = StyleSheet.create ({
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
-          margin: "5%",
-      }
+          margin: "10%",
+      },
+      image: {
+          height: "60%",
+          width: "60%",
+      },
+      button: {
+        backgroundColor: "#0782f9",
+        padding: 15,
+        borderRadius: 10,
+        alignItems: "center",
+      },
+      buttonText: {
+        color: "white",
+        fontWeight: "700",
+        fontSize: 12,
+      },
 })
