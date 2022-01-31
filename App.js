@@ -2,6 +2,7 @@ import { View, ActivityIndicator } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState, createContext, useContext, useEffect } from "react";
+import * as Progress from "react-native-progress";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
 
@@ -33,7 +34,7 @@ const AuthenticatedUserProvider = ({ children }) => {
   );
 };
 
-function AuthStack() {
+const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="OnboardingScreen" component={OnboardingScreen}/>
@@ -43,7 +44,7 @@ function AuthStack() {
   );
 }
 
-function RootNavigator() {
+const RootNavigator = () => {
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,7 +61,11 @@ function RootNavigator() {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
+        <Progress.Circle
+          size={50}
+          indeterminate={true}
+          color={"#F36433"}
+        />
       </View>
     );
   }
@@ -71,7 +76,7 @@ function RootNavigator() {
   );
 }
 
-function HomeStack() {
+const HomeStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}

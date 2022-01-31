@@ -1,9 +1,11 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { Searchbar } from "react-native-paper";
+import * as Progress from "react-native-progress";
 
 const ToolSearch = ({ items, setFilteredTools, filteredTools }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
+
   let lowerSearch = searchQuery.toLowerCase();
 
   const onChangeSearch = (query) => {
@@ -12,6 +14,7 @@ const ToolSearch = ({ items, setFilteredTools, filteredTools }) => {
 
   const handleIconPress = () => {
     const itemsArr = [...items];
+    setIsLoading(true);
     let filteredItems = itemsArr.filter((item) => {
       let itemCased = item.name.toLowerCase();
       let regex = new RegExp(`(${lowerSearch})`, "g");
@@ -19,10 +22,11 @@ const ToolSearch = ({ items, setFilteredTools, filteredTools }) => {
     });
     setFilteredTools(filteredItems);
     setSearchQuery("");
+    setIsLoading(false)
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <Searchbar
         placeholder="Search the Toolshed"
         value={searchQuery}
@@ -40,5 +44,8 @@ const styles = StyleSheet.create({
   bar: {
     width: "100%",
     marginTop: "5%",
+  },
+  spinner: {
+    marginTop: "25%",
   },
 });
