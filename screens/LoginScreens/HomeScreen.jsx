@@ -3,7 +3,6 @@ import React from "react";
 import NavTabs from "../../components/NavTabs";
 
 const HomeScreen = () => {
-
   return (
     <NavTabs style={ styles.container } />
   );
@@ -16,5 +15,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  }
-})
+  },
+});

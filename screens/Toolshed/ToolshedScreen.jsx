@@ -9,18 +9,19 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-
 import { collection, getDocs } from "firebase/firestore";
 import { db, auth } from "../../firebase";
 
 import ToolSearch from "../../components/ToolshedComponents/ToolSearch";
 import ItemCard from "../../components/ToolshedComponents/ItemCard";
 import ActionButton from "react-native-action-button";
+import * as Progress from "react-native-progress";
 
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const [filteredTools, setFilteredTools] = useState([]);
   const [newItem, setNewItem] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
   const handlePress = () => {
     navigation.navigate("PostItem", { setNewItem });
@@ -28,6 +29,7 @@ const ToolshedScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true)
       try {
         const itemList = await getDocs(collection(db, "items"));
         const itemArray = [];
@@ -35,6 +37,7 @@ const ToolshedScreen = ({ navigation }) => {
           itemArray.push(Object.assign({ uid: doc.id }, doc.data()));
         });
         setItems(itemArray);
+        setIsLoading(false)
       } catch (err) {
         console.log(err);
       }
@@ -43,6 +46,7 @@ const ToolshedScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true)
       try {
         const toolList = await getDocs(collection(db, "items"));
         const toolArray = [];
@@ -50,15 +54,14 @@ const ToolshedScreen = ({ navigation }) => {
           toolArray.push(Object.assign({ uid: doc.id }, doc.data()));
         })
         setFilteredTools(toolArray);
+        setIsLoading(false);
       }
-
       catch (err) {
         console.log(err)
+        setIsLoading(false);
       }
     })();
   }, [newItem]);
-
-
 
   return (
     <View style={styles.container}>
@@ -75,21 +78,25 @@ const ToolshedScreen = ({ navigation }) => {
           filteredTools={filteredTools}
         />
         <ScrollView>
-          <View style={styles.cardContainer}>
-            {filteredTools.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("ItemScreen", { item });
-                  }}
-                  item={item}
-                  key={index}
-                >
-                  <ItemCard item={item} key={index} />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+          {isLoading ? (
+            <Progress.Circle style={styles.progressPie} size={50} indeterminate={true} color={"#F36433"} />
+          ) : (
+            <View style={styles.cardContainer}>
+              {filteredTools.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("ItemScreen", { item });
+                    }}
+                    item={item}
+                    key={index}
+                  >
+                    <ItemCard item={item} key={index} />
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
         </ScrollView>
       </View>
       <ActionButton buttonColor="#F36433">
@@ -97,7 +104,6 @@ const ToolshedScreen = ({ navigation }) => {
           <Ionicons name={"build"} size={24} color={"white"} />
         </ActionButton.Item>
       </ActionButton>
-      
     </View>
   );
 };
@@ -158,5 +164,8 @@ const styles = StyleSheet.create({
     color: "#FFF8F0",
     fontWeight: "bold",
     fontSize: 30,
+  },
+  progressPie: {
+    alignSelf: "center",
   },
 });

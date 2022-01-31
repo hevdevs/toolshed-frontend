@@ -7,28 +7,33 @@ import { db } from "../../firebase";
 
 import RequestCard from "../../components/ToolboardComponents/RequestCard";
 import ActionButton from "react-native-action-button";
+import * as Progress from "react-native-progress";
 
 
 const ToolboardScreen = ({ navigation }) => {
 
   const [requests, setRequests] = useState([]);
-  const [filteredRequests, setFilteredRequests] = useState([]);
+  const [newRequest, setNewRequest] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true)
       try {
         const requestList = await getDocs(collection(db, "requests"));
         const requestArray = [];
         requestList.forEach((doc) => requestArray.push(doc.data()));
         setRequests(requestArray);
+        setIsLoading(false)
       } catch (err) {
         console.log(err)
+        setIsLoading(false);
       }
     })()
-  }, []);
+  }, [newRequest]);
 
   const handlePress = () => {
-    navigation.navigate("PostRequest")
+    navigation.navigate("PostRequest", {setNewRequest})
   }
     return (
       <View style={styles.container}>
@@ -37,7 +42,16 @@ const ToolboardScreen = ({ navigation }) => {
         </View>
         <ScrollView style={styles.scroll}>
           <View style={styles.contentContainer}>
-            <RequestCard requests={requests} navigation={navigation} />
+            {isLoading ? (
+              <Progress.Circle
+                size={50}
+                indeterminate={true}
+                style={styles.spinner}
+                color={"#F36433"}
+              />
+            ) : (
+              <RequestCard requests={requests} navigation={navigation} />
+            )}
           </View>
         </ScrollView>
         <ActionButton buttonColor="#F36433">
@@ -100,4 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30,
   },
+  spinner: {
+    alignSelf: "center",
+  }, 
 });
