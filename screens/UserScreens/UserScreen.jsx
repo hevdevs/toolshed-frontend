@@ -1,52 +1,44 @@
-import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
 import React, { useState, useEffect } from "react";
-
 import { auth, db } from "../../firebase.js";
 import { collection, getDoc, getDocs, doc } from "firebase/firestore";
 
+// components
+import UserRequests from "../../components/UserRequests.jsx";
+import UserItems from "../../components/UserItems.jsx";
 import SignOut from "../../components/SignOut.jsx";
 
 const UserScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const [userDoc, setUserDoc] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [display, setDisplay] = useState(false);
 
   const user = auth.currentUser;
 
-  const handleListedItems = () => {
-    navigation.navigate("UserItemsScreen");
-  };
-
-  const handleForumPosts = () => {
-    navigation.navigate("UserForumPostsScreen");
-  };
-
-useEffect( async () => {
+  useEffect(async () => {
     try {
-      const userInfo = await getDoc(doc(db, "users", user.uid))
-      setUserDoc(userInfo.data())
+      const userInfo = await getDoc(doc(db, "users", user.uid));
+      setUserDoc(userInfo.data());
     } catch (err) {
-    console.log(err)
-    
-  }
-}, [])
+      console.log(err);
+    }
+  }, []);
 
-console.log(userDoc);
+  const handleDisplayItems = () => {
+    setDisplay(false);
+  };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const itemList = await getDocs(collection(db, "items"));
-  //       const itemArray = [];
-  //       itemList.forEach((doc) => {
-  //         console.log(doc);
-  //         itemArray.push(Object.assign({ uid: doc.id }, doc.data()));
-  //       });
-  //       setItems(itemArray);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   })();
-  // }, []);
+  const handleDisplayRequests = () => {
+    setDisplay(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -58,20 +50,25 @@ console.log(userDoc);
         <View style={styles.userInfo}>
           <Text>Profile pic: {auth.currentUser.photoURL}</Text>
           <Text>Name: {auth.currentUser.displayName}</Text>
+          <Text>Number of Items for Lend</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity 
-          style={styles.button}
-          onPress={handleListedItems}>
-            <Text style={styles.buttonText}>Listed Items</Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
+          <TouchableOpacity style={styles.button} onPress={handleDisplayItems}>
+            <Text style={styles.buttonText}>Your Listed Items</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.button}
-            onPress={handleForumPosts}>
-            <Text style={styles.buttonText}>Forum Posts</Text>
-            </TouchableOpacity>
-        <SignOut />
+            onPress={handleDisplayRequests}
+          >
+            <Text style={styles.buttonText}>Your Forum Posts</Text>
+          </TouchableOpacity>
         </View>
+        <ScrollView>
+          <View style={styles.cards}>
+            {display === false ? <UserItems /> : <UserRequests />}
+          </View>
+        </ScrollView>
+        <SignOut />
       </View>
     </View>
   );
@@ -113,11 +110,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    marginTop: 50,
+    marginTop: 20,
+    marginBottom: 10,
   },
   button: {
     backgroundColor: "#0782f9",
     padding: 15,
+    margin: 10,
     borderRadius: 10,
     alignItems: "center",
   },
@@ -125,5 +124,11 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     fontSize: 12,
+  },
+
+  cards: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
   },
 });
