@@ -31,16 +31,15 @@ const UserForumPostsScreen = () => {
       requests.forEach((doc) => {
         requestArr.push(doc.data());
       });
-      console.log(requestArr);
+      console.log(requestArr[0]);
       setForumPosts(requestArr);
     } catch (err) {
       console.log(err);
     }
   }, []);
-  // console.log(forumPosts, "< posts");
 
-  const handleDelete = async () => {
-    await deleteDoc(doc(db, requests));
+  const handleDelete = async (requestId) => {
+    await deleteDoc(doc(db, "requests", requestId));
   };
 
   return (
@@ -49,12 +48,12 @@ const UserForumPostsScreen = () => {
       <View style={styles.contentContainer}>
         <ScrollView style={styles.scroll}>
           {forumPosts.length < 1 ? (
-            <Text style={styles.noRequest}>No Current Requests</Text>
+            <Text style={styles.noRequest}> No Current Requests</Text>
           ) : (
             forumPosts.map((post, index) => {
               return (
                 <>
-                  <View style={styles.requests} key={post.index}>
+                  <View style={styles.requests} key={index}>
                     <TouchableOpacity style={styles.requestCard}>
                       <Text>{post.title}</Text>
                       <Text>{post.description}</Text>
@@ -62,7 +61,7 @@ const UserForumPostsScreen = () => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.deleteButton}
-                      onPress={handleDelete}
+                      onPress={handleDelete(post.requestUid)}
                     >
                       <Text>Delete</Text>
                     </TouchableOpacity>
