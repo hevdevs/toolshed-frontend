@@ -40,6 +40,23 @@ const ToolshedScreen = ({ navigation }) => {
     })();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const toolList = await getDocs(collection(db, "items"));
+        const toolArray = [];
+        toolList.forEach((doc) => {
+          toolArray.push(Object.assign({uid: doc.id}, doc.data()));
+        })
+        setFilteredTools(toolArray);
+      }
+
+      catch (err) {
+        console.log(err)
+      }
+    })();
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
