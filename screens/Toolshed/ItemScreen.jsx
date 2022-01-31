@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 
 import {
@@ -47,7 +46,7 @@ const ItemScreen = ({ route, navigation }) => {
 
     navigation.navigate("ChatScreen", {
       messageId,
-      userUsername: item.userInfo.userUsername,
+      userUsername: `${item.userInfo.userFirstName} ${item.userInfo.userSurname}`,
     });
   };
 
@@ -70,7 +69,9 @@ const ItemScreen = ({ route, navigation }) => {
           onPress={handlePress}
           itemOwner={item.owner}
         >
-          <Text style={styles.text}>MESSAGE <Ionicons name={"paper-plane"} size={16} /></Text>
+          <Text style={styles.text}>
+            MESSAGE <Ionicons name={"paper-plane"} size={16} />
+          </Text>
         </TouchableOpacity>
         <Pressable
           title="View Map"
