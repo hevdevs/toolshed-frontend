@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import { getUserDataFromUid } from "../../utils";
 import { auth, db } from "../../firebase";
@@ -35,17 +35,19 @@ const InboxScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.header}>Your Inbox Page</Text>
       <View style={styles.contentContainer}>
-        {!chats.length ? (
-          <View style={styles.title}>
-            <Text style={styles.noMessage}>No Current Direct Messages</Text>
-          </View>
-        ) : (
-          chats.map((chat, index) => (
-            <View style={styles.chatCard} key={index}>
-              <ChatCard chat={chat} navigation={navigation} />
+        <ScrollView>
+          {!chats.length ? (
+            <View style={styles.title}>
+              <Text style={styles.noMessage}>No Current Direct Messages</Text>
             </View>
-          ))
-        )}
+          ) : (
+            chats.map((chat, index) => (
+              <View style={styles.chatCard} key={index}>
+                <ChatCard chat={chat} navigation={navigation} />
+              </View>
+            ))
+          )}
+        </ScrollView>
       </View>
     </View>
   );
@@ -83,6 +85,7 @@ const styles = StyleSheet.create({
   },
   chatCard: {
     fontWeight: "bold",
+    width: "100%",
   },
 });
 
