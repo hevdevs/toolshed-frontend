@@ -9,8 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db, auth } from "../../firebase";
 
 import ToolSearch from "../../components/ToolshedComponents/ToolSearch";
@@ -20,7 +19,7 @@ import ActionButton from "react-native-action-button";
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const [filteredTools, setFilteredTools] = useState([]);
-  
+
   const handlePress = () => {
     navigation.navigate("PostItem");
   };
@@ -46,16 +45,14 @@ const ToolshedScreen = ({ navigation }) => {
         const toolList = await getDocs(collection(db, "items"));
         const toolArray = [];
         toolList.forEach((doc) => {
-          toolArray.push(Object.assign({uid: doc.id}, doc.data()));
-        })
+          toolArray.push(Object.assign({ uid: doc.id }, doc.data()));
+        });
         setFilteredTools(toolArray);
-      }
-
-      catch (err) {
-        console.log(err)
+      } catch (err) {
+        console.log(err);
       }
     })();
-  }, [])
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -73,16 +70,16 @@ const ToolshedScreen = ({ navigation }) => {
         />
         <ScrollView>
           <View style={styles.cardContainer}>
-            {filteredTools.map((item, index) => {
+            {filteredTools.map((item) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("ItemScreen", { item });
                   }}
                   item={item}
-                  key={index}
+                  key={item.uid}
                 >
-                  <ItemCard item={item} key={index} />
+                  <ItemCard item={item} />
                 </TouchableOpacity>
               );
             })}
@@ -94,7 +91,6 @@ const ToolshedScreen = ({ navigation }) => {
           <Ionicons name={"build"} size={24} color={"white"} />
         </ActionButton.Item>
       </ActionButton>
-      
     </View>
   );
 };
