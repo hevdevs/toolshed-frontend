@@ -1,14 +1,29 @@
-import { View, Text, StyleSheet, Pressable, Picker, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Pressable,
+  Picker,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
-import { addDoc, collection, getDoc, doc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDoc,
+  doc,
+  updateDoc,
+  getDocs,
+} from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import dayjs from "dayjs";
 
 const PostRequest = ({ navigation: { goBack } }) => {
   const [titleInput, setTitleInput] = useState("");
   const [bodyInput, setBodyInput] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(undefined);
+  const [selectedCategory, setSelectedCategory] = useState("DIY");
 
   const categories = [
     "DIY",
@@ -28,7 +43,7 @@ const PostRequest = ({ navigation: { goBack } }) => {
   const handleSubmit = async () => {
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
-    const fields = docSnap._document.data.value.mapValue.fields
+    const fields = docSnap.data();
 
     const request = {
       title: titleInput,
@@ -36,8 +51,8 @@ const PostRequest = ({ navigation: { goBack } }) => {
       category: selectedCategory,
       userInfo: {
         userUid: auth.currentUser.uid,
-        userFirstName: fields.firstName.stringValue,
-        userSurname: fields.surname.stringValue,
+        userFirstName: fields.firstName,
+        userSurname: fields.surname,
         userLocation: fields.userLocation,
         userUsername: auth.currentUser.displayName,
       },
@@ -47,8 +62,13 @@ const PostRequest = ({ navigation: { goBack } }) => {
         fullStamp: dayjs().format(),
       },
     };
+
     try {
       const postRequest = await addDoc(collection(db, "requests"), request);
+      await updateDoc(doc(db, "requests", postRequest.id), {
+        requestUid: postRequest.id,
+      });
+      console.log(postRequest.id);
       alert("Request successfully posted!");
       resetForms();
     } catch (err) {
@@ -56,7 +76,6 @@ const PostRequest = ({ navigation: { goBack } }) => {
       console.log(err);
     }
   };
-
 
   return (
     <View style={styles.container}>
