@@ -19,9 +19,10 @@ import ActionButton from "react-native-action-button";
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const [filteredTools, setFilteredTools] = useState([]);
+  const [newItem, setNewItem] = useState(false);
 
   const handlePress = () => {
-    navigation.navigate("PostItem");
+    navigation.navigate("PostItem", { setNewItem });
   };
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const ToolshedScreen = ({ navigation }) => {
         console.log(err);
       }
     })();
-  }, []);
+  }, [newItem]);
 
   return (
     <View style={styles.container}>

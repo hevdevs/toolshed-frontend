@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View, Image, Switch } from "react-native";
 import React, { useEffect, useState } from "react";
 import { getDownloadURL, getStorage, ref } from "firebase/storage";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 
 import { Ionicons } from "@expo/vector-icons";
+import { updateDoc, doc } from "firebase/firestore";
 
 const ItemCard = ({ item }) => {
   const storage = getStorage();
   const [isEnabled, setIsEnabled] = useState(false);
-  const [isLent, setIsLent] = useState(false);
+  const [isLent, setIsLent] = useState(!item.available);
   const [itemImage, setItemImage] = useState("");
   
   useEffect(() => {
@@ -24,12 +25,19 @@ const ItemCard = ({ item }) => {
     })();
   }, []);
 
-  const toggleAvailibility = () => {
-    setIsEnabled(previousState => !previousState)
+  const toggleAvailibility = async () => {
+    setIsEnabled(previousState => !previousState);
     setIsLent((previousState) => !previousState);
-    item.available = !isLent
-    console.log(item.available)
-  }
+  };
+
+  const updateAvailability = async () => {
+    const docRef = doc(db, "items", item.uid);
+    await updateDoc(docRef, { available: !isLent });
+  };
+  
+  useEffect(() => {
+    updateAvailability()
+  }, [isLent])
 
   return (
     <View style={styles.card}>
@@ -55,7 +63,7 @@ const ItemCard = ({ item }) => {
               trackColor={{ false: "#9DD9D2", true: "#F36433" }}
               thumbColor={isEnabled ? "#2DC2BD" : "#2DC2BD"}
               onValueChange={toggleAvailibility}
-              value={isEnabled}
+              value={isLent}
               label={"Toggle"}
             />
           </View>
