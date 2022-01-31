@@ -16,6 +16,7 @@ import { setLocation } from "../../utils";
 import * as Location from "expo-location";
 
 const Register = ({ navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -28,6 +29,7 @@ const Register = ({ navigation }) => {
   const [postcode, setPostcode] = useState("");
 
   const handleSignUp = async () => {
+    setIsLoading(true)
     const postCodeRegex =
       /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/;
     if (!postCodeRegex.test(postcode)) alert("Not a valid UK postcode");
@@ -64,8 +66,10 @@ const Register = ({ navigation }) => {
           const addUsername = await updateProfile(auth.currentUser, {
             displayName: username,
           });
+          setIsLoading(false);
         } catch (err) {
           console.log(err);
+          setIsLoading(false);
           alert(`Sign up unsuccessful! - ${err.msg}`);
         }
       }
@@ -73,12 +77,13 @@ const Register = ({ navigation }) => {
   };
 
   return (
+    <View style={styles.container}>
     <ImageBackground
       source={require("../../assets/toolbackground.png")}
       resizeMode="cover"
       style={styles.image}
     >
-      <KeyboardAvoidingView behavior="padding" style={styles.wrapper}>
+      <View style={styles.wrapper}>
         <ScrollView>
           <View style={styles.headerContent}>
             <Text style={styles.header}>Create a new account</Text>
@@ -91,6 +96,14 @@ const Register = ({ navigation }) => {
               textContentType="name"
               value={firstName}
               onChangeText={setFirstName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Full Name"
+              autoCapitalize="none"
+              textContentType="name"
+              value={surname}
+              onChangeText={setSurname}
             />
             <TextInput
               style={styles.input}
@@ -141,40 +154,51 @@ const Register = ({ navigation }) => {
             </View>
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </ImageBackground>
+      </View>
+      </ImageBackground>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   image: {
     width: "100%",
     height: "100%",
+    position: "absolute",
   },
   wrapper: {
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#FFF8F0",
+    borderRadius: 5,
+    width: "90%",
+    margin: "5%",
+    marginTop: "15%",
   },
   headerContent: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "12%",
+    margin: "5%",
   },
   header: {
-    color: "orange",
+    color: "#575761",
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
-    backgroundColor: "#000000c0",
-    marginTop: "25%",
+    marginTop: "5%",
   },
   inputContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
   },
   input: {
-    backgroundColor: "white",
+    backgroundColor: "#F0F0F0",
     width: 300,
     alignItems: "center",
     position: "relative",
@@ -187,7 +211,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "#0782F9",
+    backgroundColor: "#F36433",
     width: 125,
     marginTop: "5%",
     padding: 15,
