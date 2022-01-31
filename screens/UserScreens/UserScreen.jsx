@@ -1,29 +1,52 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { useState, useEffect } from "react";
 
 import { auth, db } from "../../firebase.js";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDoc, getDocs, doc } from "firebase/firestore";
 
 import SignOut from "../../components/SignOut.jsx";
 
 const UserScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
+  const [userDoc, setUserDoc] = useState({});
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const itemList = await getDocs(collection(db, "items"));
-        const itemArray = [];
-        itemList.forEach((doc) => {
-          console.log(doc);
-          itemArray.push(Object.assign({ uid: doc.id }, doc.data()));
-        });
-        setItems(itemArray);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
+  const user = auth.currentUser;
+
+  const handleListedItems = () => {
+    navigation.navigate("UserItemsScreen");
+  };
+
+  const handleForumPosts = () => {
+    navigation.navigate("UserForumPostsScreen");
+  };
+
+useEffect( async () => {
+    try {
+      const userInfo = await getDoc(doc(db, "users", user.uid))
+      setUserDoc(userInfo.data())
+    } catch (err) {
+    console.log(err)
+    
+  }
+}, [])
+
+console.log(userDoc);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       const itemList = await getDocs(collection(db, "items"));
+  //       const itemArray = [];
+  //       itemList.forEach((doc) => {
+  //         console.log(doc);
+  //         itemArray.push(Object.assign({ uid: doc.id }, doc.data()));
+  //       });
+  //       setItems(itemArray);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   })();
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -36,7 +59,19 @@ const UserScreen = ({ navigation }) => {
           <Text>Profile pic: {auth.currentUser.photoURL}</Text>
           <Text>Name: {auth.currentUser.displayName}</Text>
         </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity 
+          style={styles.button}
+          onPress={handleListedItems}>
+            <Text style={styles.buttonText}>Listed Items</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+            style={styles.button}
+            onPress={handleForumPosts}>
+            <Text style={styles.buttonText}>Forum Posts</Text>
+            </TouchableOpacity>
         <SignOut />
+        </View>
       </View>
     </View>
   );
@@ -75,5 +110,20 @@ const styles = StyleSheet.create({
   userInfo: {
     display: "flex",
     flexDirection: "row",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    marginTop: 50,
+  },
+  button: {
+    backgroundColor: "#0782f9",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "700",
+    fontSize: 12,
   },
 });
