@@ -33,21 +33,26 @@ const ItemScreen = ({ route, navigation }) => {
   }, []);
 
   const handlePress = async () => {
-    const messageId =
-      item.userInfo.userUid < auth.currentUser.uid
-        ? `${auth.currentUser.uid}-${item.userInfo.userUid}`
-        : `${item.userInfo.userUid}-${auth.currentUser.uid}`;
-    await updateDoc(doc(db, `users/${auth.currentUser.uid}`), {
-      chats: arrayUnion(messageId),
-    });
-    await updateDoc(doc(db, `users/${item.userInfo.userUid}`), {
-      chats: arrayUnion(messageId),
-    });
+    try {
+      const messageId =
+        item.userInfo.userUid < auth.currentUser.uid
+          ? `${auth.currentUser.uid}-${item.userInfo.userUid}`
+          : `${item.userInfo.userUid}-${auth.currentUser.uid}`;
+      await updateDoc(doc(db, `users/${auth.currentUser.uid}`), {
+        chats: arrayUnion(messageId),
+      });
+      await updateDoc(doc(db, `users/${item.userInfo.userUid}`), {
+        chats: arrayUnion(messageId),
+      });
 
-    navigation.navigate("ChatScreen", {
-      messageId,
-      userUsername: `${item.userInfo.userFirstName} ${item.userInfo.userSurname}`,
-    });
+      navigation.navigate("ChatScreen", {
+        messageId,
+        userUsername: `${item.userInfo.userFirstName} ${item.userInfo.userSurname}`,
+      });
+    } catch (err) {
+      alert("Error: Could not load chat");
+      console.log(err);
+    }
   };
 
   return (
