@@ -4,36 +4,42 @@ import { getUserDataFromUid } from "../../utils";
 import { auth, db } from "../../firebase";
 import ChatCard from "../../components/ChatCard";
 import { onSnapshot, doc } from "firebase/firestore";
+import * as Progress from "react-native-progress";
+
 const InboxScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useLayoutEffect(() => {
+    setIsLoading(true);
     const unsubscribe = onSnapshot(
       doc(db, "users", auth.currentUser.uid),
       (userData) => {
         const { chats } = userData.data();
-        setChats(chats);
+        const reverseChat = chats.reverse();
+        setChats(reverseChat);
       }
     );
+    setIsLoading(false);
     return unsubscribe;
   }, []);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const currentUserInfo = await getUserDataFromUid(auth.currentUser.uid);
-  //       setChats(currentUserInfo.chats);
-  //     } catch (err) {
-  //       console.log("HERE");
-
-  //       console.log(err);
-  //     }
-  //   })();
-  // }, []);
-
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Your Inbox Page</Text>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Your Inbox Page</Text>
+      </View>
+      <View style={styles.subheadingContainer}>
+        <Text style={styles.subheading}>Recent messages</Text>
+      </View>
+      {isLoading ? (
+        <Progress.Circle
+          style={styles.progressPie}
+          size={50}
+          indeterminate={true}
+          color={"#F36433"}
+        />
+      ) : null}
       <View style={styles.contentContainer}>
         <ScrollView>
           {!chats.length ? (
@@ -56,9 +62,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    backgroundColor: "#9dd9d2",
     alignItems: "center",
+  },
+  headerContainer: {
+    paddingTop: "10%",
     backgroundColor: "#F36433",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
+    position: "absolute",
+    top: 0,
   },
   header: {
     margin: "5%",
@@ -66,15 +81,29 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "#FFF8F0",
+    alignSelf: "center",
   },
   contentContainer: {
     width: "100%",
-    padding: 0,
-    margin: 0,
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "#9DD9D2",
+  },
+  subheadingContainer: {
+    width: "70%",
+    alignItems: "center",
+    margin: "5%",
+    marginTop: "40%",
+    paddingTop: "5%",
+    borderBottomColor: "#172121",
+    borderBottomWidth: 1,
+    paddingBottom: "5%",
+  },
+  subheading: {
+    fontSize: 20,
+    textAlign: "center",
+    color: "#172121",
+    fontWeight: "bold",
   },
   noMessage: {
     fontWeight: "bold",
@@ -86,6 +115,23 @@ const styles = StyleSheet.create({
   chatCard: {
     fontWeight: "bold",
     width: "100%",
+  },
+  button: {
+    backgroundColor: "#F36433",
+    margin: "5%",
+    padding: 10,
+    borderRadius: 35,
+    position: "relative",
+    bottom: 0,
+    alignSelf: "flex-end",
+  },
+  text: {
+    color: "#FFF8F0",
+    fontWeight: "bold",
+    fontSize: 30,
+  },
+  progressPie: {
+    alignSelf: "center",
   },
 });
 
