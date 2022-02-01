@@ -3,14 +3,15 @@ import { ref, getDownloadURL } from "firebase/storage";
 import { Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as Location from "expo-location";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection, updateDoc } from "firebase/firestore";
 
-export const distance = (loc1, loc2) => {
+export const calculateDistance = (loc1, loc2) => {
   //Distance in km
   const [
     { latitude: lat1, longitude: lon1 },
     { latitude: lat2, longitude: lon2 },
   ] = [loc1, loc2];
+
   if (lat1 == lat2 && lon1 == lon2) {
     return 0;
   } else {
@@ -26,7 +27,7 @@ export const distance = (loc1, loc2) => {
     dist = Math.acos(dist);
     dist = (dist * 180) / Math.PI;
     dist = dist * 60 * 1.1515;
-    dist = dist * 1.609344;
+    //dist = dist * 1.609344; include for km, remove for miles
     return dist.toFixed(2);
   }
 };
@@ -45,7 +46,29 @@ export const getUserDataFromUid = async (uid) => {
     const docSnap = await getDoc(docRef);
     const fields = docSnap.data();
     return fields;
-  } catch {
-    throw "err";
+  } catch (err) {
+    throw err;
   }
 };
+
+// const requests = await getDocs(collection(db, "requests"));
+// requests.forEach((notDoc) =>
+//   updateDoc(doc(db, "requests", notDoc.id), {
+//     requestUid: notDoc.id,
+//   })
+// );
+
+// export const updateItemLocationFormat = async () => {
+//   const docs = await getDocs(collection(db, "items"));
+//   docs.forEach((docco) => {
+//     const userData = docco.data();
+//     userData.userInfo.userLocation = {
+//       latitude:
+//         userData.userInfo.userLocation.mapValue.fields.latitude.doubleValue,
+//       longitude:
+//         userData.userInfo.userLocation.mapValue.fields.longitude.doubleValue,
+//     };
+//     console.log(userData.userInfo, ">>>>>>>>>>>>>>");
+//     updateDoc(doc(db, "items", docco.id), { userInfo: userData.userInfo });
+//   });
+// };
