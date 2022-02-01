@@ -100,6 +100,7 @@ const ToolshedScreen = ({ navigation }) => {
             });
         setItems(filteredItems);
       } catch (err) {
+        alert(err);
         console.log(err);
       }
     })();

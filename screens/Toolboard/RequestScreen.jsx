@@ -14,24 +14,28 @@ import { updateDoc, doc, arrayUnion } from "firebase/firestore";
 
 const RequestScreen = ({ route, navigation }) => {
   const { req } = route.params;
-  console.log(req);
 
   const handlePress = async () => {
-    const messageId =
-      req.userInfo.userUid < auth.currentUser.uid
-        ? `${auth.currentUser.uid}-${req.userInfo.userUid}`
-        : `${req.userInfo.userUid}-${auth.currentUser.uid}`;
-    await updateDoc(doc(db, `users/${auth.currentUser.uid}`), {
-      chats: arrayUnion(messageId),
-    });
-    await updateDoc(doc(db, `users/${req.userInfo.userUid}`), {
-      chats: arrayUnion(messageId),
-    });
+    try {
+      const messageId =
+        req.userInfo.userUid < auth.currentUser.uid
+          ? `${auth.currentUser.uid}-${req.userInfo.userUid}`
+          : `${req.userInfo.userUid}-${auth.currentUser.uid}`;
+      await updateDoc(doc(db, `users/${auth.currentUser.uid}`), {
+        chats: arrayUnion(messageId),
+      });
+      await updateDoc(doc(db, `users/${req.userInfo.userUid}`), {
+        chats: arrayUnion(messageId),
+      });
 
-    navigation.navigate("ChatScreen", {
-      messageId,
-      userUsername: `${req.userInfo.userFirstName} ${req.userInfo.userSurname}`,
-    });
+      navigation.navigate("ChatScreen", {
+        messageId,
+        userUsername: `${req.userInfo.userFirstName} ${req.userInfo.userSurname}`,
+      });
+    } catch (err) {
+      alert("Error: Could not create chat");
+      console.log(err);
+    }
   };
 
   return (
