@@ -56,12 +56,6 @@ const ChatScreen = ({ route }) => {
       text,
       user,
     });
-    // updateDoc(doc(db, `users/${auth.currentUser.uid}`), {
-    //   chats: arrayUnion(messageId),
-    // });
-    // updateDoc(doc(db, `users/${userUid}`), {
-    //   chats: arrayUnion(messageId),
-    // });
   }, []);
 
   function renderBubble(props) {
