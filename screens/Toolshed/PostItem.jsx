@@ -23,7 +23,7 @@ const PostItem = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
   const [phoneImageUri, setPhoneImageUri] = useState("");
   const [itemDescription, setItemDescription] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(undefined);
+  const [selectedCategory, setSelectedCategory] = useState("DIY");
   const [isItemUploading, setIsItemUploading] = useState(false);
 
   const { setNewItem } = route.params;
@@ -42,11 +42,11 @@ const PostItem = ({ navigation, route }) => {
     setItemName("");
     setPhoneImageUri("");
     setItemDescription("");
-    setSelectedCategory(undefined);
+    setSelectedCategory("DIY");
   };
 
   const uploadImage = async () => {
-    setIsItemUploading(true)
+    setIsItemUploading(true);
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -65,11 +65,10 @@ const PostItem = ({ navigation, route }) => {
     try {
       const snapshot = await uploadBytes(reference, blob);
       blob.close();
-      setIsLoading(false)
       const uri = `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`;
       return uri;
     } catch (err) {
-      setIsItemUploading(false)
+      setIsItemUploading(false);
       alert("Image failed to upload!");
       console.log(err);
     }
@@ -86,8 +85,8 @@ const PostItem = ({ navigation, route }) => {
       category: selectedCategory,
       userInfo: {
         userUid: auth.currentUser.uid,
-        userFirstName: fields.firstName.stringValue,
-        userSurname: fields.surname.stringValue,
+        userFirstName: fields.firstName,
+        userSurname: fields.surname,
         userLocation: fields.userLocation,
         userUsername: auth.currentUser.displayName,
       },
@@ -111,6 +110,7 @@ const PostItem = ({ navigation, route }) => {
       await addItem(uploadedUri);
       alert("Request successfully posted!");
       resetState();
+      navigation.goBack();
     } catch (err) {
       if (uploadedUri) await deleteObject(uploadedImageRef);
       alert("Request failed to post!");
