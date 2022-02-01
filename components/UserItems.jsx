@@ -15,6 +15,7 @@ import { getDownloadURL, ref } from "@firebase/storage";
 const UserItems = () => {
   const [items, setItems] = useState([]);
   const [itemImage, setItemImage] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const user = auth.currentUser;
 
   const handleOnPress = async () => {
