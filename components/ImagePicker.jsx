@@ -1,22 +1,23 @@
 import { View, Pressable, Image, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import * as ImagePickerPackage from "expo-image-picker";
+import * as Progress from "react-native-progress";
 
 const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const pickImage = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     let result = await ImagePickerPackage.launchImageLibraryAsync({
       mediaTypes: ImagePickerPackage.MediaTypeOptions.All,
       allowsEditing: true,
       //   aspect: [4, 3],
-      quality: 1,
+      quality: 0.5,
     });
-    
+
     if (!result.cancelled) {
       setPhoneImageUri(result.uri);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -25,7 +26,7 @@ const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
       <Pressable style={styles.button} onPress={pickImage}>
         <Text style={styles.text}>Upload a Photo</Text>
       </Pressable>
-      {!isLoading ? (
+      {!isLoading && phoneImageUri ? (
         <>
           <Image
             source={{ uri: phoneImageUri }}
