@@ -3,6 +3,9 @@ import React from "react";
 import MapComponent from "../../components/MapComponent";
 import { Ionicons } from "@expo/vector-icons";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 export default MapScreen = ({ route, navigation }) => {
   const { item } = route.params;
 
@@ -10,6 +13,14 @@ export default MapScreen = ({ route, navigation }) => {
     longitude: -2.238332152375383,
     latitude: 53.4723494112368,
   };
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -47,6 +58,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#9dd9d2",
     alignItems: "center",
+    fontFamily: "Oxygen_400Regular"
   },
   headerContainer: {
     paddingTop: "10%",
@@ -62,7 +74,7 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     margin: "5%",
     fontSize: 28,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
   },
   subheadingContainer: {
@@ -78,7 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
   },
   mapContainer: {
     width: "80%",
@@ -94,7 +106,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
   },
 });

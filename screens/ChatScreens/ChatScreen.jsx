@@ -13,6 +13,8 @@ import {
   updateDoc,
   arrayUnion,
 } from "firebase/firestore";
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
 
 const ChatScreen = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
@@ -82,6 +84,14 @@ const ChatScreen = ({ route, navigation }) => {
     );
   };
 
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <>
       <View style={styles.headerContainer}>
@@ -123,6 +133,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "relative",
     justifyContent: "center",
+    fontFamily: "Oxygen_400Regular"
   },
   headerContainer: {
     paddingTop: "15%",
@@ -148,7 +159,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
     fontSize: 30,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
   },
   text: {
     color: "#FFF8F0",
