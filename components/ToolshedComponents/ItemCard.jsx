@@ -11,13 +11,11 @@ const ItemCard = ({ item }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [isLent, setIsLent] = useState(!item.available);
   const [itemImage, setItemImage] = useState("");
-  
+
   useEffect(() => {
     (async () => {
       try {
-        const imageUrl = await getDownloadURL(
-          ref(storage, `${item.imageUri}`)
-        );
+        const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
         setItemImage(imageUrl);
       } catch (err) {
         console.log(err);
@@ -26,7 +24,7 @@ const ItemCard = ({ item }) => {
   }, []);
 
   const toggleAvailibility = async () => {
-    setIsEnabled(previousState => !previousState);
+    setIsEnabled((previousState) => !previousState);
     setIsLent((previousState) => !previousState);
   };
 
@@ -34,10 +32,10 @@ const ItemCard = ({ item }) => {
     const docRef = doc(db, "items", item.uid);
     await updateDoc(docRef, { available: !isLent });
   };
-  
+
   useEffect(() => {
-    updateAvailability()
-  }, [isLent])
+    updateAvailability();
+  }, [isLent]);
 
   return (
     <View style={styles.card}>
