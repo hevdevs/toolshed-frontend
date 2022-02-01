@@ -24,6 +24,7 @@ const PostItem = ({ navigation, route }) => {
   const [phoneImageUri, setPhoneImageUri] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(undefined);
+  const [isItemUploading, setIsItemUploading] = useState(false);
 
   const { setNewItem } = route.params;
 
@@ -45,6 +46,7 @@ const PostItem = ({ navigation, route }) => {
   };
 
   const uploadImage = async () => {
+    setIsItemUploading(true)
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -63,10 +65,13 @@ const PostItem = ({ navigation, route }) => {
     try {
       const snapshot = await uploadBytes(reference, blob);
       blob.close();
+      setIsLoading(false)
       const uri = `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`;
       return uri;
     } catch (err) {
-      throw err;
+      setIsItemUploading(false)
+      alert("Image failed to upload!");
+      console.log(err);
     }
   };
 

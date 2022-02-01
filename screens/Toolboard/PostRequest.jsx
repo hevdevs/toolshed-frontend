@@ -17,13 +17,17 @@ import {
   updateDoc,
   getDocs,
 } from "firebase/firestore";
+import * as Progress from "react-native-progress";
 import { auth, db } from "../../firebase";
 import dayjs from "dayjs";
 
-const PostRequest = ({ navigation: { goBack } }) => {
+const PostRequest = ({ route, navigation: { goBack } }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [titleInput, setTitleInput] = useState("");
   const [bodyInput, setBodyInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("DIY");
+
+  const { setNewRequest } = route.params;
 
   const categories = [
     "DIY",
@@ -41,6 +45,7 @@ const PostRequest = ({ navigation: { goBack } }) => {
   };
 
   const handleSubmit = async () => {
+    setIsLoading(true)
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
     const fields = docSnap.data();
@@ -69,9 +74,14 @@ const PostRequest = ({ navigation: { goBack } }) => {
         requestUid: postRequest.id,
       });
       console.log(postRequest.id);
+      setNewRequest((currNewReq) => {
+        !currNewReq;
+      });
       alert("Request successfully posted!");
       resetForms();
+      setIsLoading(false);
     } catch (err) {
+      setIsLoading(false);
       alert("Request failed to post!");
       console.log(err);
     }
@@ -126,6 +136,14 @@ const PostRequest = ({ navigation: { goBack } }) => {
             <Text style={styles.text}>Go Back</Text>
           </Pressable>
         </View>
+        {isLoading ? (
+          <Progress.Circle
+            size={50}
+            indeterminate={true}
+            style={styles.spinner}
+            color={"#F36433"}
+          />
+        ) : null}
       </ScrollView>
     </View>
   );
@@ -203,5 +221,8 @@ const styles = StyleSheet.create({
     marginBottom: "2%",
     borderBottomColor: "#172121",
     borderBottomWidth: 1,
+  },
+  spinner: {
+    alignSelf: "center",
   },
 });

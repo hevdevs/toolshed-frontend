@@ -28,6 +28,7 @@ import {
 import ToolSearch from "../../components/ToolshedComponents/ToolSearch";
 import ItemCard from "../../components/ToolshedComponents/ItemCard";
 import ActionButton from "react-native-action-button";
+import * as Progress from "react-native-progress";
 
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
@@ -64,6 +65,7 @@ const ToolshedScreen = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
+      // setIsLoading(true);
       try {
         const itemList =
           selectedCategory === "All"
@@ -237,5 +239,8 @@ const styles = StyleSheet.create({
     color: "#FFF8F0",
     fontWeight: "bold",
     fontSize: 30,
+  },
+  progressPie: {
+    alignSelf: "center",
   },
 });

@@ -3,26 +3,29 @@ import React, { useState } from "react";
 import * as ImagePickerPackage from "expo-image-picker";
 
 const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const pickImage = async () => {
+    setIsLoading(true)
     let result = await ImagePickerPackage.launchImageLibraryAsync({
       mediaTypes: ImagePickerPackage.MediaTypeOptions.All,
       allowsEditing: true,
       //   aspect: [4, 3],
       quality: 1,
     });
-
+    
     if (!result.cancelled) {
       setPhoneImageUri(result.uri);
+      setIsLoading(false)
     }
   };
 
   return (
     <View>
-      <Text>{"\n\n\n\n"}</Text>
       <Pressable style={styles.button} onPress={pickImage}>
         <Text style={styles.text}>Upload a Photo</Text>
       </Pressable>
-      {phoneImageUri ? (
+      {!isLoading ? (
         <>
           <Image
             source={{ uri: phoneImageUri }}
@@ -32,7 +35,14 @@ const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
             <Text style={styles.text}>Pick a Different Photo</Text>
           </Pressable>
         </>
-      ) : null}
+      ) : (
+        <Progress.Circle
+          style={styles.spinner}
+          indeterminate={true}
+          size={50}
+          color={"#F36433"}
+        />
+      )}
     </View>
   );
 };
@@ -52,5 +62,8 @@ const styles = StyleSheet.create({
   text: {
     color: "#FFF8F0",
     fontWeight: "bold",
+  },
+  spinner: {
+    alignSelf: "center",
   },
 });

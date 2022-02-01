@@ -4,6 +4,7 @@ import { getDownloadURL, getStorage, ref } from "firebase/storage";
 import { auth, db } from "../../firebase";
 
 import { Ionicons } from "@expo/vector-icons";
+import * as Progress from "react-native-progress";
 import { updateDoc, doc } from "firebase/firestore";
 
 const ItemCard = ({ item }) => {
@@ -17,6 +18,7 @@ const ItemCard = ({ item }) => {
       try {
         const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
         setItemImage(imageUrl);
+        setIsLoading(false)
       } catch (err) {
         console.log(err);
       }
@@ -41,7 +43,14 @@ const ItemCard = ({ item }) => {
     <View style={styles.card}>
       {itemImage ? (
         <Image style={styles.image} source={{ uri: itemImage }} />
-      ) : null}
+      ) : (
+        <Progress.Circle
+          size={50}
+          indeterminate={true}
+          style={styles.spinner}
+          color={"#F36433"}
+        />
+      )}
       <View>
         <Text style={styles.cardText}>{`${item.name} \n`}</Text>
         <Text style={styles.cardText}>
@@ -110,6 +119,9 @@ const styles = StyleSheet.create({
   text: {
     color: "#FFF8F0",
     fontWeight: "bold",
+    alignSelf: "center",
+  },
+  spinner: {
     alignSelf: "center",
   },
 });

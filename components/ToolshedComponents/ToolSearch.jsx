@@ -12,7 +12,7 @@ const ToolSearch = ({ setSearch, search, setSearchQuery }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <Searchbar
         placeholder="Search the Toolshed"
         value={search}
@@ -30,5 +30,8 @@ const styles = StyleSheet.create({
   bar: {
     width: "100%",
     marginTop: "5%",
+  },
+  spinner: {
+    marginTop: "25%",
   },
 });
