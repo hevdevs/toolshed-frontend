@@ -73,6 +73,17 @@ const RequestScreen = ({ route, navigation }) => {
         </Text>
       </TouchableOpacity>
       <Pressable
+        title="View Map"
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate("MapScreen", { item: req });
+        }}
+      >
+        <Text style={styles.text}>
+          VIEW MAP <Ionicons name={"map"} size={16} />
+        </Text>
+      </Pressable>
+      <Pressable
         style={styles.button}
         onPress={() => {
           navigation.goBack();
