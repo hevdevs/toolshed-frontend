@@ -1,4 +1,4 @@
-import { View, ActivityIndicator } from "react-native";
+import { View, ActivityIndicator, LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useState, createContext, useContext, useEffect } from "react";
@@ -21,8 +21,11 @@ import PostRequest from "./screens/Toolboard/PostRequest";
 import ChatScreen from "./screens/ChatScreens/ChatScreen";
 import RequestScreen from "./screens/Toolboard/RequestScreen";
 import MapScreen from "./screens/Maps/MapScreen";
-import UserForumPostsScreen from "./screens/UserScreens/UserForumPostsScreen"
+import UserForumPostsScreen from "./screens/UserScreens/UserForumPostsScreen";
 import UserItemsScreen from "./screens/UserScreens/UserItemsScreen";
+
+LogBox.ignoreAllLogs(["Warning: ..."]);
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 
@@ -39,12 +42,12 @@ const AuthenticatedUserProvider = ({ children }) => {
 const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen}/>
+      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
   );
-}
+};
 
 const RootNavigator = () => {
   const { user, setUser } = useContext(AuthenticatedUserContext);
@@ -63,11 +66,7 @@ const RootNavigator = () => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Progress.Circle
-          size={50}
-          indeterminate={true}
-          color={"#F36433"}
-        />
+        <Progress.Circle size={50} indeterminate={true} color={"#F36433"} />
       </View>
     );
   }
@@ -76,7 +75,7 @@ const RootNavigator = () => {
       {user ? <HomeStack /> : <AuthStack />}
     </NavigationContainer>
   );
-}
+};
 
 const HomeStack = () => {
   return (
@@ -95,11 +94,14 @@ const HomeStack = () => {
       <Stack.Screen name="PostRequest" component={PostRequest} />
       <Stack.Screen name="ChatScreen" component={ChatScreen} />
       <Stack.Screen name="MapScreen" component={MapScreen} />
-      <Stack.Screen name="UserForumPostsScreen" component={UserForumPostsScreen} />
+      <Stack.Screen
+        name="UserForumPostsScreen"
+        component={UserForumPostsScreen}
+      />
       <Stack.Screen name="UserItemsScreen" component={UserItemsScreen} />
     </Stack.Navigator>
   );
-}
+};
 
 export default function App() {
   return (
