@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
-  Pressable,
-} from "react-native";
+import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 
 import { getDownloadURL, ref } from "@firebase/storage";
 import { storage, auth, db } from "../../firebase";
@@ -45,6 +37,7 @@ const ItemScreen = ({ route, navigation }) => {
     });
 
     navigation.navigate("ChatScreen", {
+      navigation,
       messageId,
       userUsername: `${item.userInfo.userFirstName} ${item.userInfo.userSurname}`,
     });
@@ -70,7 +63,7 @@ const ItemScreen = ({ route, navigation }) => {
         </View>
         {/* <CalendarComponent /> */}
 
-        <TouchableOpacity
+        <Pressable
           style={styles.button}
           onPress={handlePress}
           itemOwner={item.owner}
@@ -78,7 +71,7 @@ const ItemScreen = ({ route, navigation }) => {
           <Text style={styles.text}>
             MESSAGE <Ionicons name={"paper-plane"} size={16} />
           </Text>
-        </TouchableOpacity>
+        </Pressable>
         <Pressable
           title="View Map"
           style={styles.button}
@@ -152,10 +145,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
+    alignSelf: "center",
     justifyContent: "center",
-    height: 200,
-    width: 200,
-    borderRadius: 5,
+    marginTop: "30%",
+    height: 150,
+    width: 150,
+    borderRadius: 100,
   },
   contentContainer: {
     width: "100%",
