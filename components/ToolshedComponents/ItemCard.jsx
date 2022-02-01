@@ -13,32 +13,17 @@ const ItemCard = ({ item }) => {
   const [isLent, setIsLent] = useState(!item.available);
   const [itemImage, setItemImage] = useState("");
 
-<<<<<<< HEAD
   useEffect(() => {
     (async () => {
       try {
         const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
         setItemImage(imageUrl);
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
     })();
   }, []);
-=======
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
-  //       setItemImage(imageUrl);
-  //       setIsLoading(false);
-  //       for (let i = 0; i < 1000; i++) console.log("Daeodon");
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   })();
-  // }, []);
->>>>>>> inbox-page
 
   const toggleAvailibility = async () => {
     setIsEnabled((previousState) => !previousState);
