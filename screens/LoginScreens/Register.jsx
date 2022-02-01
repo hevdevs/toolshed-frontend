@@ -21,33 +21,24 @@ const Register = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");
-  const [userLocation, setUserLocation] = useState({
-    longitude: -2.238332152375383,
-    latitude: 53.4723494112368,
-  });
   const [username, setUsername] = useState("");
   const [postcode, setPostcode] = useState("");
 
   const handleSignUp = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     const postCodeRegex =
       /([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})/;
     if (!postCodeRegex.test(postcode)) alert("Not a valid UK postcode");
     else {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMessage("Access to location is required to run app");
-        return;
-      }
-      await setLocation(postcode, setUserLocation);
-
-      if (email !== "" && password !== "") {
-        try {
+      try {
+        const userLocation = await setLocation(postcode);
+        if (email !== "" && password !== "" && userLocation) {
           const newUser = await createUserWithEmailAndPassword(
             auth,
             email,
             password
           );
+          console.log(userLocation);
           const docRef = newUser.user.uid;
           let newUserInfo = {
             firstName,
@@ -55,6 +46,7 @@ const Register = ({ navigation }) => {
             email,
             uid: docRef,
             userLocation,
+            displayName: username,
           };
 
           const addUserDoc = await setDoc(
@@ -66,95 +58,96 @@ const Register = ({ navigation }) => {
           const addUsername = await updateProfile(auth.currentUser, {
             displayName: username,
           });
+
           setIsLoading(false);
-        } catch (err) {
-          console.log(err);
-          setIsLoading(false);
-          alert(`Sign up unsuccessful! - ${err.msg}`);
         }
+      } catch (err) {
+        console.log(err);
+        setIsLoading(false);
+        alert(`Sign up unsuccessful! - ${err.msg}`);
       }
     }
   };
 
   return (
     <View style={styles.container}>
-    <ImageBackground
-      source={require("../../assets/toolbackground.png")}
-      resizeMode="cover"
-      style={styles.image}
-    >
-      <View style={styles.wrapper}>
-        <ScrollView>
-          <View style={styles.headerContent}>
-            <Text style={styles.header}>Create a new account</Text>
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Full Name"
-              autoCapitalize="none"
-              textContentType="name"
-              value={firstName}
-              onChangeText={setFirstName}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Full Name"
-              autoCapitalize="none"
-              textContentType="name"
-              value={surname}
-              onChangeText={setSurname}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Username"
-              autoCapitalize="none"
-              textContentType="name"
-              value={username}
-              onChangeText={setUsername}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Email"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              value={email}
-              onChangeText={setEmail}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Password"
-              autoCapitalize="none"
-              autoCorrect={false}
-              secureTextEntry={true}
-              textContentType="password"
-              value={password}
-              onChangeText={setPassword}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Postcode"
-              autoCapitalize="none"
-              autoCorrect={false}
-              textContentType="postalCode"
-              value={postcode}
-              onChangeText={setPostcode}
-            />
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-                <Text style={styles.buttonText}>Sign Up</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate("LoginScreen")}
-              >
-                <Text style={styles.buttonText}>Go To Login</Text>
-              </TouchableOpacity>
+      <ImageBackground
+        source={require("../../assets/toolbackground.png")}
+        resizeMode="cover"
+        style={styles.image}
+      >
+        <View style={styles.wrapper}>
+          <ScrollView>
+            <View style={styles.headerContent}>
+              <Text style={styles.header}>Create a new account</Text>
             </View>
-          </View>
-        </ScrollView>
-      </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="First Name"
+                autoCapitalize="none"
+                textContentType="name"
+                value={firstName}
+                onChangeText={setFirstName}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Surname"
+                autoCapitalize="none"
+                textContentType="name"
+                value={surname}
+                onChangeText={setSurname}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Username"
+                autoCapitalize="none"
+                textContentType="name"
+                value={username}
+                onChangeText={setUsername}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                textContentType="emailAddress"
+                value={email}
+                onChangeText={setEmail}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                autoCapitalize="none"
+                autoCorrect={false}
+                secureTextEntry={true}
+                textContentType="password"
+                value={password}
+                onChangeText={setPassword}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Postcode"
+                autoCapitalize="none"
+                autoCorrect={false}
+                textContentType="postalCode"
+                value={postcode}
+                onChangeText={setPostcode}
+              />
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+                  <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => navigation.navigate("LoginScreen")}
+                >
+                  <Text style={styles.buttonText}>Go To Login</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
       </ImageBackground>
     </View>
   );
