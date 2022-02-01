@@ -24,20 +24,25 @@ const ChatScreen = ({ route }) => {
   //     : `${userUid}-${auth.currentUser.uid}`;
 
   useLayoutEffect(() => {
-    const collectionRef = collection(db, `groups/${messageId}/messages`);
-    const q = query(collectionRef, orderBy("createdAt", "desc"));
+    try {
+      const collectionRef = collection(db, `groups/${messageId}/messages`);
+      const q = query(collectionRef, orderBy("createdAt", "desc"));
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      setMessages(
-        querySnapshot.docs.map((doc) => ({
-          _id: doc.data()._id,
-          createdAt: doc.data().createdAt.toDate(),
-          text: doc.data().text,
-          user: doc.data().user,
-        }))
-      );
-    });
-    return unsubscribe;
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        setMessages(
+          querySnapshot.docs.map((doc) => ({
+            _id: doc.data()._id,
+            createdAt: doc.data().createdAt.toDate(),
+            text: doc.data().text,
+            user: doc.data().user,
+          }))
+        );
+      });
+      return unsubscribe;
+    } catch (err) {
+      alert("Failed to fetch messages");
+      console.log(err);
+    }
   }, []);
 
   const onSend = useCallback((messages = []) => {
