@@ -8,14 +8,19 @@ const InboxScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
 
   useLayoutEffect(() => {
-    const unsubscribe = onSnapshot(
-      doc(db, "users", auth.currentUser.uid),
-      (userData) => {
-        const { chats } = userData.data();
-        setChats(chats);
-      }
-    );
-    return unsubscribe;
+    try {
+      const unsubscribe = onSnapshot(
+        doc(db, "users", auth.currentUser.uid),
+        (userData) => {
+          const data = userData.data();
+          setChats(data.chats || []);
+        }
+      );
+      return unsubscribe;
+    } catch (err) {
+      alert("Failed to fetch messages");
+      console.log(err);
+    }
   }, []);
 
   // useEffect(() => {
