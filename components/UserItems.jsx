@@ -1,11 +1,5 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../firebase.js";
 import React, { useState, useEffect } from "react";
 import {
@@ -46,23 +40,31 @@ const UserItems = () => {
   }, []);
 
   return (
-    <View style={styles.itemContainer}>
-      {items.map((item) => {
-        return (
-          <>
-            <View key={item.requestUid} style={styles.itemCard}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemDescription}>{item.description}</Text>
-              <Text>{item.category}</Text>
+    <View style={styles.cardContainer}>
+      {items.length > 0 ? (
+        items.map((item) => {
+          return (
+            <View style={styles.card}>
+              <View key={item.requestUid} style={styles.card}>
+                <Text style={styles.subheader}>{item.name}</Text>
+                <Text style={styles.bodyDesc}>{`"${item.description}"`}</Text>
+                <Text style={styles.bodyText}>Category: {item.category}</Text>
+
+                <Pressable style={styles.button} onPress={handleOnPress()}>
+                  <Text style={styles.text}>
+                    <Ionicons name={"close-circle"} size={16} />
+                    {` DELETE`}
+                  </Text>
+                </Pressable>
+              </View>
             </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.button} onPress={handleOnPress()}>
-                <Text style={styles.buttonText}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        );
-      })}
+          );
+        })
+      ) : (
+        <View style={styles.card}>
+          <Text style={styles.subheader}>No item posts found</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -70,34 +72,63 @@ const UserItems = () => {
 export default UserItems;
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    width: "90%",
-    justifyContent: "center",
+  cardContainer: {
+    paddingTop: "4%",
+    backgroundColor: "#FFF8F090",
+    width: "80%",
+    flex: 1,
+    alignSelf: "center",
     alignItems: "center",
-    marginTop: 10,
   },
-  itemCard: {
-    justifyContent: "center",
+  card: {
+    flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "white",
-    borderRadius: 15,
+    justifyContent: "center",
     width: "100%",
-    margin: 5,
-    alignItems: "center",
-    height: "40%",
-  },
-  buttonContainer: {
-    margin: 5,
+    paddingTop: "2%",
+    padding: "5%",
+    borderRadius: 5,
+    margin: "5%",
+    marginTop: 0,
+    backgroundColor: "#FFF8F0",
   },
   button: {
-    backgroundColor: "red",
+    backgroundColor: "#F36433",
     padding: 15,
+    width: "50%",
     borderRadius: 10,
     alignItems: "center",
+    marginTop: "5%",
   },
   buttonText: {
     color: "white",
-    fontWeight: "700",
-    fontSize: 12,
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  subheader: {
+    color: "#172121",
+    fontWeight: "bold",
+    fontSize: 20,
+    marginBottom: "5%",
+    borderBottomColor: "#172121",
+    borderBottomWidth: 1,
+  },
+  bodyText: {
+    fontSize: 16,
+    color: "#172121",
+    fontWeight: "bold",
+  },
+  bodyDesc: {
+    fontSize: 16,
+    color: "#172121",
+    fontWeight: "bold",
+    fontStyle: "italic",
+    textAlign: "center",
+    marginBottom: "5%",
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#FFF8F0",
   },
 });

@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import uuid from "react-native-uuid";
 
@@ -14,10 +15,14 @@ const RequestCard = ({ requests, navigation }) => {
             }
           >
             <View style={styles.card}>
+              <Text style={styles.cardTitle}>
+                <Ionicons name={"help-circle"} size={16} color={"#F36433"} />
+                {` Looking for: ${req.title}`}
+              </Text>
+              <Text style={styles.bodyText}>{`"${req.body}"`}</Text>
               <Text
-                style={styles.cardTitle}
-              >{`Looking for: ${req.title} \n \n`}</Text>
-              <Text>{`${req.body}`}</Text>
+                style={styles.cardText}
+              >{`Posted by ${req.userInfo.userUsername}`}</Text>
             </View>
           </Pressable>
         );
@@ -42,12 +47,21 @@ const styles = StyleSheet.create({
   },
   cardText: {
     marginRight: 0,
-    marginLeft: "5%",
+  },
+  cardTitle: {
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#F36433",
   },
   image: {
     width: 100,
     height: 100,
     padding: 0,
     margin: 0,
+  },
+  bodyText: {
+    margin: 0,
+    fontWeight: "bold",
+    fontStyle: "italic",
   },
 });
