@@ -32,12 +32,16 @@ export const calculateDistance = (loc1, loc2) => {
   }
 };
 
-export const setLocation = async (postcode, setUserLocation) => {
-  const coords = await Location.geocodeAsync(`${postcode}`);
-  setUserLocation({
-    longitude: coords[0].longitude,
-    latitude: coords[0].latitude,
-  });
+export const setLocation = async (postcode) => {
+  try {
+    const coords = await Location.geocodeAsync(`${postcode}`);
+    return {
+      longitude: coords[0].longitude,
+      latitude: coords[0].latitude,
+    };
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const getUserDataFromUid = async (uid) => {
