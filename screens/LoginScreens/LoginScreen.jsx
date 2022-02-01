@@ -20,19 +20,18 @@ const LoginScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         emailInput,
         passwordInput
       );
-      console.log(userCredential);
       const user = userCredential.user;
       setIsLoading(false);
     } catch (err) {
       console.log(err);
-      setIsLoading(false)
+      setIsLoading(false);
       alert("Login error: Please check your username and password");
     }
   };
@@ -70,7 +69,7 @@ const LoginScreen = ({ navigation }) => {
             onChangeText={setPasswordInput}
             secureTextEntry={true}
           />
-          
+
           <TouchableOpacity onPress={handleLogin} style={styles.button}>
             <Text style={styles.buttonText}>Log In</Text>
           </TouchableOpacity>
@@ -80,14 +79,16 @@ const LoginScreen = ({ navigation }) => {
           >
             <Text style={styles.buttonText}>Register</Text>
           </TouchableOpacity>
-          {isLoading ? <Progress.Circle
-            size={50}
-            indeterminate={true}
-            style={styles.spinner}
-            color={"#F36433"}
-          /> : null}
+          {isLoading ? (
+            <Progress.Circle
+              size={50}
+              indeterminate={true}
+              style={styles.spinner}
+              color={"#F36433"}
+            />
+          ) : null}
         </View>
-        </View>
+      </View>
     </ImageBackground>
   );
 };
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     top: 90,
     borderRadius: 5,
     width: "90%",
-    margin: "5%"
+    margin: "5%",
   },
   welcContents: {
     justifyContent: "center",
