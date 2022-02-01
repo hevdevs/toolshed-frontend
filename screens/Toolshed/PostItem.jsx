@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, Button, Picker, StyleSheet, Pressable, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  Picker,
+  StyleSheet,
+  Pressable,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { TextInput } from "react-native-paper";
 import uuid from "react-native-uuid";
 
@@ -17,7 +26,7 @@ const PostItem = ({ navigation, route }) => {
   const [selectedCategory, setSelectedCategory] = useState(undefined);
 
   const { setNewItem } = route.params;
-  
+
   const categories = [
     "DIY",
     "Household",
@@ -25,7 +34,7 @@ const PostItem = ({ navigation, route }) => {
     "Electronics",
     "Arts and Crafts",
     "Garden",
-    "Furniture"
+    "Furniture",
   ];
 
   const resetState = () => {
@@ -64,8 +73,7 @@ const PostItem = ({ navigation, route }) => {
   const addItem = async (uploadedUri) => {
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
-    const fields = docSnap._document.data.value.mapValue.fields;
-    console.log(fields)
+    const fields = docSnap.data();
     const item = {
       name: itemName,
       description: itemDescription,
@@ -86,7 +94,9 @@ const PostItem = ({ navigation, route }) => {
       available: true,
     };
     const postItem = await addDoc(collection(db, "items"), item);
-    setNewItem((currNewItem) => { !currNewItem });
+    setNewItem((currNewItem) => {
+      !currNewItem;
+    });
   };
 
   const handleSubmit = async () => {
@@ -104,10 +114,10 @@ const PostItem = ({ navigation, route }) => {
   };
 
   return (
-      <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Text style={styles.header}>Lend an Item</Text>
-          </View>
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Lend an Item</Text>
+      </View>
       <ScrollView>
         <View style={styles.formContainer}>
           <Text style={styles.subheader}>Enter item name</Text>
@@ -160,7 +170,7 @@ const PostItem = ({ navigation, route }) => {
           </Pressable>
         </View>
       </ScrollView>
-        </View>
+    </View>
   );
 };
 
