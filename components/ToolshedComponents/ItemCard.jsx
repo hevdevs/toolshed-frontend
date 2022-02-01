@@ -18,7 +18,7 @@ const ItemCard = ({ item }) => {
       try {
         const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
         setItemImage(imageUrl);
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
