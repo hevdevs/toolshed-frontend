@@ -45,6 +45,7 @@ const ItemScreen = ({ route, navigation }) => {
     });
 
     navigation.navigate("ChatScreen", {
+      navigation,
       messageId,
       userUsername: `${item.userInfo.userFirstName} ${item.userInfo.userSurname}`,
     });
@@ -152,10 +153,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
+    alignSelf: "center",
     justifyContent: "center",
-    height: 200,
-    width: 200,
-    borderRadius: 5,
+    marginTop: "30%",
+    height: 150,
+    width: 150,
+    borderRadius: 100,
   },
   contentContainer: {
     width: "100%",
