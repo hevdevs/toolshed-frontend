@@ -1,7 +1,8 @@
 import React, { useCallback, useLayoutEffect, useState } from "react";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 import { auth, db } from "../../firebase.js";
-import { Text } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Text, StyleSheet, Button, Pressable, View } from "react-native";
 import {
   addDoc,
   collection,
@@ -13,9 +14,8 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 
-const ChatScreen = ({ route }) => {
+const ChatScreen = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
-
   const { messageId, userUsername } = route.params;
 
   // const messageId =
@@ -59,34 +59,45 @@ const ChatScreen = ({ route }) => {
     // });
   }, []);
 
-  function renderBubble(props) {
+  const renderBubble = (props) => {
     return (
       <Bubble
         {...props}
         wrapperStyle={{
           left: {
-            backgroundColor: "orange",
+            backgroundColor: "#2dc2db",
+          },
+          right: {
+            backgroundColor: "#F36433",
           },
         }}
         textStyle={{
           right: {
-            color: "#fff",
+            color: "#FFF8F0",
+          },
+          left: {
+            color: "#FFF8F0",
           },
         }}
       />
     );
-  }
+  };
 
   return (
     <>
-      <Text
-        style={{
-          textAlign: "center",
-          backgroundColor: "orange",
-          color: "white",
-          fontSize: 20,
-        }}
-      >{`\n\n@${userUsername}`}</Text>
+      <View style={styles.headerContainer}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <Text style={styles.text}>
+            <Ionicons name={"arrow-back-circle"} size={30} />
+          </Text>
+        </Pressable>
+        <Text style={styles.userNameText}>{`${userUsername}`}</Text>
+      </View>
       <GiftedChat
         messages={messages}
         onSend={onSend}
@@ -103,3 +114,44 @@ const ChatScreen = ({ route }) => {
 };
 
 export default ChatScreen;
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "#2DC2BD",
+    padding: 5,
+    left: 0,
+    borderRadius: 50,
+    alignItems: "center",
+    position: "relative",
+    justifyContent: "center",
+  },
+  headerContainer: {
+    paddingTop: "15%",
+    backgroundColor: "#F36433",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    position: "absolute",
+    top: 0,
+    flexDirection: "row",
+  },
+  header: {
+    margin: "5%",
+    marginTop: "10%",
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#FFF8F0",
+    alignSelf: "center",
+    paddingBottom: "5%",
+  },
+  userNameText: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  text: {
+    color: "#FFF8F0",
+  },
+});
