@@ -6,11 +6,24 @@ import {
   ScrollView,
   Pressable,
   TouchableOpacity,
+  Picker,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  where,
+  query,
+} from "firebase/firestore";
 import { db, auth } from "../../firebase";
+import {
+  getUserDataFromUid,
+  calculateDistance,
+  updateItemLocationFormat,
+} from "../../utils";
 
 import ToolSearch from "../../components/ToolshedComponents/ToolSearch";
 import ItemCard from "../../components/ToolshedComponents/ItemCard";
@@ -20,40 +33,75 @@ const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
   const [filteredTools, setFilteredTools] = useState([]);
   const [newItem, setNewItem] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedDistance, setSelectedDistance] = useState(15);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [search, setSearch] = useState("");
+
+  const categories = [
+    "All",
+    "DIY",
+    "Household",
+    "Kitchen",
+    "Electronics",
+    "Arts and Crafts",
+    "Garden",
+    "Furniture",
+  ];
+
+  const distances = [1, 2, 5, 10, 15, 20];
 
   const handlePress = () => {
     navigation.navigate("PostItem", { setNewItem });
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const itemList = await getDocs(collection(db, "items"));
-        const itemArray = [];
-        itemList.forEach((doc) => {
-          itemArray.push(Object.assign({ uid: doc.id }, doc.data()));
-        });
-        setItems(itemArray);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
+  const resetFilter = () => {
+    setSearchQuery("");
+    setSearch("");
+    setSelectedDistance(15);
+    setSelectedCategory("All");
+  };
 
   useEffect(() => {
     (async () => {
       try {
-        const toolList = await getDocs(collection(db, "items"));
-        const toolArray = [];
-        toolList.forEach((doc) => {
-          toolArray.push(Object.assign({ uid: doc.id }, doc.data()));
+        const itemList =
+          selectedCategory === "All"
+            ? await getDocs(collection(db, "items"))
+            : await getDocs(
+                query(
+                  collection(db, "items"),
+                  where("category", "==", `${selectedCategory}`)
+                )
+              );
+        const userInfo = await getUserDataFromUid(auth.currentUser.uid);
+        const itemArray = [];
+        itemList.forEach((item) => {
+          const data = item.data();
+          if (
+            selectedDistance === "Any" ||
+            calculateDistance(
+              data.userInfo.userLocation,
+              userInfo.userLocation
+            ) < selectedDistance
+          ) {
+            itemArray.push(Object.assign({ uid: item.id }, item.data()));
+          }
         });
-        setFilteredTools(toolArray);
+        let filteredItems = !searchQuery
+          ? itemArray
+          : itemArray.filter((item) => {
+              let itemCased = item.name.toLowerCase();
+              let lowerSearch = searchQuery.toLowerCase();
+              let regex = new RegExp(`(${lowerSearch})`, "g");
+              return itemCased.match(regex);
+            });
+        setItems(filteredItems);
       } catch (err) {
         console.log(err);
       }
     })();
-  }, [newItem]);
+  }, [newItem, selectedCategory, searchQuery, selectedDistance]);
 
   return (
     <View style={styles.container}>
@@ -63,15 +111,52 @@ const ToolshedScreen = ({ navigation }) => {
       <View style={styles.contentContainer}>
         <ToolSearch
           style={styles.bar}
-          items={items}
-          setItems={setItems}
-          navigation={navigation}
-          setFilteredTools={setFilteredTools}
-          filteredTools={filteredTools}
+          setSearchQuery={setSearchQuery}
+          search={search}
+          setSearch={setSearch}
         />
+        <Picker
+          selectedValue={selectedCategory}
+          onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+        >
+          {categories.map((category, index) => {
+            return (
+              <Picker.Item
+                label={`${category}`}
+                value={`${category}`}
+                key={index}
+              />
+            );
+          })}
+        </Picker>
+        <Picker
+          selectedValue={selectedDistance}
+          onValueChange={(itemValue) => setSelectedDistance(itemValue)}
+        >
+          <Picker.Item label={"Any"} value={"Any"} />
+          {distances.map((distance, index) => {
+            return (
+              <Picker.Item
+                label={`+${distance} miles`}
+                value={distance}
+                key={index}
+              />
+            );
+          })}
+        </Picker>
+        <Text style={{ fontWeight: "bold", textAlign: "center" }}>
+          {searchQuery || "All items"}{" "}
+          {selectedCategory !== "All"
+            ? `in category: ${selectedCategory} `
+            : ""}
+          within {selectedDistance} miles
+        </Text>
+        <Pressable onPress={resetFilter}>
+          <Text>Clear filters</Text>
+        </Pressable>
         <ScrollView>
           <View style={styles.cardContainer}>
-            {filteredTools.map((item) => {
+            {items.map((item) => {
               return (
                 <TouchableOpacity
                   onPress={() => {
