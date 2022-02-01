@@ -42,7 +42,7 @@ const UserItems = () => {
 
   return (
     <View style={styles.cardContainer}>
-      {items.length > 0 ? (
+      {items.length ? (
         items.map((item) => {
           return (
             <View style={styles.card}>
