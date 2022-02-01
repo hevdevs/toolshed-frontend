@@ -19,6 +19,9 @@ import dayjs from "dayjs";
 
 import ImagePicker from "../../components/ImagePicker";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const PostItem = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
   const [phoneImageUri, setPhoneImageUri] = useState("");
@@ -118,6 +121,14 @@ const PostItem = ({ navigation, route }) => {
     }
   };
 
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -187,6 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     backgroundColor: "#9DD9D2",
+    fontFamily: "Oxygen_400Regular"
   },
   headerContainer: {
     backgroundColor: "#F36433",
@@ -200,7 +212,7 @@ const styles = StyleSheet.create({
     marginTop: "15%",
     margin: 0,
     fontSize: 28,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
   },
   formContainer: {
@@ -240,12 +252,12 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#FFF8F0",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_400Regular",
   },
   subheader: {
     alignSelf: "center",
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 20,
     marginBottom: "2%",
     borderBottomColor: "#172121",

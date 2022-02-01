@@ -7,6 +7,9 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
 import { updateDoc, doc } from "firebase/firestore";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const ItemCard = ({ item }) => {
   const storage = getStorage();
   const [isEnabled, setIsEnabled] = useState(false);
@@ -39,6 +42,14 @@ const ItemCard = ({ item }) => {
     updateAvailability();
   }, [isLent]);
 
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+  
   return (
     <View style={styles.card}>
       {itemImage ? (
@@ -91,6 +102,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: "5%",
     backgroundColor: "#FFF8F0",
+    fontFamily: "Oxygen_400Regular",
   },
   cardText: {
     marginRight: 0,
@@ -118,7 +130,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#FFF8F0",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     alignSelf: "center",
   },
   spinner: {

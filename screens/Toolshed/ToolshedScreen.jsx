@@ -29,6 +29,8 @@ import ToolSearch from "../../components/ToolshedComponents/ToolSearch";
 import ItemCard from "../../components/ToolshedComponents/ItemCard";
 import ActionButton from "react-native-action-button";
 import * as Progress from "react-native-progress";
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
 
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
@@ -105,6 +107,14 @@ const ToolshedScreen = ({ navigation }) => {
       }
     })();
   }, [newItem, selectedCategory, searchQuery, selectedDistance]);
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -198,6 +208,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 1,
+    fontFamily: "Oxygen_400Regular",
   },
   headerContainer: {
     paddingTop: "10%",
@@ -213,7 +224,7 @@ const styles = StyleSheet.create({
     margin: "5%",
     marginTop: "10%",
     fontSize: 28,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
     alignSelf: "center",
   },
@@ -238,7 +249,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#FFF8F0",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 30,
   },
   progressPie: {

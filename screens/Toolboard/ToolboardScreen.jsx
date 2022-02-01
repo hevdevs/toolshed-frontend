@@ -17,6 +17,9 @@ import RequestCard from "../../components/ToolboardComponents/RequestCard";
 import ActionButton from "react-native-action-button";
 import * as Progress from "react-native-progress";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const ToolboardScreen = ({ navigation }) => {
   const [requests, setRequests] = useState([]);
   const [newRequest, setNewRequest] = useState(false);
@@ -54,6 +57,15 @@ const ToolboardScreen = ({ navigation }) => {
   const handlePress = () => {
     navigation.navigate("PostRequest", { setNewRequest });
   };
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+  
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -106,6 +118,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     backgroundColor: "#9DD9D2",
+    fontFamily: "Oxygen_400Regular",
   },
   headerContainer: {
     paddingTop: "10%",
@@ -119,8 +132,9 @@ const styles = StyleSheet.create({
   },
   header: {
     margin: "5%",
+    marginTop: "10%",
     fontSize: 28,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
     alignSelf: "center",
   },
@@ -145,7 +159,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#FFF8F0",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 30,
   },
   spinner: {

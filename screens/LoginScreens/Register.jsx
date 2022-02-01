@@ -15,6 +15,9 @@ import { setDoc, doc } from "firebase/firestore";
 import { setLocation } from "../../utils";
 import * as Location from "expo-location";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const Register = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -75,6 +78,14 @@ const Register = ({ navigation }) => {
       }
     }
   };
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -166,6 +177,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    fontFamily: "Oxygen_400Regular",
   },
   image: {
     width: "100%",
@@ -189,7 +201,7 @@ const styles = StyleSheet.create({
   header: {
     color: "#575761",
     fontSize: 30,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     textAlign: "center",
     marginTop: "5%",
   },

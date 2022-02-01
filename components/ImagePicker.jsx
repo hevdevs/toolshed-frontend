@@ -2,6 +2,8 @@ import { View, Pressable, Image, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import * as ImagePickerPackage from "expo-image-picker";
 import * as Progress from "react-native-progress";
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
 
 const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,6 +22,14 @@ const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
       setIsLoading(false);
     }
   };
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <View>
@@ -62,7 +72,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#FFF8F0",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
   },
   spinner: {
     alignSelf: "center",

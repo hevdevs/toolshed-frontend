@@ -20,6 +20,9 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const UserRequests = () => {
   const [forumPosts, setForumPosts] = useState([]);
   const [isDeleted, setIsDeleted] = useState(false);
@@ -54,6 +57,14 @@ const UserRequests = () => {
       setIsDeleted(false);
     }
   };
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <View style={styles.cardContainer}>
@@ -97,6 +108,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomColor: "#F36433",
     borderBottomWidth: 2,
+    fontFamily: "Oxygen_400Regular",
   },
   card: {
     flexDirection: "column",
@@ -120,12 +132,12 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 16,
   },
   subheader: {
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 20,
     marginBottom: "5%",
     borderBottomColor: "#172121",
@@ -134,19 +146,19 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 16,
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
   },
   bodyDesc: {
     fontSize: 16,
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontStyle: "italic",
     textAlign: "center",
     marginBottom: "5%",
   },
   text: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
   },
 });
