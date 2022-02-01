@@ -1,24 +1,25 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import React from 'react';
-import MapComponent from '../../components/MapComponent';
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import React from "react";
+import MapComponent from "../../components/MapComponent";
 import { Ionicons } from "@expo/vector-icons";
 
-export default MapScreen = ({route, navigation}) => {
+export default MapScreen = ({ route, navigation }) => {
+  const { item } = route.params;
 
-  const {item} = route.params;
+  const northCoders = {
+    longitude: -2.238332152375383,
+    latitude: 53.4723494112368,
+  };
 
-    const northCoders = {
-        longitude: -2.238332152375383,
-        latitude: 53.4723494112368,
-      };
-    
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Toolshed</Text>
       </View>
       <View style={styles.subheadingContainer}>
-        <Text style={styles.subheading}>Pinch and drag the map to zoom in and move around.</Text>
+        <Text style={styles.subheading}>
+          Pinch and drag the map to zoom in and move around.
+        </Text>
       </View>
       <View style={styles.mapContainer}>
         <MapComponent location={item.location || northCoders}></MapComponent>
@@ -36,7 +37,7 @@ export default MapScreen = ({route, navigation}) => {
       </Pressable>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
