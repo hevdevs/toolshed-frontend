@@ -6,6 +6,9 @@ import ChatCard from "../../components/ChatCard";
 import { onSnapshot, doc } from "firebase/firestore";
 import * as Progress from "react-native-progress";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const InboxScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +29,14 @@ const InboxScreen = ({ navigation }) => {
       console.log(err);
     }
   }, []);
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -67,6 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#9dd9d2",
     alignItems: "center",
+    fontFamily: "Oxygen_400Regular",
   },
   headerContainer: {
     paddingTop: "10%",
@@ -82,7 +94,7 @@ const styles = StyleSheet.create({
     margin: "5%",
     marginTop: "10%",
     fontSize: 28,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
     alignSelf: "center",
   },
@@ -106,17 +118,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
   },
   noMessage: {
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 20,
   },
   title: {
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
   },
   chatCard: {
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     width: "100%",
   },
   button: {
@@ -130,7 +142,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#FFF8F0",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 30,
   },
   progressPie: {

@@ -12,6 +12,9 @@ import React from "react";
 import { auth, db } from "../../firebase";
 import { updateDoc, doc, arrayUnion } from "firebase/firestore";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const RequestScreen = ({ route, navigation }) => {
   const { req } = route.params;
 
@@ -37,6 +40,14 @@ const RequestScreen = ({ route, navigation }) => {
       console.log(err);
     }
   };
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -95,6 +106,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     backgroundColor: "#9DD9D2",
+    fontFamily: "Oxygen_400Regular",
   },
   whiteBox: {
     alignItems: "center",
@@ -119,7 +131,7 @@ const styles = StyleSheet.create({
     margin: "5%",
     marginTop: "10%",
     fontSize: 28,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
     textAlign: "center",
   },
@@ -143,12 +155,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     color: "#FFF8F0",
   },
   subheader: {
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 20,
     marginBottom: "2%",
   },
@@ -168,13 +180,13 @@ const styles = StyleSheet.create({
   bodyText: {
     fontSize: 20,
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     textAlign: "center",
   },
   bodyDesc: {
     fontSize: 20,
     color: "#172121",
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     textAlign: "center",
     fontStyle: "italic",
   },

@@ -3,8 +3,20 @@ import React from "react";
 import { View, Text, Pressable, StyleSheet , Image} from "react-native";
 import Onboarding from "react-native-onboarding-swiper";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const OnboardingScreen = ({navigation}) => {
-    return (
+    
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+  
+  return (
       <Onboarding
         onSkip={() => navigation.navigate("LoginScreen")}
         onDone={() => navigation.navigate("Register")}
@@ -68,7 +80,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   header: {
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 60,
     alignSelf: "center",
     position: "absolute",

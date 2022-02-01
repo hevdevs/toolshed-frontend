@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React from "react";
 import { auth } from "../firebase";
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
 
 const SignOut = () => {
   const handleSignOut = async () => {
@@ -10,6 +12,14 @@ const SignOut = () => {
       console.log(err);
     }
   };
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -25,6 +35,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
+    fontFamily: "Oxygen_400Regular"
   },
   button: {
     backgroundColor: "#0782f9",
@@ -35,7 +46,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    fontWeight: "700",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 16,
   },
 });

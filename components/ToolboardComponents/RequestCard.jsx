@@ -3,7 +3,19 @@ import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import uuid from "react-native-uuid";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const RequestCard = ({ requests, navigation }) => {
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
     <View style={styles.cardContainer}>
       {requests.map((req) => {
@@ -37,6 +49,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: "100%",
     backgroundColor: "#9DD9D2",
+    fontFamily: "Oxygen_400Regular",
   },
   card: {
     width: "90%",
@@ -49,7 +62,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
   },
   cardTitle: {
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontSize: 16,
     color: "#F36433",
   },
@@ -61,7 +74,7 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     margin: 0,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     fontStyle: "italic",
   },
 });

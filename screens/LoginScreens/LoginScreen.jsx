@@ -14,6 +14,9 @@ import React, { useState } from "react";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
+import AppLoading from "expo-app-loading";
+import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+
 const LoginScreen = ({ navigation }) => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
@@ -36,6 +39,14 @@ const LoginScreen = ({ navigation }) => {
       alert("Login error: Please check your username and password");
     }
   };
+
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular, Oxygen_700Bold,
+  });
+  
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <ImageBackground
@@ -104,7 +115,8 @@ const styles = StyleSheet.create({
     top: 90,
     borderRadius: 5,
     width: "90%",
-    margin: "5%"
+    margin: "5%",
+    fontFamily: "Oxygen_400Regular",
   },
   welcContents: {
     justifyContent: "center",
@@ -114,7 +126,7 @@ const styles = StyleSheet.create({
   header: {
     color: "#575761",
     fontSize: 30,
-    fontWeight: "bold",
+    fontFamily: "Oxygen_700Bold",
     textAlign: "center",
     marginTop: "10%",
   },
