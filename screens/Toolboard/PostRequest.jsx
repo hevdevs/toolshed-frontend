@@ -45,41 +45,41 @@ const PostRequest = ({ route, navigation: { goBack } }) => {
   };
 
   const handleSubmit = async () => {
-    setIsLoading(true)
-    const docRef = doc(db, "users", auth.currentUser.uid);
-    const docSnap = await getDoc(docRef);
-    const fields = docSnap.data();
-
-    const request = {
-      title: titleInput,
-      body: bodyInput,
-      category: selectedCategory,
-      userInfo: {
-        userUid: auth.currentUser.uid,
-        userFirstName: fields.firstName,
-        userSurname: fields.surname,
-        userLocation: fields.userLocation,
-        userUsername: auth.currentUser.displayName,
-      },
-      timestamp: {
-        date: dayjs().format("DD/MM/YY"),
-        time: dayjs().format("HH:mm"),
-        fullStamp: dayjs().format(),
-      },
-    };
-
     try {
+      setIsLoading(true);
+      const docRef = doc(db, "users", auth.currentUser.uid);
+      const docSnap = await getDoc(docRef);
+      const fields = docSnap.data();
+
+      const request = {
+        title: titleInput,
+        body: bodyInput,
+        category: selectedCategory,
+        userInfo: {
+          userUid: auth.currentUser.uid,
+          userFirstName: fields.firstName,
+          userSurname: fields.surname,
+          userLocation: fields.userLocation,
+          userUsername: auth.currentUser.displayName,
+        },
+        timestamp: {
+          date: dayjs().format("DD/MM/YY"),
+          time: dayjs().format("HH:mm"),
+          fullStamp: dayjs().format(),
+        },
+      };
+
       const postRequest = await addDoc(collection(db, "requests"), request);
       await updateDoc(doc(db, "requests", postRequest.id), {
         requestUid: postRequest.id,
       });
-      console.log(postRequest.id);
       setNewRequest((currNewReq) => {
         !currNewReq;
       });
       alert("Request successfully posted!");
       resetForms();
       setIsLoading(false);
+      goBack();
     } catch (err) {
       setIsLoading(false);
       alert("Request failed to post!");
