@@ -1,31 +1,21 @@
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
+import React from "react";
 import { Searchbar } from "react-native-paper";
 
-const ToolSearch = ({ items, setFilteredTools, filteredTools }) => {
-  const [searchQuery, setSearchQuery] = React.useState("");
-  let lowerSearch = searchQuery.toLowerCase();
-
+const ToolSearch = ({ setSearch, search, setSearchQuery }) => {
   const onChangeSearch = (query) => {
-    setSearchQuery(query);
+    setSearch(query);
   };
 
   const handleIconPress = () => {
-    const itemsArr = [...items];
-    let filteredItems = itemsArr.filter((item) => {
-      let itemCased = item.name.toLowerCase();
-      let regex = new RegExp(`(${lowerSearch})`, "g");
-      return itemCased.match(regex);
-    });
-    setFilteredTools(filteredItems);
-    setSearchQuery("");
+    setSearchQuery(search);
   };
 
   return (
     <View style={styles.container}>
       <Searchbar
         placeholder="Search the Toolshed"
-        value={searchQuery}
+        value={search}
         style={styles.bar}
         onChangeText={onChangeSearch}
         onIconPress={handleIconPress}
