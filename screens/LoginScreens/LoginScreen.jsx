@@ -15,7 +15,11 @@ import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const LoginScreen = ({ navigation }) => {
   const [emailInput, setEmailInput] = useState("");
@@ -40,9 +44,10 @@ const LoginScreen = ({ navigation }) => {
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -117,10 +122,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: "90%",
     margin: "5%",
-<<<<<<< HEAD
-=======
     fontFamily: "Oxygen_400Regular",
->>>>>>> 9d2de6c13c4eb495f4a7b5bbb271139f56cf7136
   },
   welcContents: {
     justifyContent: "center",
