@@ -104,10 +104,14 @@ const PostItem = ({ navigation, route }) => {
         fullStamp: dayjs().format(),
       },
       available: true,
+      UsersNumOfItems: fields.itemsInShed + 1,
     };
     const postItem = await addDoc(collection(db, "items"), item);
     await updateDoc(doc(db, "items", postItem.id), {
       itemUid: postItem.id,
+    });
+    await updateDoc(doc(db, "users", fields.uid), {
+      itemsInShed: fields.itemsInShed + 1,
     });
     setNewItem((currNewItem) => {
       !currNewItem;
