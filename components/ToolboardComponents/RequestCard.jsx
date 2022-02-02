@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     padding: "5%",
     borderRadius: 5,
     margin: "5%",
+    marginBottom: 0,
     backgroundColor: "#FFF8F0",
   },
   cardText: {
