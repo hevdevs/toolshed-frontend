@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
   noMessage: {
     fontFamily: "Oxygen_700Bold",
     fontSize: 20,
+    alignSelf: "center",
   },
   title: {
     fontFamily: "Oxygen_700Bold",
