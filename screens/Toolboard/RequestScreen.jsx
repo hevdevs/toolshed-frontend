@@ -13,7 +13,11 @@ import { auth, db } from "../../firebase";
 import { updateDoc, doc, arrayUnion } from "firebase/firestore";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const RequestScreen = ({ route, navigation }) => {
   const { req } = route.params;
@@ -42,9 +46,10 @@ const RequestScreen = ({ route, navigation }) => {
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -163,6 +168,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     width: "100%",
+    marginTop: "30%",
   },
   text: {
     fontSize: 16,
