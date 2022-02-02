@@ -12,7 +12,11 @@ import {
 } from "firebase/firestore";
 import { getUserDataFromUid } from "../utils";
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const ChatCard = ({ chat, navigation }) => {
   const [message, setMessage] = useState("");
@@ -40,13 +44,14 @@ const ChatCard = ({ chat, navigation }) => {
   }, []);
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  
+
   return (
     <View style={styles.container}>
       {message.user ? (
@@ -55,6 +60,7 @@ const ChatCard = ({ chat, navigation }) => {
             navigation.navigate("ChatScreen", {
               messageId: chat,
               userUsername: `${chatee.firstName} ${chatee.surname}`,
+              navigation,
             })
           }
         >
@@ -78,7 +84,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: "100%",
     backgroundColor: "#9DD9D2",
-    fontFamily: "Oxygen_400Regular"
+    fontFamily: "Oxygen_400Regular",
   },
   card: {
     width: "90%",
