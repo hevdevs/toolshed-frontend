@@ -99,6 +99,13 @@ const ChatScreen = ({ route, navigation }) => {
       </View>
       <GiftedChat
         messages={messages}
+        renderActions={() => (
+          <>
+            <Pressable onPress={navigation.goBack}>
+              <Ionicons name={"arrow-back-circle"} size={40} />
+            </Pressable>
+          </>
+        )}
         onSend={onSend}
         renderBubble={renderBubble}
         user={{
