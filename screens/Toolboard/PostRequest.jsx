@@ -22,15 +22,17 @@ import { auth, db } from "../../firebase";
 import dayjs from "dayjs";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const PostRequest = ({ route, navigation: { goBack } }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [titleInput, setTitleInput] = useState("");
   const [bodyInput, setBodyInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("DIY");
-
-  const { setNewRequest } = route.params;
 
   const categories = [
     "DIY",
@@ -76,9 +78,6 @@ const PostRequest = ({ route, navigation: { goBack } }) => {
       await updateDoc(doc(db, "requests", postRequest.id), {
         requestUid: postRequest.id,
       });
-      setNewRequest((currNewReq) => {
-        !currNewReq;
-      });
       alert("Request successfully posted!");
       resetForms();
       setIsLoading(false);
@@ -91,13 +90,14 @@ const PostRequest = ({ route, navigation: { goBack } }) => {
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     backgroundColor: "#9DD9D2",
-    fontFamily:"Oxygen_400Regular",
+    fontFamily: "Oxygen_400Regular",
   },
   headerContainer: {
     backgroundColor: "#F36433",
