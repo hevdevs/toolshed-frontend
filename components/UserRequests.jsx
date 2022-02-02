@@ -21,7 +21,11 @@ import {
 } from "firebase/firestore";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const UserRequests = () => {
   const [forumPosts, setForumPosts] = useState([]);
@@ -59,9 +63,10 @@ const UserRequests = () => {
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -89,7 +94,7 @@ const UserRequests = () => {
         })
       ) : (
         <View style={styles.card}>
-          <Text>No requests found</Text>
+          <Text style={styles.bodyText}>No requests found</Text>
         </View>
       )}
     </View>

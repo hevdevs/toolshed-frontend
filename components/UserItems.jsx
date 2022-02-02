@@ -12,16 +12,29 @@ import {
 } from "@firebase/firestore";
 import { getDownloadURL, ref } from "@firebase/storage";
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const UserItems = () => {
   const [items, setItems] = useState([]);
   const [itemImage, setItemImage] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const user = auth.currentUser;
 
-  const handleOnPress = async () => {
-    await deleteDoc(doc(db, "items", items.requestUid));
+  const handleOnPress = async (item) => {
+    try {
+      await deleteDoc(doc(db, "items", item.itemUid));
+      console.log(items);
+      alert("Request deleted");
+      setIsDeleted(true);
+    } catch (err) {
+      console.log(err);
+      setIsDeleted(false);
+    }
   };
 
   useEffect(async () => {
@@ -40,40 +53,42 @@ const UserItems = () => {
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [isDeleted]);
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  
+
   return (
     <View style={styles.cardContainer}>
       {items.length ? (
-        items.map((item) => {
+        items.map((item, index) => {
           return (
-            <View style={styles.card}>
-              <View key={item.requestUid} style={styles.card}>
-                <Text style={styles.subheader}>{item.name}</Text>
-                <Text style={styles.bodyDesc}>{`"${item.description}"`}</Text>
-                <Text style={styles.bodyText}>Category: {item.category}</Text>
+            <View key={index} style={styles.card}>
+              <Text style={styles.subheader}>{item.name}</Text>
+              <Text style={styles.bodyDesc}>{`"${item.description}"`}</Text>
+              <Text style={styles.bodyText}>Category: {item.category}</Text>
 
-                <Pressable style={styles.button} onPress={handleOnPress()}>
-                  <Text style={styles.text}>
-                    <Ionicons name={"close-circle"} size={16} />
-                    {` DELETE`}
-                  </Text>
-                </Pressable>
-              </View>
+              <Pressable
+                style={styles.button}
+                onPress={() => handleOnPress(item, index)}
+              >
+                <Text style={styles.text}>
+                  <Ionicons name={"close-circle"} size={16} />
+                  {` DELETE`}
+                </Text>
+              </Pressable>
             </View>
           );
         })
       ) : (
         <View style={styles.card}>
-          <Text style={styles.subheader}>No item posts found</Text>
+          <Text style={styles.bodyText}>No item posts found</Text>
         </View>
       )}
     </View>
@@ -90,7 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "center",
     alignItems: "center",
-    fontFamily: "Oxygen_400Regular"
+    fontFamily: "Oxygen_400Regular",
   },
   card: {
     flexDirection: "column",
