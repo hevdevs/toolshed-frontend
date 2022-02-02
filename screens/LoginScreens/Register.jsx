@@ -16,7 +16,11 @@ import { setLocation } from "../../utils";
 import * as Location from "expo-location";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const Register = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +39,8 @@ const Register = ({ navigation }) => {
     else {
       try {
         const userLocation = await setLocation(postcode);
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") return;
         if (email !== "" && password !== "" && userLocation) {
           const newUser = await createUserWithEmailAndPassword(
             auth,
@@ -73,9 +79,10 @@ const Register = ({ navigation }) => {
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
