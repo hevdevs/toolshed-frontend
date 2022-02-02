@@ -74,6 +74,11 @@ const ToolshedScreen = ({ navigation }) => {
     setSearch("");
     setSelectedDistance(15);
     setSelectedCategory("All");
+    setDisplayFilter(false);
+  };
+
+  const handleDisplayFilter = () => {
+    setDisplayFilter((currDisplay) => !currDisplay);
   };
 
   useLayoutEffect(() => {
@@ -136,7 +141,7 @@ const ToolshedScreen = ({ navigation }) => {
     return <AppLoading />;
   }
 
-  const toggleIsAvailibleFilter = async () => {
+  const toggleIsAvailableFilter = async () => {
     setIsEnabled((previousState) => !previousState);
     setAvailableOnly((previousState) => !previousState);
   };
@@ -153,49 +158,79 @@ const ToolshedScreen = ({ navigation }) => {
           search={search}
           setSearch={setSearch}
         />
-        <View style={styles.filter}>
-          <Picker
-            style={styles.picker}
-            selectedValue={selectedCategory}
-            onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-          >
-            {categories.map((category, index) => {
-              return (
-                <Picker.Item
-                  label={`${category}`}
-                  value={`${category}`}
-                  key={index}
+        <Pressable style={styles.dropdown} onPress={handleDisplayFilter}>
+          <Text style={styles.text}>
+            {`Filter `}
+            <Text style={styles.arrow}>
+              {displayFilter ? (
+                <Ionicons name={"caret-up-circle"} size={16} color={"white"} />
+              ) : (
+                <Ionicons
+                  name={"caret-down-circle"}
+                  size={16}
+                  color={"white"}
                 />
-              );
-            })}
-          </Picker>
-          <Picker
-            style={styles.picker}
-            selectedValue={selectedDistance}
-            onValueChange={(itemValue) => setSelectedDistance(itemValue)}
-          >
-            <Picker.Item label={"Any"} value={"Any"} />
-            {distances.map((distance, index) => {
-              return (
-                <Picker.Item
-                  label={`+${distance} miles`}
-                  value={distance}
-                  key={index}
-                />
-              );
-            })}
-          </Picker>
-          <Switch
-            trackColor={{ false: "#9DD9D2", true: "#F36433" }}
-            thumbColor={availableOnly ? "#2DC2BD" : "#2DC2BD"}
-            onValueChange={toggleIsAvailibleFilter}
-            value={availableOnly}
-            label="Toggle"
-          />
-          <Pressable onPress={resetFilter} style={styles.resetFilter}>
-            <Text style={styles.textFilter}>CLEAR</Text>
-          </Pressable>
-        </View>
+              )}
+            </Text>
+          </Text>
+        </Pressable>
+        {displayFilter ? (
+          <View style={styles.filter}>
+            <Text style={styles.toggleText}>Filter item list by category</Text>
+            <TouchableOpacity style={styles.pickerContainer}>
+              <Picker
+                style={styles.picker}
+                selectedValue={selectedCategory}
+                onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+              >
+                {categories.map((category, index) => {
+                  return (
+                    <Picker.Item
+                      label={`${category}`}
+                      value={`${category}`}
+                      key={index}
+                    />
+                  );
+                })}
+              </Picker>
+            </TouchableOpacity>
+            <Text style={styles.toggleText}>Filter item list by distance</Text>
+            <TouchableOpacity style={styles.pickerContainer}>
+              <Picker
+                style={styles.picker}
+                selectedValue={selectedDistance}
+                onValueChange={(itemValue) => setSelectedDistance(itemValue)}
+              >
+                <Picker.Item label={"Any"} value={"Any"} />
+                {distances.map((distance, index) => {
+                  return (
+                    <Picker.Item
+                      label={`+${distance} miles`}
+                      value={distance}
+                      key={index}
+                    />
+                  );
+                })}
+              </Picker>
+            </TouchableOpacity>
+            <View style={styles.toggleAvailable}>
+              <Text style={styles.toggleText}>Filter unavailable items</Text>
+              <Switch
+                trackColor={{ false: "#9DD9D2", true: "#F36433" }}
+                thumbColor={availableOnly ? "#2DC2BD" : "#2DC2BD"}
+                onValueChange={toggleIsAvailableFilter}
+                value={availableOnly}
+                label="Toggle"
+              />
+            </View>
+            <Pressable onPress={resetFilter} style={styles.resetFilter}>
+              <Text style={styles.text}>
+                <Ionicons name={"close-circle"} size={20} color={"white"} />
+                CLEAR
+              </Text>
+            </Pressable>
+          </View>
+        ) : null}
         <ScrollView>
           {isLoading ? (
             <Progress.Circle
@@ -259,7 +294,7 @@ const styles = StyleSheet.create({
     top: 0,
   },
   header: {
-    margin: "5%",
+    margin: "10%",
     marginTop: "10%",
     fontSize: 28,
     fontFamily: "Oxygen_700Bold",
@@ -282,9 +317,17 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     paddingBottom: "5%",
     backgroundColor: "#FFF8F0",
+    borderBottomColor: "#172121",
+    borderBottomWidth: 2,
   },
   picker: {
-    width: 120,
+    width: 200,
+  },
+  pickerContainer: {
+    margin: "2%",
+    backgroundColor: "#9DD9D2",
+    alignSelf: "center",
+    alignItems: "center",
   },
   bar: {
     width: "100%",
@@ -301,7 +344,11 @@ const styles = StyleSheet.create({
   text: {
     color: "#FFF8F0",
     fontFamily: "Oxygen_700Bold",
-    fontSize: 30,
+    fontSize: 20,
+  },
+  toggleText: {
+    paddingTop: "3.5%",
+    fontSize: 16,
   },
   progressPie: {
     alignSelf: "center",
@@ -314,17 +361,35 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     position: "relative",
     bottom: 0,
-    // alignItems: "center",
-    alignSelf: "flex-end",
+    alignSelf: "center",
   },
-  textFilter: {
+  text: {
     color: "#FFF8F0",
     fontFamily: "Oxygen_700Bold",
     fontSize: 16,
+    fontWeight: "bold",
   },
   switch: {
     bottom: -35,
     right: -70,
     position: "absolute",
+  },
+  toggleAvailable: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  dropdown: {
+    backgroundColor: "#F36433",
+    margin: "5%",
+    width: "100%",
+    alignSelf: "center",
+    marginBottom: 0,
+    marginTop: 0,
+    padding: 10,
+    position: "relative",
+    bottom: 0,
+    alignItems: "center",
+    borderTopColor: "#172121",
+    borderTopWidth: 1,
   },
 });
