@@ -153,11 +153,19 @@ const UserScreen = () => {
             <Text style={styles.text}>
               {`Your Listed Items  `}
               <Text style={styles.arrow}>
-                <Ionicons
-                  name={"caret-down-circle"}
-                  size={16}
-                  color={"white"}
-                />
+                {itemDisplay ? (
+                  <Ionicons
+                    name={"caret-up-circle"}
+                    size={16}
+                    color={"white"}
+                  />
+                ) : (
+                  <Ionicons
+                    name={"caret-down-circle"}
+                    size={16}
+                    color={"white"}
+                  />
+                )}
               </Text>
             </Text>
           </Pressable>
@@ -177,11 +185,19 @@ const UserScreen = () => {
             <Text style={styles.text}>
               {`Your Forum Posts  `}
               <Text style={styles.arrow}>
-                <Ionicons
-                  name={"caret-down-circle"}
-                  size={16}
-                  color={"white"}
-                />
+                {reqDisplay ? (
+                  <Ionicons
+                    name={"caret-up-circle"}
+                    size={16}
+                    color={"white"}
+                  />
+                ) : (
+                  <Ionicons
+                    name={"caret-down-circle"}
+                    size={16}
+                    color={"white"}
+                  />
+                )}
               </Text>
             </Text>
           </Pressable>
