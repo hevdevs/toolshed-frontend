@@ -2,14 +2,7 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { auth, db } from "../firebase.js";
 import React, { useState, useEffect } from "react";
-import {
-  getDocs,
-  doc,
-  collection,
-  where,
-  query,
-  deleteDoc,
-} from "@firebase/firestore";
+import { doc, deleteDoc } from "@firebase/firestore";
 import { getDownloadURL, ref } from "@firebase/storage";
 import AppLoading from "expo-app-loading";
 import {
@@ -18,42 +11,19 @@ import {
   useFonts,
 } from "@expo-google-fonts/oxygen";
 
-const UserItems = () => {
-  const [items, setItems] = useState([]);
-  const [itemImage, setItemImage] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isDeleted, setIsDeleted] = useState(false);
+const UserItems = ({ setIsItemDeleted, items }) => {
   const user = auth.currentUser;
 
   const handleOnPress = async (item) => {
     try {
       await deleteDoc(doc(db, "items", item.itemUid));
-      console.log(items);
-      alert("Request deleted");
-      setIsDeleted(true);
+      alert("Item deleted");
+      setIsItemDeleted(true);
     } catch (err) {
       console.log(err);
-      setIsDeleted(false);
+      setIsItemDeleted(false);
     }
   };
-
-  useEffect(async () => {
-    try {
-      const q = query(
-        collection(db, "items"),
-        where("userInfo.userUid", "==", user.uid)
-      );
-      const items = await getDocs(q);
-      const itemsArr = [];
-
-      items.forEach((item) => {
-        itemsArr.push(item.data());
-      });
-      setItems(itemsArr);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [isDeleted]);
 
   let [fontsLoaded] = useFonts({
     Oxygen_400Regular,

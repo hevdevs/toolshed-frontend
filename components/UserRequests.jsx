@@ -1,24 +1,8 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  ScrollView,
-  Button,
-  Pressable,
-} from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { auth, db } from "../firebase";
-import {
-  doc,
-  collection,
-  getDocs,
-  where,
-  query,
-  deleteDoc,
-} from "firebase/firestore";
+import { doc, deleteDoc } from "firebase/firestore";
 
 import AppLoading from "expo-app-loading";
 import {
@@ -27,38 +11,17 @@ import {
   useFonts,
 } from "@expo-google-fonts/oxygen";
 
-const UserRequests = () => {
-  const [forumPosts, setForumPosts] = useState([]);
-  const [isDeleted, setIsDeleted] = useState(false);
+const UserRequests = ({ setIsRequestDeleted, postRequests }) => {
   const user = auth.currentUser;
-
-  useEffect(async () => {
-    try {
-      setIsDeleted(false);
-      const q = query(
-        collection(db, "requests"),
-        where("userInfo.userUid", "==", user.uid)
-      );
-      const requests = await getDocs(q);
-      const requestArr = [];
-      requests.forEach((doc) => {
-        console.log("doc >>>>", doc);
-        requestArr.push(doc.data());
-      });
-      setForumPosts(requestArr);
-    } catch (err) {
-      console.log(err);
-    }
-  }, [isDeleted]);
 
   const handleDelete = async (post) => {
     try {
       await deleteDoc(doc(db, "requests", post.requestUid));
       alert("Request deleted");
-      setIsDeleted(true);
+      setIsRequestDeleted(true);
     } catch (err) {
       console.log(err);
-      setIsDeleted(false);
+      setIsRequestDeleted(false);
     }
   };
 
@@ -73,10 +36,10 @@ const UserRequests = () => {
 
   return (
     <View style={styles.cardContainer}>
-      {forumPosts.length > 0 ? (
-        forumPosts.map((post, index) => {
+      {postRequests.length ? (
+        postRequests.map((post, index) => {
           return (
-            <View style={styles.card} key={post.requestUid}>
+            <View style={styles.card} key={index}>
               <Text style={styles.subheader}>{post.title}</Text>
               <Text style={styles.bodyDesc}>{`"${post.body}"`}</Text>
               <Text style={styles.bodyText}>Category: {post.category}</Text>
