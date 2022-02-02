@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Pressable, ScrollView } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import ActionButton from "react-native-action-button";
 import AppLoading from "expo-app-loading";
@@ -18,6 +18,7 @@ import {
   collection,
   where,
   query,
+  onSnapshot,
 } from "firebase/firestore";
 
 // components
@@ -42,52 +43,58 @@ const UserScreen = () => {
       const userInfo = await getDoc(doc(db, "users", user.uid));
       setUserDoc(userInfo.data());
     } catch (err) {
-      console.log(err);
+      console.log("UserScreen", err);
     }
   }, []);
 
-  useEffect(async () => {
+  useLayoutEffect(async () => {
     try {
-      setIsItemDeleted(false);
       setIsLoading(true);
-      const q = query(
-        collection(db, "items"),
-        where("userInfo.userUid", "==", user.uid)
+      const unsubscribe = onSnapshot(
+        query(
+          collection(db, "items"),
+          where("userInfo.userUid", "==", user.uid)
+        ),
+        (itemList) => {
+          const itemsArr = [];
+          itemList.forEach((item) => {
+            itemsArr.push(item.data());
+          });
+          console.log(itemsArr);
+          setItems(itemsArr);
+          setIsLoading(false);
+        }
       );
-      const items = await getDocs(q);
-      const itemsArr = [];
-
-      items.forEach((item) => {
-        itemsArr.push(item.data());
-      });
-      setItems(itemsArr);
-      setIsLoading(false);
+      return unsubscribe;
     } catch (err) {
       console.log(err);
       setIsLoading(false);
     }
-  }, [isItemDeleted]);
+  }, []);
 
-  useEffect(async () => {
+  useLayoutEffect(async () => {
     try {
       setIsLoading(true);
-      setIsRequestDeleted(false);
-      const q = query(
-        collection(db, "requests"),
-        where("userInfo.userUid", "==", user.uid)
+      const unsubscribe = onSnapshot(
+        query(
+          collection(db, "requests"),
+          where("userInfo.userUid", "==", user.uid)
+        ),
+        (requestList) => {
+          const requestArr = [];
+          requestList.forEach((request) => {
+            requestArr.push(request.data());
+          });
+          setPostRequests(requestArr);
+          setIsLoading(false);
+        }
       );
-      const requests = await getDocs(q);
-      const requestArr = [];
-      requests.forEach((doc) => {
-        requestArr.push(doc.data());
-      });
-      setPostRequests(requestArr);
-      setIsLoading(false);
+      return unsubscribe;
     } catch (err) {
       console.log(err);
       setIsLoading(false);
     }
-  }, [isRequestDeleted]);
+  }, []);
 
   const handleDisplayItems = () => {
     setItemDisplay((currDisplay) => !currDisplay);
