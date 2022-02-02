@@ -49,7 +49,7 @@ const ToolshedScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [availableOnly, setAvailableOnly] = useState(false);
+  const [availableOnly, setAvailableOnly] = useState(true);
   const [isEnabled, setIsEnabled] = useState(false);
 
   const categories = [
@@ -95,7 +95,6 @@ const ToolshedScreen = ({ navigation }) => {
             const userInfo = await getUserDataFromUid(auth.currentUser.uid);
             const itemArray = [];
             itemList.forEach((item) => {
-              console.log(item);
               const data = item.data();
               if (
                 selectedDistance === "Any" ||
@@ -104,9 +103,8 @@ const ToolshedScreen = ({ navigation }) => {
                   userInfo.userLocation
                 ) < selectedDistance
               ) {
-                itemArray.push(
-                  Object.assign({ uid: item.itemUid }, item.data())
-                );
+                if (!availableOnly || (availableOnly && data.available))
+                  itemArray.push(Object.assign({ uid: item.itemUid }, data));
               }
             });
             let filteredItems = !searchQuery
@@ -129,50 +127,6 @@ const ToolshedScreen = ({ navigation }) => {
     })();
   }, [newItem, selectedCategory, searchQuery, selectedDistance, availableOnly]);
 
-  // useLayoutEffect(() => {
-  //   (async () => {
-  //     // setIsLoading(true);
-  //     try {
-  //       const itemList =
-  //         selectedCategory === "All"
-  //           ? await getDocs(collection(db, "items"))
-  //           : await getDocs(
-  //               query(
-  //                 collection(db, "items"),
-  //                 where("category", "==", `${selectedCategory}`)
-  //               )
-  //             );
-  //       const userInfo = await getUserDataFromUid(auth.currentUser.uid);
-  //       const itemArray = [];
-  //       itemList.forEach((item) => {
-  //         const data = item.data();
-  //         if (
-  //           selectedDistance === "Any" ||
-  //           calculateDistance(
-  //             data.userInfo.userLocation,
-  //             userInfo.userLocation
-  //           ) < selectedDistance
-  //         ) {
-  //           itemArray.push(Object.assign({ uid: item.id }, item.data()));
-  //         }
-  //       });
-  //       let filteredItems = !searchQuery
-  //         ? itemArray
-  //         : itemArray.filter((item) => {
-  //             let itemCased = item.name.toLowerCase();
-  //             let lowerSearch = searchQuery.toLowerCase();
-  //             let regex = new RegExp(`(${lowerSearch})`, "g");
-  //             return itemCased.match(regex);
-  //           });
-  //       filteredItems.reverse();
-  //       setItems(filteredItems);
-  //     } catch (err) {
-  //       alert(err);
-  //       console.log(err);
-  //     }
-  //   })();
-  // }, [newItem, selectedCategory, searchQuery, selectedDistance]);
-
   let [fontsLoaded] = useFonts({
     Oxygen_400Regular,
     Oxygen_700Bold,
@@ -181,6 +135,12 @@ const ToolshedScreen = ({ navigation }) => {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+
+  const toggleIsAvailibleFilter = async () => {
+    setIsEnabled((previousState) => !previousState);
+    setAvailableOnly((previousState) => !previousState);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -226,10 +186,9 @@ const ToolshedScreen = ({ navigation }) => {
             })}
           </Picker>
           <Switch
-            style={styles.switch}
             trackColor={{ false: "#9DD9D2", true: "#F36433" }}
-            thumbColor={isEnabled ? "#2DC2BD" : "#2DC2BD"}
-            onValueChange={() => setAvailableOnly((curr) => !curr)}
+            thumbColor={availableOnly ? "#2DC2BD" : "#2DC2BD"}
+            onValueChange={toggleIsAvailibleFilter}
             value={availableOnly}
             label="Toggle"
           />
