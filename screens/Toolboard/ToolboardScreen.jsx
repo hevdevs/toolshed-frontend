@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { calculateDistance, getUserDataFromUid } from "../../utils";
 
@@ -18,11 +18,14 @@ import ActionButton from "react-native-action-button";
 import * as Progress from "react-native-progress";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const ToolboardScreen = ({ navigation }) => {
   const [requests, setRequests] = useState([]);
-  const [newRequest, setNewRequest] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDistance, setSelectedDistance] = useState(15);
 
@@ -32,40 +35,47 @@ const ToolboardScreen = ({ navigation }) => {
     (async () => {
       setIsLoading(true);
       try {
-        const requestList = await getDocs(collection(db, "requests"));
-        const requestArray = [];
         const userInfo = await getUserDataFromUid(auth.currentUser.uid);
-        requestList.forEach((doc) => {
-          if (
-            selectedDistance === "Any" ||
-            calculateDistance(
-              doc.data().userInfo.userLocation,
-              userInfo.userLocation
-            ) < selectedDistance
-          )
-            requestArray.push(doc.data());
-        });
-        setRequests(requestArray);
-        setIsLoading(false);
+        const unsubscribe = onSnapshot(
+          collection(db, "requests"),
+          (requestList) => {
+            const requestArray = [];
+
+            requestList.forEach((doc) => {
+              if (
+                selectedDistance === "Any" ||
+                calculateDistance(
+                  doc.data().userInfo.userLocation,
+                  userInfo.userLocation
+                ) < selectedDistance
+              )
+                requestArray.push(doc.data());
+            });
+            setRequests(requestArray);
+            setIsLoading(false);
+          }
+        );
+        return unsubscribe;
       } catch (err) {
         console.log(err);
         setIsLoading(false);
       }
     })();
-  }, [newRequest, selectedDistance]);
+  }, [selectedDistance]);
 
   const handlePress = () => {
-    navigation.navigate("PostRequest", { setNewRequest });
+    navigation.navigate("PostRequest");
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -78,17 +88,19 @@ const ToolboardScreen = ({ navigation }) => {
             onValueChange={(itemValue) => setSelectedDistance(itemValue)}
           >
             <Picker.Item label={"Any"} value={"Any"} />
-            {distances.map((distance, index) => {
+            {distances.map((distance) => {
               return (
                 <Picker.Item
                   label={`+${distance} miles`}
                   value={distance}
-                  key={index}
+                  key={distance}
                 />
               );
             })}
           </Picker>
-          {isLoading ? (
+          {requests.length ? (
+            <RequestCard requests={requests} navigation={navigation} />
+          ) : isLoading ? (
             <Progress.Circle
               size={50}
               indeterminate={true}
@@ -96,8 +108,18 @@ const ToolboardScreen = ({ navigation }) => {
               color={"#F36433"}
             />
           ) : (
-            <RequestCard requests={requests} navigation={navigation} />
+            <View style={styles.noRequestsContainer}>
+              <Text style={styles.noRequestsText}>
+                No requests{" "}
+                {selectedDistance === "All"
+                  ? ""
+                  : `within ${selectedDistance} mile${
+                      selectedDistance === 1 ? "" : "s"
+                    }`}
+              </Text>
+            </View>
           )}
+          {/* // )} */}
         </View>
       </ScrollView>
       <ActionButton buttonColor="#F36433">
@@ -156,6 +178,7 @@ const styles = StyleSheet.create({
   scroll: {
     padding: 0,
     margin: 0,
+    width: "100%",
   },
   text: {
     color: "#FFF8F0",
@@ -164,5 +187,17 @@ const styles = StyleSheet.create({
   },
   spinner: {
     alignSelf: "center",
+  },
+  noRequestsText: {
+    color: "black",
+    fontFamily: "Oxygen_700Bold",
+    fontSize: 20,
+  },
+  noRequestsContainer: {
+    marginTop: "40%",
+    justifyContent: "center",
+    width: "100%",
+    backgroundColor: "#9DD9D2",
+    alignItems: "center",
   },
 });
