@@ -86,7 +86,7 @@ const ItemCard = ({ item }) => {
         <Text style={styles.bodyDesc}>
           Posted by {item.userInfo.userUsername}
         </Text>
-        <Text style={styles.bodyDesc}>Rating: {userRating}</Text>
+        <Text style={styles.bodyDesc}>User Rating: {userRating}</Text>
         {isLent === true ? (
           <View style={styles.statusLent}>
             <Text style={styles.text}>
