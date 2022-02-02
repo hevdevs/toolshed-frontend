@@ -7,7 +7,11 @@ import { onSnapshot, doc } from "firebase/firestore";
 import * as Progress from "react-native-progress";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const InboxScreen = ({ navigation }) => {
   const [chats, setChats] = useState([]);
@@ -15,25 +19,29 @@ const InboxScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     try {
+      setIsLoading(true);
       const unsubscribe = onSnapshot(
         doc(db, "users", auth.currentUser.uid),
         (userData) => {
           const data = userData.data();
           const reverseChat = data.chats ? data.chats.reverse() : [];
           setChats(reverseChat);
+          setIsLoading(false);
         }
       );
       return unsubscribe;
     } catch (err) {
       alert("Failed to fetch messages");
+      setIsLoading(false);
       console.log(err);
     }
   }, []);
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -56,13 +64,13 @@ const InboxScreen = ({ navigation }) => {
       ) : null}
       <View style={styles.contentContainer}>
         <ScrollView>
-          {!chats.length ? (
+          {!chats.length && !isLoading ? (
             <View style={styles.title}>
               <Text style={styles.noMessage}>No Current Direct Messages</Text>
             </View>
           ) : (
-            chats.map((chat, index) => (
-              <View style={styles.chatCard} key={index}>
+            chats.map((chat) => (
+              <View style={styles.chatCard} key={chat}>
                 <ChatCard chat={chat} navigation={navigation} />
               </View>
             ))
