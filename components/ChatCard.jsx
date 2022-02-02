@@ -54,7 +54,7 @@ const ChatCard = ({ chat, navigation }) => {
 
   return (
     <View style={styles.container}>
-      {message.user ? (
+      {message.user && chatee ? (
         <Pressable
           onPress={() =>
             navigation.navigate("ChatScreen", {

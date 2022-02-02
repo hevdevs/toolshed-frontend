@@ -5,7 +5,7 @@ import { auth, db } from "../../firebase";
 
 import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, getDocs } from "firebase/firestore";
 
 import AppLoading from "expo-app-loading";
 import {
@@ -25,7 +25,11 @@ const ItemCard = ({ item }) => {
       try {
         const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
         setItemImage(imageUrl);
-        setIsLoading(false);
+        // const allUserItems = await getDocs(
+        //   collection(db, "items"),
+        //   where("userInfo.userUid", "==", item.userInfo.userUid)
+        // );
+        // console.log(allUserItems.length);
       } catch (err) {
         console.log(err);
       }

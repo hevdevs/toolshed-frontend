@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import ActionButton from "react-native-action-button";
 import AppLoading from "expo-app-loading";
+import * as Progress from "react-native-progress";
+
 import {
   Oxygen_400Regular,
   Oxygen_700Bold,
@@ -45,8 +47,9 @@ const UserScreen = () => {
   }, []);
 
   useEffect(async () => {
-    setIsItemDeleted(false);
     try {
+      setIsItemDeleted(false);
+      setIsLoading(true);
       const q = query(
         collection(db, "items"),
         where("userInfo.userUid", "==", user.uid)
@@ -58,13 +61,16 @@ const UserScreen = () => {
         itemsArr.push(item.data());
       });
       setItems(itemsArr);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   }, [isItemDeleted]);
 
   useEffect(async () => {
     try {
+      setIsLoading(true);
       setIsRequestDeleted(false);
       const q = query(
         collection(db, "requests"),
@@ -76,8 +82,10 @@ const UserScreen = () => {
         requestArr.push(doc.data());
       });
       setPostRequests(requestArr);
+      setIsLoading(false);
     } catch (err) {
       console.log(err);
+      setIsLoading(false);
     }
   }, [isRequestDeleted]);
 
@@ -94,8 +102,9 @@ const UserScreen = () => {
   const handleSignOut = async () => {
     try {
       const signOut = await auth.signOut();
+      alert("You have now signed out");
     } catch (err) {
-      console.log(err);
+      alert(err);
     }
   };
 
@@ -153,7 +162,16 @@ const UserScreen = () => {
             </Text>
           </Pressable>
           {itemDisplay ? (
-            <UserItems setIsDeleted={setIsItemDeleted} items={items} />
+            isLoading ? (
+              <Progress.Circle
+                size={50}
+                indeterminate={true}
+                style={styles.progressPie}
+                color={"#F36433"}
+              />
+            ) : (
+              <UserItems setIsItemDeleted={setIsItemDeleted} items={items} />
+            )
           ) : null}
           <Pressable style={styles.button2} onPress={handleDisplayRequests}>
             <Text style={styles.text}>
@@ -168,10 +186,19 @@ const UserScreen = () => {
             </Text>
           </Pressable>
           {reqDisplay ? (
-            <UserRequests
-              setIsRequestDeleted={setIsRequestDeleted}
-              postRequests={postRequests}
-            />
+            isLoading ? (
+              <Progress.Circle
+                size={50}
+                indeterminate={true}
+                style={styles.progressPie}
+                color={"#F36433"}
+              />
+            ) : (
+              <UserRequests
+                setIsRequestDeleted={setIsRequestDeleted}
+                postRequests={postRequests}
+              />
+            )
           ) : null}
         </ScrollView>
       </View>

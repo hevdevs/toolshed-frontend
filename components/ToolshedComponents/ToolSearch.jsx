@@ -29,7 +29,7 @@ export default ToolSearch;
 const styles = StyleSheet.create({
   bar: {
     width: "100%",
-    marginTop: "5%",
+    marginBottom: 0,
   },
   spinner: {
     marginTop: "25%",

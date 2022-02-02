@@ -46,7 +46,7 @@ const UserItems = ({ setIsItemDeleted, items }) => {
 
               <Pressable
                 style={styles.button}
-                onPress={() => handleOnPress(item, index)}
+                onPress={() => handleOnPress(item)}
               >
                 <Text style={styles.text}>
                   <Ionicons name={"close-circle"} size={16} />

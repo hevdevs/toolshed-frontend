@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import * as ImagePickerPackage from "expo-image-picker";
 import * as Progress from "react-native-progress";
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,17 +20,15 @@ const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
       //   aspect: [4, 3],
       quality: 0.5,
     });
-
-    if (!result.cancelled) {
-      setPhoneImageUri(result.uri);
-      setIsLoading(false);
-    }
+    if (!result.cancelled) setPhoneImageUri(result.uri);
+    setIsLoading(false);
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -46,14 +48,14 @@ const ImagePicker = ({ phoneImageUri, setPhoneImageUri }) => {
             <Text style={styles.text}>Pick a Different Photo</Text>
           </Pressable>
         </>
-      ) : (
+      ) : isLoading ? (
         <Progress.Circle
           style={styles.spinner}
           indeterminate={true}
           size={50}
           color={"#F36433"}
         />
-      )}
+      ) : null}
     </View>
   );
 };

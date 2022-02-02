@@ -73,6 +73,7 @@ const PostItem = ({ navigation, route }) => {
       const snapshot = await uploadBytes(reference, blob);
       blob.close();
       const uri = `gs://${snapshot.metadata.bucket}/${snapshot.metadata.fullPath}`;
+      setIsItemUploading(false);
       return uri;
     } catch (err) {
       setIsItemUploading(false);
@@ -84,7 +85,6 @@ const PostItem = ({ navigation, route }) => {
   const addItem = async (uploadedUri) => {
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
-    console.log(docSnap);
     const fields = docSnap.data();
     const item = {
       name: itemName,
@@ -125,7 +125,6 @@ const PostItem = ({ navigation, route }) => {
     } catch (err) {
       if (uploadedUri) await deleteObject(uploadedImageRef);
       alert("Request failed to post!");
-      console.log(err);
     }
   };
 

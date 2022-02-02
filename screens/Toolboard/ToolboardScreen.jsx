@@ -57,6 +57,7 @@ const ToolboardScreen = ({ navigation }) => {
         );
         return unsubscribe;
       } catch (err) {
+        alert(err);
         console.log(err);
         setIsLoading(false);
       }
@@ -81,23 +82,23 @@ const ToolboardScreen = ({ navigation }) => {
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Toolboard</Text>
       </View>
-      <ScrollView style={styles.scroll}>
-        <View style={styles.contentContainer}>
-          <Picker
-            selectedValue={selectedDistance}
-            onValueChange={(itemValue) => setSelectedDistance(itemValue)}
-          >
-            <Picker.Item label={"Any"} value={"Any"} />
-            {distances.map((distance) => {
-              return (
-                <Picker.Item
-                  label={`+${distance} miles`}
-                  value={distance}
-                  key={distance}
-                />
-              );
-            })}
-          </Picker>
+      <View style={styles.contentContainer}>
+        <Picker
+          selectedValue={selectedDistance}
+          onValueChange={(itemValue) => setSelectedDistance(itemValue)}
+        >
+          <Picker.Item label={"Any"} value={"Any"} />
+          {distances.map((distance) => {
+            return (
+              <Picker.Item
+                label={`+${distance} miles`}
+                value={distance}
+                key={distance}
+              />
+            );
+          })}
+        </Picker>
+        <ScrollView style={styles.scroll}>
           {requests.length ? (
             <RequestCard requests={requests} navigation={navigation} />
           ) : isLoading ? (
@@ -120,8 +121,8 @@ const ToolboardScreen = ({ navigation }) => {
             </View>
           )}
           {/* // )} */}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
       <ActionButton buttonColor="#F36433">
         <ActionButton.Item onPress={handlePress} title={"Post a Request"}>
           <Ionicons name={"help-circle"} size={24} color={"white"} />

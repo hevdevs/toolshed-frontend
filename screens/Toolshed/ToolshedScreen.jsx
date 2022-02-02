@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   Pressable,
   TouchableOpacity,
   Picker,
+  Switch,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -17,6 +18,7 @@ import {
   doc,
   where,
   query,
+  onSnapshot,
 } from "firebase/firestore";
 import { db, auth } from "../../firebase";
 import {
@@ -30,7 +32,11 @@ import ItemCard from "../../components/ToolshedComponents/ItemCard";
 import ActionButton from "react-native-action-button";
 import * as Progress from "react-native-progress";
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const ToolshedScreen = ({ navigation }) => {
   const [items, setItems] = useState([]);
@@ -38,8 +44,12 @@ const ToolshedScreen = ({ navigation }) => {
   const [newItem, setNewItem] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedDistance, setSelectedDistance] = useState(15);
+  const [displayFilter, setDisplayFilter] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [availableOnly, setAvailableOnly] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   const categories = [
     "All",
@@ -65,57 +75,107 @@ const ToolshedScreen = ({ navigation }) => {
     setSelectedCategory("All");
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     (async () => {
-      // setIsLoading(true);
+      setIsLoading(true);
       try {
-        const itemList =
+        const unsubscribe = onSnapshot(
           selectedCategory === "All"
-            ? await getDocs(collection(db, "items"))
-            : await getDocs(
-                query(
-                  collection(db, "items"),
-                  where("category", "==", `${selectedCategory}`)
-                )
-              );
-        const userInfo = await getUserDataFromUid(auth.currentUser.uid);
-        const itemArray = [];
-        itemList.forEach((item) => {
-          const data = item.data();
-          if (
-            selectedDistance === "Any" ||
-            calculateDistance(
-              data.userInfo.userLocation,
-              userInfo.userLocation
-            ) < selectedDistance
-          ) {
-            itemArray.push(Object.assign({ uid: item.id }, item.data()));
-          }
-        });
-        let filteredItems = !searchQuery
-          ? itemArray
-          : itemArray.filter((item) => {
-              let itemCased = item.name.toLowerCase();
-              let lowerSearch = searchQuery.toLowerCase();
-              let regex = new RegExp(`(${lowerSearch})`, "g");
-              return itemCased.match(regex);
+            ? collection(db, "items")
+            : query(
+                collection(db, "items"),
+                where("category", "==", `${selectedCategory}`)
+              ),
+          async (itemList) => {
+            const userInfo = await getUserDataFromUid(auth.currentUser.uid);
+            const itemArray = [];
+            itemList.forEach((item) => {
+              console.log(item);
+              const data = item.data();
+              if (
+                selectedDistance === "Any" ||
+                calculateDistance(
+                  data.userInfo.userLocation,
+                  userInfo.userLocation
+                ) < selectedDistance
+              ) {
+                itemArray.push(
+                  Object.assign({ uid: item.itemUid }, item.data())
+                );
+              }
             });
-        setItems(filteredItems);
+            let filteredItems = !searchQuery
+              ? itemArray
+              : itemArray.filter((item) => {
+                  let itemCased = item.name.toLowerCase();
+                  let lowerSearch = searchQuery.toLowerCase();
+                  let regex = new RegExp(`(${lowerSearch})`, "g");
+                  return itemCased.match(regex);
+                });
+            setItems(filteredItems);
+            setIsLoading(false);
+          }
+        );
+        return unsubscribe;
       } catch (err) {
-        alert(err);
         console.log(err);
+        setIsLoading(false);
       }
     })();
-  }, [newItem, selectedCategory, searchQuery, selectedDistance]);
+  }, [newItem, selectedCategory, searchQuery, selectedDistance, availableOnly]);
+
+  // useLayoutEffect(() => {
+  //   (async () => {
+  //     // setIsLoading(true);
+  //     try {
+  //       const itemList =
+  //         selectedCategory === "All"
+  //           ? await getDocs(collection(db, "items"))
+  //           : await getDocs(
+  //               query(
+  //                 collection(db, "items"),
+  //                 where("category", "==", `${selectedCategory}`)
+  //               )
+  //             );
+  //       const userInfo = await getUserDataFromUid(auth.currentUser.uid);
+  //       const itemArray = [];
+  //       itemList.forEach((item) => {
+  //         const data = item.data();
+  //         if (
+  //           selectedDistance === "Any" ||
+  //           calculateDistance(
+  //             data.userInfo.userLocation,
+  //             userInfo.userLocation
+  //           ) < selectedDistance
+  //         ) {
+  //           itemArray.push(Object.assign({ uid: item.id }, item.data()));
+  //         }
+  //       });
+  //       let filteredItems = !searchQuery
+  //         ? itemArray
+  //         : itemArray.filter((item) => {
+  //             let itemCased = item.name.toLowerCase();
+  //             let lowerSearch = searchQuery.toLowerCase();
+  //             let regex = new RegExp(`(${lowerSearch})`, "g");
+  //             return itemCased.match(regex);
+  //           });
+  //       filteredItems.reverse();
+  //       setItems(filteredItems);
+  //     } catch (err) {
+  //       alert(err);
+  //       console.log(err);
+  //     }
+  //   })();
+  // }, [newItem, selectedCategory, searchQuery, selectedDistance]);
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
 
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -128,61 +188,75 @@ const ToolshedScreen = ({ navigation }) => {
           search={search}
           setSearch={setSearch}
         />
-        <Picker
-          selectedValue={selectedCategory}
-          onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-        >
-          {categories.map((category, index) => {
-            return (
-              <Picker.Item
-                label={`${category}`}
-                value={`${category}`}
-                key={index}
-              />
-            );
-          })}
-        </Picker>
-        <Picker
-          selectedValue={selectedDistance}
-          onValueChange={(itemValue) => setSelectedDistance(itemValue)}
-        >
-          <Picker.Item label={"Any"} value={"Any"} />
-          {distances.map((distance, index) => {
-            return (
-              <Picker.Item
-                label={`+${distance} miles`}
-                value={distance}
-                key={index}
-              />
-            );
-          })}
-        </Picker>
-        <Text style={{ fontWeight: "bold", textAlign: "center" }}>
-          {searchQuery || "All items"}{" "}
-          {selectedCategory !== "All"
-            ? `in category: ${selectedCategory} `
-            : ""}
-          within {selectedDistance} miles
-        </Text>
-        <Pressable onPress={resetFilter}>
-          <Text>Clear filters</Text>
-        </Pressable>
-        <ScrollView>
-          <View style={styles.cardContainer}>
-            {items.map((item) => {
+        <View style={styles.filter}>
+          <Picker
+            style={styles.picker}
+            selectedValue={selectedCategory}
+            onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+          >
+            {categories.map((category, index) => {
               return (
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("ItemScreen", { item });
-                  }}
-                  item={item}
-                  key={item.uid}
-                >
-                  <ItemCard item={item} />
-                </TouchableOpacity>
+                <Picker.Item
+                  label={`${category}`}
+                  value={`${category}`}
+                  key={index}
+                />
               );
             })}
-          </View>
+          </Picker>
+          <Picker
+            style={styles.picker}
+            selectedValue={selectedDistance}
+            onValueChange={(itemValue) => setSelectedDistance(itemValue)}
+          >
+            <Picker.Item label={"Any"} value={"Any"} />
+            {distances.map((distance, index) => {
+              return (
+                <Picker.Item
+                  label={`+${distance} miles`}
+                  value={distance}
+                  key={index}
+                />
+              );
+            })}
+          </Picker>
+          <Switch
+            style={styles.switch}
+            trackColor={{ false: "#9DD9D2", true: "#F36433" }}
+            thumbColor={isEnabled ? "#2DC2BD" : "#2DC2BD"}
+            onValueChange={() => setAvailableOnly((curr) => !curr)}
+            value={availableOnly}
+            label="Toggle"
+          />
+          <Pressable onPress={resetFilter} style={styles.resetFilter}>
+            <Text style={styles.textFilter}>CLEAR</Text>
+          </Pressable>
+        </View>
+        <ScrollView>
+          {isLoading ? (
+            <Progress.Circle
+              size={50}
+              indeterminate={true}
+              style={styles.progressPie}
+              color={"#F36433"}
+            />
+          ) : (
+            <View style={styles.cardContainer}>
+              {items.map((item) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate("ItemScreen", { item });
+                    }}
+                    item={item}
+                    key={item.uid}
+                  >
+                    <ItemCard item={item} />
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
         </ScrollView>
       </View>
       <ActionButton buttonColor="#F36433">
@@ -229,11 +303,24 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   contentContainer: {
-    marginTop: "40%",
+    marginTop: "30%",
     width: "100%",
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#9DD9D2",
+  },
+  filter: {
+    alignItems: "center",
+    width: "90%",
+    justifyContent: "center",
+    margin: "5%",
+    marginTop: 0,
+    marginBottom: 0,
+    paddingBottom: "5%",
+    backgroundColor: "#FFF8F0",
+  },
+  picker: {
+    width: 120,
   },
   bar: {
     width: "100%",
@@ -254,5 +341,26 @@ const styles = StyleSheet.create({
   },
   progressPie: {
     alignSelf: "center",
+  },
+  resetFilter: {
+    backgroundColor: "#F36433",
+    margin: "5%",
+    marginBottom: 0,
+    padding: 10,
+    borderRadius: 5,
+    position: "relative",
+    bottom: 0,
+    // alignItems: "center",
+    alignSelf: "flex-end",
+  },
+  textFilter: {
+    color: "#FFF8F0",
+    fontFamily: "Oxygen_700Bold",
+    fontSize: 16,
+  },
+  switch: {
+    bottom: -35,
+    right: -70,
+    position: "absolute",
   },
 });

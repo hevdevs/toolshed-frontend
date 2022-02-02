@@ -10,7 +10,11 @@ import { updateDoc, doc, arrayUnion, addDoc } from "firebase/firestore";
 import { Ionicons } from "@expo/vector-icons";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const ItemScreen = ({ route, navigation }) => {
   const { item } = route.params;
@@ -22,7 +26,7 @@ const ItemScreen = ({ route, navigation }) => {
         const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
         setItemImage(imageUrl);
       } catch (err) {
-        console.log(err);
+        alert(err);
       }
     })();
   }, []);
@@ -46,18 +50,18 @@ const ItemScreen = ({ route, navigation }) => {
       });
     } catch (err) {
       alert("Error: Could not load chat");
-      console.log(err);
     }
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -76,7 +80,6 @@ const ItemScreen = ({ route, navigation }) => {
             <Text style={styles.bodyDesc}>{`"${item.description}"`}</Text>
           </View>
         </View>
-        {/* <CalendarComponent /> */}
 
         <Pressable
           style={styles.button}

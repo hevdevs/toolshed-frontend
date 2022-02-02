@@ -24,11 +24,6 @@ const ChatScreen = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
   const { messageId, userUsername } = route.params;
 
-  // const messageId =
-  //   userUid < auth.currentUser.uid
-  //     ? `${auth.currentUser.uid}-${userUid}`
-  //     : `${userUid}-${auth.currentUser.uid}`;
-
   useLayoutEffect(() => {
     try {
       const collectionRef = collection(db, `groups/${messageId}/messages`);
@@ -99,21 +94,20 @@ const ChatScreen = ({ route, navigation }) => {
 
   return (
     <>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Text style={styles.text}>
+          <Ionicons name={"arrow-back-circle"} size={16} />
+          BACK
+        </Text>
+      </Pressable>
       <View style={styles.headerContainer}>
-        <Pressable
-          style={styles.button}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
-          <Text style={styles.text}>
-            <Ionicons name={"arrow-back-circle"} size={16} />
-            BACK
-          </Text>
-        </Pressable>
         <Text style={styles.userNameText}>{`${userUsername}`}</Text>
       </View>
-
       <GiftedChat
         messages={messages}
         onSend={onSend}
