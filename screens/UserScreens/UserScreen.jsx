@@ -2,20 +2,36 @@ import { StyleSheet, Text, View, Pressable, ScrollView } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import ActionButton from "react-native-action-button";
+import AppLoading from "expo-app-loading";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 import { auth, db } from "../../firebase.js";
-import { collection, getDoc, getDocs, doc } from "firebase/firestore";
+import {
+  getDoc,
+  getDocs,
+  doc,
+  collection,
+  where,
+  query,
+} from "firebase/firestore";
 
 // components
 import UserRequests from "../../components/UserRequests.jsx";
 import UserItems from "../../components/UserItems.jsx";
 import SignOut from "../../components/SignOut.jsx";
 
-const UserScreen = ({ navigation }) => {
-  const [items, setItems] = useState([]);
+const UserScreen = () => {
   const [userDoc, setUserDoc] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [itemDisplay, setItemDisplay] = useState(false);
   const [reqDisplay, setReqDisplay] = useState(false);
+  const [items, setItems] = useState([]);
+  const [postRequests, setPostRequests] = useState([]);
+  const [isItemDeleted, setIsItemDeleted] = useState(false);
+  const [isRequestDeleted, setIsRequestDeleted] = useState(false);
 
   const user = auth.currentUser;
 
@@ -27,6 +43,43 @@ const UserScreen = ({ navigation }) => {
       console.log(err);
     }
   }, []);
+
+  useEffect(async () => {
+    setIsItemDeleted(false);
+    try {
+      const q = query(
+        collection(db, "items"),
+        where("userInfo.userUid", "==", user.uid)
+      );
+      const items = await getDocs(q);
+      const itemsArr = [];
+
+      items.forEach((item) => {
+        itemsArr.push(item.data());
+      });
+      setItems(itemsArr);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [isItemDeleted]);
+
+  useEffect(async () => {
+    try {
+      setIsRequestDeleted(false);
+      const q = query(
+        collection(db, "requests"),
+        where("userInfo.userUid", "==", user.uid)
+      );
+      const requests = await getDocs(q);
+      const requestArr = [];
+      requests.forEach((doc) => {
+        requestArr.push(doc.data());
+      });
+      setPostRequests(requestArr);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [isRequestDeleted]);
 
   const handleDisplayItems = () => {
     setItemDisplay((currDisplay) => !currDisplay);
@@ -46,6 +99,23 @@ const UserScreen = ({ navigation }) => {
     }
   };
 
+  let [fontsLoaded] = useFonts({
+    Oxygen_400Regular,
+    Oxygen_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
+  const starRating = (items) => {
+    const itemsCopy = [...items];
+    const starArr = itemsCopy.map((item) => {
+      return <>⭐️</>;
+    });
+    return starArr;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -55,6 +125,21 @@ const UserScreen = ({ navigation }) => {
       </View>
       <View style={styles.contentContainer}>
         <ScrollView>
+          <View style={styles.bio}>
+            <View style={styles.subheaderContainer}>
+              <Text style={styles.subheader}>Your Stats</Text>
+            </View>
+            <Text style={styles.bodyText}>
+              {`Rank: `}
+              {starRating(items)}
+            </Text>
+            <Text
+              style={styles.bodyText}
+            >{`Posted ${items.length} items to the toolshed`}</Text>
+            <Text
+              style={styles.bodyText}
+            >{`Made ${postRequests.length} requests to the toolboard`}</Text>
+          </View>
           <Pressable style={styles.button1} onPress={handleDisplayItems}>
             <Text style={styles.text}>
               {`Your Listed Items  `}
@@ -67,7 +152,9 @@ const UserScreen = ({ navigation }) => {
               </Text>
             </Text>
           </Pressable>
-          {itemDisplay ? <UserItems /> : null}
+          {itemDisplay ? (
+            <UserItems setIsDeleted={setIsItemDeleted} items={items} />
+          ) : null}
           <Pressable style={styles.button2} onPress={handleDisplayRequests}>
             <Text style={styles.text}>
               {`Your Forum Posts  `}
@@ -80,7 +167,12 @@ const UserScreen = ({ navigation }) => {
               </Text>
             </Text>
           </Pressable>
-          {reqDisplay ? <UserRequests /> : null}
+          {reqDisplay ? (
+            <UserRequests
+              setIsRequestDeleted={setIsRequestDeleted}
+              postRequests={postRequests}
+            />
+          ) : null}
         </ScrollView>
       </View>
       <ActionButton buttonColor="#F36433">
@@ -125,6 +217,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#FFF8F0",
     alignSelf: "center",
+    fontFamily: "Oxygen_700Bold",
+  },
+  subheaderContainer: {
+    borderBottomColor: "#172121",
+    borderBottomWidth: 1,
+    width: "80%",
+    alignItems: "center",
+    marginBottom: "3%",
+  },
+  subheader: {
+    color: "#172121",
+    fontFamily: "Oxygen_700Bold",
+    fontSize: 20,
+    marginBottom: "3%",
   },
   contentContainer: {
     marginTop: "40%",
@@ -132,6 +238,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     backgroundColor: "#9DD9D2",
+  },
+  bio: {
+    backgroundColor: "#FFF8F0",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "90%",
+    margin: "5%",
+    borderRadius: 5,
+    padding: "5%",
   },
   button1: {
     backgroundColor: "#F36433",
@@ -164,5 +279,18 @@ const styles = StyleSheet.create({
   },
   arrow: {
     alignSelf: "flex-end",
+  },
+  bodyText: {
+    fontSize: 16,
+    color: "#172121",
+    fontFamily: "Oxygen_700Bold",
+  },
+  bodyDesc: {
+    fontSize: 16,
+    color: "#172121",
+    fontFamily: "Oxygen_700Bold",
+    fontStyle: "italic",
+    textAlign: "center",
+    marginBottom: "5%",
   },
 });

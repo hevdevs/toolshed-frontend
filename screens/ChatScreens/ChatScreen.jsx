@@ -14,7 +14,11 @@ import {
   arrayUnion,
 } from "firebase/firestore";
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const ChatScreen = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
@@ -66,7 +70,7 @@ const ChatScreen = ({ route, navigation }) => {
         {...props}
         wrapperStyle={{
           left: {
-            backgroundColor: "#2dc2db",
+            backgroundColor: "#2DC2BD",
           },
           right: {
             backgroundColor: "#F36433",
@@ -85,9 +89,10 @@ const ChatScreen = ({ route, navigation }) => {
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -102,11 +107,13 @@ const ChatScreen = ({ route, navigation }) => {
           }}
         >
           <Text style={styles.text}>
-            <Ionicons name={"arrow-back-circle"} size={30} />
+            <Ionicons name={"arrow-back-circle"} size={16} />
+            BACK
           </Text>
         </Pressable>
         <Text style={styles.userNameText}>{`${userUsername}`}</Text>
       </View>
+
       <GiftedChat
         messages={messages}
         onSend={onSend}
@@ -125,15 +132,23 @@ const ChatScreen = ({ route, navigation }) => {
 export default ChatScreen;
 
 const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "#2DC2BD",
-    padding: 5,
-    left: 0,
-    borderRadius: 50,
-    alignItems: "center",
-    position: "relative",
+  container: {
+    flex: 1,
     justifyContent: "center",
-    fontFamily: "Oxygen_400Regular"
+    backgroundColor: "#2DC2DB",
+    alignItems: "center",
+    fontFamily: "Oxygen_400Regular",
+  },
+  button: {
+    backgroundColor: "#F36433",
+    padding: 5,
+    left: 20,
+    borderRadius: 100,
+    alignItems: "center",
+    position: "absolute",
+    top: 120,
+    justifyContent: "center",
+    fontFamily: "Oxygen_400Regular",
   },
   headerContainer: {
     paddingTop: "15%",

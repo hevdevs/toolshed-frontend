@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
   },
   spinner: {
     alignSelf: "center",
+    marginTop: "60%",
   },
   noRequestsText: {
     color: "black",
