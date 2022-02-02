@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     color: "#172121",
   },
   pickerContainer: {
-    margin: "2%",
+    margin: "5%",
     backgroundColor: "#2DC2DB",
     width: 150,
     alignSelf: "center",
@@ -251,11 +251,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "center",
+    margin: "10%",
   },
   button: {
     alignSelf: "center",
     backgroundColor: "#F36433",
-    margin: "2.5%",
+    marginRight: "5%",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "#FFF8F0",
-    fontFamily: "Oxygen_400Regular",
+    fontFamily: "Oxygen_700Bold",
   },
   subheader: {
     alignSelf: "center",
