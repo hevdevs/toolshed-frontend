@@ -28,6 +28,7 @@ const ToolboardScreen = ({ navigation }) => {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDistance, setSelectedDistance] = useState(15);
+  const [newRequest, setNewRequest] = useState(false);
 
   const distances = [1, 2, 5, 10, 15, 20];
 
@@ -62,10 +63,10 @@ const ToolboardScreen = ({ navigation }) => {
         setIsLoading(false);
       }
     })();
-  }, [selectedDistance]);
+  }, [newRequest, selectedDistance]);
 
   const handlePress = () => {
-    navigation.navigate("PostRequest");
+    navigation.navigate("PostRequest", { setNewRequest });
   };
 
   let [fontsLoaded] = useFonts({

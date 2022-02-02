@@ -33,6 +33,7 @@ const PostRequest = ({ route, navigation: { goBack } }) => {
   const [titleInput, setTitleInput] = useState("");
   const [bodyInput, setBodyInput] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("DIY");
+  const { setNewRequest } = route.params;
 
   const categories = [
     "DIY",
@@ -77,6 +78,9 @@ const PostRequest = ({ route, navigation: { goBack } }) => {
       const postRequest = await addDoc(collection(db, "requests"), request);
       await updateDoc(doc(db, "requests", postRequest.id), {
         requestUid: postRequest.id,
+      });
+      setNewRequest((currNewRequest) => {
+        !currNewRequest;
       });
       alert("Request successfully posted!");
       resetForms();

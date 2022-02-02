@@ -148,6 +148,9 @@ const styles = StyleSheet.create({
   spinner: {
     alignSelf: "center",
   },
+  textWrapper: {
+    width: "60%",
+  },
   bodyText: {
     marginLeft: "5%",
     fontSize: 16,

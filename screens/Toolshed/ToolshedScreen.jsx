@@ -19,6 +19,7 @@ import {
   where,
   query,
   onSnapshot,
+  orderBy,
 } from "firebase/firestore";
 import { db, auth } from "../../firebase";
 import {
@@ -81,10 +82,14 @@ const ToolshedScreen = ({ navigation }) => {
       try {
         const unsubscribe = onSnapshot(
           selectedCategory === "All"
-            ? collection(db, "items")
+            ? query(
+                collection(db, "items"),
+                orderBy("timestamp.fullStamp", "desc")
+              )
             : query(
                 collection(db, "items"),
-                where("category", "==", `${selectedCategory}`)
+                where("category", "==", `${selectedCategory}`),
+                orderBy("timestamp.fullStamp", "desc")
               ),
           async (itemList) => {
             const userInfo = await getUserDataFromUid(auth.currentUser.uid);

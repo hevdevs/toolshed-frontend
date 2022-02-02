@@ -94,17 +94,6 @@ const ChatScreen = ({ route, navigation }) => {
 
   return (
     <>
-      <Pressable
-        style={styles.button}
-        onPress={() => {
-          navigation.goBack();
-        }}
-      >
-        <Text style={styles.text}>
-          <Ionicons name={"arrow-back-circle"} size={16} />
-          BACK
-        </Text>
-      </Pressable>
       <View style={styles.headerContainer}>
         <Text style={styles.userNameText}>{`${userUsername}`}</Text>
       </View>
@@ -135,12 +124,12 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#F36433",
-    padding: 5,
+    marginTop: "5%",
     left: 20,
-    borderRadius: 100,
+    padding: 5,
+    borderRadius: 5,
     alignItems: "center",
     position: "absolute",
-    top: 120,
     justifyContent: "center",
     fontFamily: "Oxygen_400Regular",
   },
@@ -153,6 +142,7 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     top: 0,
+    marginBottom: "5%",
     flexDirection: "row",
   },
   header: {
