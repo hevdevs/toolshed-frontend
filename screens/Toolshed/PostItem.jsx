@@ -13,7 +13,7 @@ import { TextInput } from "react-native-paper";
 import uuid from "react-native-uuid";
 
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection, getDoc, doc } from "firebase/firestore";
+import { addDoc, collection, getDoc, doc, updateDoc } from "firebase/firestore";
 import { auth, db, storage } from "../../firebase";
 import dayjs from "dayjs";
 
@@ -106,7 +106,7 @@ const PostItem = ({ navigation, route }) => {
       available: true,
     };
     const postItem = await addDoc(collection(db, "items"), item);
-    await updateDoc(doc(db, "requests", postItem.id), {
+    await updateDoc(doc(db, "items", postItem.id), {
       itemUid: postItem.id,
     });
     setNewItem((currNewItem) => {
