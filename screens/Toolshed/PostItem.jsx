@@ -20,7 +20,11 @@ import dayjs from "dayjs";
 import ImagePicker from "../../components/ImagePicker";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const PostItem = ({ navigation, route }) => {
   const [itemName, setItemName] = useState("");
@@ -80,6 +84,7 @@ const PostItem = ({ navigation, route }) => {
   const addItem = async (uploadedUri) => {
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
+    console.log(docSnap);
     const fields = docSnap.data();
     const item = {
       name: itemName,
@@ -101,6 +106,9 @@ const PostItem = ({ navigation, route }) => {
       available: true,
     };
     const postItem = await addDoc(collection(db, "items"), item);
+    await updateDoc(doc(db, "requests", postItem.id), {
+      itemUid: postItem.id,
+    });
     setNewItem((currNewItem) => {
       !currNewItem;
     });
@@ -122,9 +130,10 @@ const PostItem = ({ navigation, route }) => {
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -198,7 +207,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     backgroundColor: "#9DD9D2",
-    fontFamily: "Oxygen_400Regular"
+    fontFamily: "Oxygen_400Regular",
   },
   headerContainer: {
     backgroundColor: "#F36433",
