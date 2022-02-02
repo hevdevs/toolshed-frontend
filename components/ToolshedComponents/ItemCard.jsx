@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     margin: "5%",
     backgroundColor: "#FFF8F0",
     fontFamily: "Oxygen_400Regular",
+    marginBottom: 0,
   },
   cardText: {
     marginRight: 0,
