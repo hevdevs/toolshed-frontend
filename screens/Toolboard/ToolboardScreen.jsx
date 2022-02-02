@@ -18,7 +18,11 @@ import ActionButton from "react-native-action-button";
 import * as Progress from "react-native-progress";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const ToolboardScreen = ({ navigation }) => {
   const [requests, setRequests] = useState([]);
@@ -59,13 +63,14 @@ const ToolboardScreen = ({ navigation }) => {
   };
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -164,5 +169,6 @@ const styles = StyleSheet.create({
   },
   spinner: {
     alignSelf: "center",
+    marginTop: "60%",
   },
 });
