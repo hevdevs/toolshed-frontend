@@ -8,7 +8,11 @@ import * as Progress from "react-native-progress";
 import { updateDoc, doc } from "firebase/firestore";
 
 import AppLoading from "expo-app-loading";
-import { Oxygen_400Regular, Oxygen_700Bold, useFonts } from "@expo-google-fonts/oxygen";
+import {
+  Oxygen_400Regular,
+  Oxygen_700Bold,
+  useFonts,
+} from "@expo-google-fonts/oxygen";
 
 const ItemCard = ({ item }) => {
   const storage = getStorage();
@@ -43,13 +47,14 @@ const ItemCard = ({ item }) => {
   }, [isLent]);
 
   let [fontsLoaded] = useFonts({
-    Oxygen_400Regular, Oxygen_700Bold,
+    Oxygen_400Regular,
+    Oxygen_700Bold,
   });
-  
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
-  
+
   return (
     <View style={styles.card}>
       {itemImage ? (
@@ -63,8 +68,11 @@ const ItemCard = ({ item }) => {
         />
       )}
       <View>
-        <Text style={styles.cardText}>{`${item.name} \n`}</Text>
-        <Text style={styles.cardText}>
+        <Text style={styles.bodyText}>
+          <Ionicons name={"construct"} size={16} />
+          {` ${item.name}`}
+        </Text>
+        <Text style={styles.bodyDesc}>
           Posted by {item.userInfo.userUsername}
         </Text>
         {isLent === true ? (
@@ -135,5 +143,18 @@ const styles = StyleSheet.create({
   },
   spinner: {
     alignSelf: "center",
+  },
+  bodyText: {
+    marginLeft: "5%",
+    fontSize: 16,
+    color: "#F36433",
+    fontFamily: "Oxygen_700Bold",
+  },
+  bodyDesc: {
+    margin: "5%",
+    fontSize: 14,
+    color: "#172121",
+    fontFamily: "Oxygen_700Bold",
+    marginBottom: "5%",
   },
 });
