@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, getDoc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../../firebase";
 import { calculateDistance, getUserDataFromUid } from "../../utils";
 
