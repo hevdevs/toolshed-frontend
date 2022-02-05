@@ -118,11 +118,12 @@ const UserScreen = () => {
   }
 
   const starRating = (items) => {
-    const itemsCopy = [...items];
-    const starArr = itemsCopy.map((item) => {
-      return <>⭐️</>;
-    });
-    return starArr;
+    const itemsInShed = items.length;
+    if (itemsInShed < 1) return "⭐️".repeat(1);
+    else if (itemsInShed >= 1 && itemsInShed < 2) return "⭐️".repeat(2);
+    else if (itemsInShed >= 2 && itemsInShed < 3) return "⭐️".repeat(3);
+    else if (itemsInShed >= 3 && itemsInShed < 5) return "⭐️".repeat(4);
+    else if (itemsInShed >= 5) return "⭐️".repeat(5);
   };
 
   return (

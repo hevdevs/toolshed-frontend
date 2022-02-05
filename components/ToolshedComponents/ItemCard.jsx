@@ -19,15 +19,15 @@ const ItemCard = ({ item }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [isLent, setIsLent] = useState(!item.available);
   const [itemImage, setItemImage] = useState("");
-  const [userRating, setUserRating] = useState(1);
+  const [userRating, setUserRating] = useState("1");
 
   useEffect(() => {
     (async () => {
       try {
         const imageUrl = await getDownloadURL(ref(storage, `${item.imageUri}`));
         setItemImage(imageUrl);
-        const userInfo = await getDoc(doc(db, "users", item.userInfo.userUri));
-        calculateRank(userInfo.data().itemsInShed);
+        // const userInfo = await getDoc(doc(db, "users", item.userInfo.userUri));
+        // calculateRank(userInfo.data().itemsInShed);
       } catch (err) {
         console.log(err);
       }
@@ -39,14 +39,9 @@ const ItemCard = ({ item }) => {
     setIsLent((previousState) => !previousState);
   };
 
-  const calculateRank = (num) => {
-    const star = "⭐️";
-    if (num < 2) setUserRating(star);
-    if (num >= 2 && num < 4) setUserRating(star.repeat(2));
-    if (num >= 4 && num < 6) setUserRating(star.repeat(3));
-    if (num >= 6 && num < 8) setUserRating(star.repeat(4));
-    if (num >= 8) setUserRating(star.repeat(5));
-  };
+  // const calculateRank = (num) => {
+  //   if (num > 4) setUserRating("Top Lender");
+  // };
 
   const updateAvailability = async () => {
     const docRef = doc(db, "items", item.uid);
@@ -86,7 +81,7 @@ const ItemCard = ({ item }) => {
         <Text style={styles.bodyDesc}>
           Posted by {item.userInfo.userUsername}
         </Text>
-        <Text style={styles.bodyDesc}>User Rating: {userRating}</Text>
+        {/* <Text style={styles.bodyDesc}>User Rating: {userRating}</Text> */}
         {isLent === true ? (
           <View style={styles.statusLent}>
             <Text style={styles.text}>
