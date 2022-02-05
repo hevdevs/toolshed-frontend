@@ -7,4 +7,4 @@ Toolshed is a decentralised community item library. It's mantra is to promote sh
 
 Toolshed was developed in an 8 day sprint as part of Northcoders final project phase by @adamrleigh @eobr @Eth4nF @hevmag @k-huggs.
 
-## githuvb repo formaInstructions
+## Instructions
