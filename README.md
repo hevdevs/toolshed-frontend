@@ -26,6 +26,6 @@ Run the above command in your terminal to install all of Toolshed's dependencies
 expo start
 ```
 Scan QR code to open on your device, or if applicable open in Android emulator.  
-You can sign up and create your own account (try making a post or sending a message!) or log in as an existing user e.g. bigjohn@bigjohn.com with password as "password".  If you are signing up, please allow expo to access your location while initially using toolshed as not doing so may block you from using parts of the app in its current stage, interfering with key functionality. 
+You can sign up and create your own account (try making a post or sending a message!) or log in as an existing user e.g. bigjohn@bigjohn.com with password as "password".    If you are signing up, please allow expo to access your location while initially using toolshed as not doing so may block you from using parts of the app in its current stage, interfering with key functionality. 
 
 
